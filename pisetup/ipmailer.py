@@ -30,4 +30,4 @@ msg['To'] = to
 smtpserver.sendmail(gmail_user, [to], msg.as_string())
 smtpserver.quit()
 
-
+#Add "python /home/pi/ipmailer.py" to /etc/rc.local at the bottom
