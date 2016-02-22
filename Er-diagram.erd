@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram height="600" made_with_version="1.5" name="Default" width="800">
+<entity id="0" is_weak="false" name="User" x="109" y="145">
+<attributes>
+<attribute is_hidden="false" is_key="true" name="id" type=""/>
+<attribute is_hidden="false" is_key="false" name="username" type=""/>
+<attribute is_hidden="false" is_key="false" name="email" type=""/>
+<attribute is_hidden="false" is_key="false" name="password" type=""/>
+</attributes>
+</entity>
+<entity id="1" is_weak="false" name="RaspberryPi" x="303" y="153">
+<attributes>
+<attribute is_hidden="false" is_key="true" name="id" type=""/>
+<attribute is_hidden="false" is_key="false" name="alarm" type="Boolean"/>
+<attribute is_hidden="false" is_key="false" name="car" type=""/>
+<attribute is_hidden="false" is_key="false" name="longitude" type=""/>
+<attribute is_hidden="false" is_key="false" name="latitude" type=""/>
+</attributes>
+</entity>
+<entity id="5" is_weak="true" name="Alarm_log" x="532" y="154">
+<attributes>
+<attribute is_hidden="false" is_key="false" name="id" type=""/>
+<attribute is_hidden="false" is_key="false" name="timestamp" type="Date"/>
+</attributes>
+</entity>
+<entity id="9" is_weak="true" name="Gps_log" x="313" y="364">
+<attributes>
+<attribute is_hidden="false" is_key="false" name="id" type=""/>
+<attribute is_hidden="false" is_key="false" name="latitude" type=""/>
+<attribute is_hidden="false" is_key="false" name="longitude" type=""/>
+<attribute is_hidden="false" is_key="false" name="timestamp" type=""/>
+</attributes>
+</entity>
+<diamond id="2" is_weak="false" name="has" x="221" y="181">
+<attributes/>
+</diamond>
+<diamond id="6" is_weak="true" name="has" x="446" y="173">
+<attributes/>
+</diamond>
+<diamond id="10" is_weak="true" name="has" x="333" y="295">
+<attributes/>
+</diamond>
+<line cardinality_string="(0,n)" has_u="false" id="3" is_weak="false" role="" style="0" turned="false">
+<connection connection_side="2" direction="0" object_id="0" relation_point_x="173" relation_point_y="188"/>
+<connection connection_side="0" direction="0" object_id="2" relation_point_x="221" relation_point_y="197"/>
+</line>
+<line cardinality_string="(1,n)" has_u="false" id="4" is_weak="false" role="" style="0" turned="false">
+<connection connection_side="0" direction="0" object_id="1" relation_point_x="303" relation_point_y="203"/>
+<connection connection_side="2" direction="0" object_id="2" relation_point_x="253" relation_point_y="197"/>
+</line>
+<line cardinality_string="(0,n)" has_u="false" id="7" is_weak="false" role="" style="0" turned="false">
+<connection connection_side="2" direction="0" object_id="1" relation_point_x="395" relation_point_y="203"/>
+<connection connection_side="0" direction="0" object_id="6" relation_point_x="446" relation_point_y="189"/>
+</line>
+<line cardinality_string="(1,1)" has_u="false" id="8" is_weak="false" role="" style="0" turned="false">
+<connection connection_side="0" direction="0" object_id="5" relation_point_x="532" relation_point_y="187"/>
+<connection connection_side="2" direction="0" object_id="6" relation_point_x="478" relation_point_y="189"/>
+</line>
+<line cardinality_string="(0,n)" has_u="false" id="11" is_weak="false" role="" style="0" turned="false">
+<connection connection_side="3" direction="1" object_id="1" relation_point_x="349" relation_point_y="253"/>
+<connection connection_side="1" direction="1" object_id="10" relation_point_x="349" relation_point_y="295"/>
+</line>
+<line cardinality_string="(1,1)" has_u="false" id="12" is_weak="false" role="" style="0" turned="false">
+<connection connection_side="1" direction="1" object_id="9" relation_point_x="351" relation_point_y="364"/>
+<connection connection_side="3" direction="1" object_id="10" relation_point_x="349" relation_point_y="327"/>
+</line>
+</diagram>
