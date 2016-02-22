@@ -1,11 +1,15 @@
 import RPi.GPIO as GPIO
 import MySQLdb
 
+#https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
+
+#lager en connection til db
 db = MySQLdb.connect(host="mysql.stud.ntnu.no",    # your host, usually localhost
 		user="glennchr",         # your username
 		passwd="mysql123",  # your password
 		db="glennchr_app")        # name of the data base
 
+#setter opp RaspberryPi
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -19,8 +23,10 @@ GPIO.setup(alarm_button, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(reset_button, GPIO.IN, GPIO.PUD_UP)
 
 def alarm():
+  #lager en cursor som kan kjøre sql spørringer
 	cur = db.cursor()
 	cur.execute("SELECT alarm FROM alarm WHERE user_email = %s", ("glaar90@gmail.com"))
+  #henter ut verdier fra fetchone
 	values = cur.fetchone()
 	value = values[0]
 	return value
