@@ -25,7 +25,7 @@ public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, Void> {
     protected Void doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/PT/addDataSecure.php");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/Register.php");
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
