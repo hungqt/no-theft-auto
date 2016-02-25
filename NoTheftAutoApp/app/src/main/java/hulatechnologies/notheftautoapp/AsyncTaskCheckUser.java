@@ -29,7 +29,7 @@ public class AsyncTaskCheckUser extends AsyncTask<JSONObject, Void, Integer> {
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/PT/checkDataSecure.php");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/loginCheck.php");
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
