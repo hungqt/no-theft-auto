@@ -7,10 +7,37 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="notheftautoapp.hulatechnologies.examplecodemodule.MainActivity">
+    tools:context="com.example.hqthi.deeznuts.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="I just got this new CD"
+        android:id="@+id/generatedTxt"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What CD?"
+        android:id="@+id/whatcd"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/generatedTxt"
+        android:layout_centerHorizontal="true"
+        android:onClick="generateText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next layout"
+        android:id="@+id/nextLayoutBtn"
+        android:layout_marginTop="39dp"
+        android:layout_below="@+id/whatcd"
+        android:layout_centerHorizontal="true"
+        android:onClick="changeToNext"/>
+
+
 </RelativeLayout>

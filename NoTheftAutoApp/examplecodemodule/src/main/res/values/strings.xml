@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">ExampleCodeModule</string>
+
+    <string-array name="planets_array">
+        <item>Kobe Bryant</item>
+        <item>Lebron James</item>
+        <item>Stephen Curry</item>
+        <item>Dwyane Wade</item>
+        <item>Kevin Durant</item>
+        <item>Russell Westbrook</item>
+        <item>Damian Lillard</item>
+        <item>John Wall</item>
+        <item>Kyrie Irving</item>
+        <item>James Harden</item>
+        <item>Andre Drummond</item>
+        <item>Pau Gasol</item>
+        <item>Chris Paul</item>
+        <item>DeMarcus Cousins</item>
+        <item>Klay Thompson</item>
+        <item>Dwight Howard</item>
+        <item>Tim Duncan</item>
+        <item>Carmelo Anthony</item>
+        <item>Dirk Nowitzki</item>
+        <item>Gordon Hayward</item>
+    </string-array>
 </resources>
