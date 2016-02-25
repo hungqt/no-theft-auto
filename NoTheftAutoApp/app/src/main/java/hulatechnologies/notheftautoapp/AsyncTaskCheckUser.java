@@ -30,7 +30,7 @@ public class AsyncTaskCheckUser extends AsyncTask<JSONObject, Void, Integer> {
         URL url = null;
         try {
             url = new URL("http://folk.ntnu.no/thomborr/PT/checkDataSecure.php");
-            String message = md5(params[0].toString());
+            String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
             //Setter at jeg kan sende data til serveren
@@ -84,7 +84,7 @@ public class AsyncTaskCheckUser extends AsyncTask<JSONObject, Void, Integer> {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
-    public static String md5(String s)
+    /*public static String md5(String s)
     {
         MessageDigest digest;
         try
@@ -101,7 +101,7 @@ public class AsyncTaskCheckUser extends AsyncTask<JSONObject, Void, Integer> {
             e.printStackTrace();
         }
         return "";
-    }
+    }*/
     @Override
     protected void onPostExecute(Integer result) {
         delegate.processFinish(result);
