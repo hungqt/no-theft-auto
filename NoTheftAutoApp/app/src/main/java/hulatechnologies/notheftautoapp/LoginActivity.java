@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     private EditText passText;
     private AlertDialog alertDialog;
     private AlertDialog alertDialog2;
+    private AlertDialog acceptDialog;
+    private static final String PrefName = "User";
+    private static final String PrefPass = "Pass";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userText = (EditText) findViewById(R.id.userText);
         passText = (EditText) findViewById(R.id.passText);
+        if(!getPrefName().isEmpty()){
+            userText.setText(getPrefName());
+            passText.setText(getPrefPass());
+        }
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Error");
         alertDialog.setMessage("Wrong username or password");
@@ -52,6 +60,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             json.put("username", userText.getText().toString());
             json.put("password", passText.getText().toString());
             data.execute(json);
+            //LaunchAlert();
+            setPrefName(userText.getText().toString());
+            setPrefPass(passText.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -76,6 +87,37 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             });
             alertDialog2.show();
         }
+    }
+    private void LaunchAlert(){
+        boolean remember = false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Add the buttons
+        builder.setPositiveButton(R.string.No, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton(R.string.Yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+            }
+        });
+        acceptDialog = builder.create();
+        acceptDialog.setTitle("Stay logged in");
+        acceptDialog.setMessage("Do you wish to stay logged in?");
+        acceptDialog.show();
+    }
+    private void setPrefName(String prefName){
+        PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).edit().putString(PrefName, prefName).commit();
+    }
+    private void setPrefPass(String prefPass){
+        PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).edit().putString(PrefPass, prefPass).commit();
+    }
+    private String getPrefName(){
+        return PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).getString(PrefName,"");
+    }
+    private String getPrefPass(){
+        return PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).getString(PrefPass,"");
     }
 }
 

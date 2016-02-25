@@ -4,5 +4,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_observer">ObserverActivity</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
 
 </resources>
