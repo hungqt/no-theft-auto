@@ -26,7 +26,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
     public void initDrawerList(){
         //Getting planet-titles from /res/values/strings.xml (Manually write it in, in this example; the list of NBA players)
-        nbaPlayerNames = getResources().getStringArray(R.array.planets_array);
+        nbaPlayerNames = getResources().getStringArray(R.array.nba_players_array);
         DrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         DrawerList = (ListView) findViewById(R.id.left_drawer);
 
