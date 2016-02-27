@@ -1,5 +1,6 @@
 package notheftautoapp.hulatechnologies.examplecodemodule;
 
+import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +36,7 @@ public class NavDrawerActivity extends AppCompatActivity {
 
         //Set the list's click listener
         //DrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
     }
 
 }
