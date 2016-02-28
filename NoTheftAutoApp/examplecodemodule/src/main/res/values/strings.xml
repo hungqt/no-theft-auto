@@ -2,7 +2,7 @@
     <string name="app_name">ExampleCodeModule</string>
 
     <string-array name="nba_players_array">
-        <item>Kobe Bryant</item>
+        <item>kobe</item>
         <item>Lebron James</item>
         <item>Stephen Curry</item>
         <item>Dwyane Wade</item>

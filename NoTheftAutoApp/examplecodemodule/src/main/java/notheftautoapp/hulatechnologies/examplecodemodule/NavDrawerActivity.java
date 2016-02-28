@@ -11,7 +11,7 @@ import android.widget.ListView;
 public class NavDrawerActivity extends AppCompatActivity {
 
     private String[] nbaPlayerNames;
-    private DrawerLayout DrawerLayout;
+    private DrawerLayout drawerLayout;
     private ListView DrawerList;
 
     @Override
@@ -28,14 +28,14 @@ public class NavDrawerActivity extends AppCompatActivity {
     public void initDrawerList(){
         //Getting planet-titles from /res/values/strings.xml (Manually write it in, in this example; the list of NBA players)
         nbaPlayerNames = getResources().getStringArray(R.array.nba_players_array);
-        DrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         DrawerList = (ListView) findViewById(R.id.left_drawer);
 
         //Set the adapter for the list view
         DrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, nbaPlayerNames));
 
         //Set the list's click listener
-        //DrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        DrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
     }
 
