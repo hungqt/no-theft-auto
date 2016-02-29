@@ -13,7 +13,7 @@ db = MySQLdb.connect(host="mysql.stud.ntnu.no",    # your host, usually localhos
 def getAlarm():
   #lager en cursor som kan kjore sql soringer
 	cur = db.cursor()
-	cur.execute("SELECT alarm FROM alarm WHERE user_email = %s", ("glaar90@gmail.com"))
+	cur.execute("SELECT alarm FROM alarm WHERE user_email = %s", ["glaar90@gmail.com"])
   #henter ut verdier fra fetchone
 	values = cur.fetchone()
 	value = values[0]
@@ -23,7 +23,7 @@ def getAlarm():
 def setAlarm(value):
 	cur = db.cursor()
 	stringValue = str(value)
-	cur.execute("UPDATE glennchr_app.alarm SET alarm="+stringValue+" WHERE user_email = %s", ("glaar90@gmail.com"))
+	cur.execute("UPDATE glennchr_app.alarm SET alarm="+stringValue+" WHERE user_email = %s", ["glaar90@gmail.com"])
 
 
 menu = {}
@@ -44,7 +44,7 @@ while True:
 		setAlarm(0)
 	elif selection == '3': 
 		text = "\nAlarm status: %d \n" % getAlarm()
-		print(text)
+		print text
 	elif selection == '4':
 		break
 	else: 
