@@ -5,6 +5,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,14 +15,10 @@ import android.view.View;
 public class ObserverActivity extends ContentObserver {
 
 
-    /**
-     * Creates a content observer.
-     *
-     * @param handler The handler to run {@link #onChange} on, or null if none.
-     */
     public ObserverActivity(Handler handler) {
         super(handler);
     }
+
     @Override
     public void onChange(boolean selfChange) {
         this.onChange(selfChange, null);
@@ -29,6 +26,8 @@ public class ObserverActivity extends ContentObserver {
 
     @Override
     public void onChange(boolean selfChange, Uri uri) {
-
+        // do s.th.
+        // depending on the handler you might be on the UI
+        // thread, so be cautious!
     }
 }

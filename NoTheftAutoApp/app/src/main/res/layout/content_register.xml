@@ -19,18 +19,16 @@
         android:text="Register"
         android:id="@+id/text"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp" />
+        android:layout_alignStart="@+id/userText" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
         android:id="@+id/btnRegister"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="136dp"
-        android:onClick="onRegClick" />
+        android:onClick="onRegClick"
+        android:layout_above="@+id/button"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -51,7 +49,8 @@
         android:id="@+id/passText2"
         android:text="pass"
         android:layout_above="@+id/btnRegister"
-        android:layout_alignStart="@+id/passText1" />
+        android:layout_alignStart="@+id/passText1"
+        android:layout_marginBottom="33dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -79,8 +78,8 @@
         android:layout_height="wrap_content"
         android:text="Cancel"
         android:id="@+id/button"
-        android:layout_marginTop="51dp"
-        android:layout_below="@+id/passText2"
+        android:layout_marginBottom="53dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/btnRegister" />
 
 </RelativeLayout>

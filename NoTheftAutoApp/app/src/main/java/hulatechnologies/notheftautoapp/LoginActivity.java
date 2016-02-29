@@ -1,6 +1,9 @@
 package hulatechnologies.notheftautoapp;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     private AlertDialog acceptDialog;
     private static final String PrefName = "User";
     private static final String PrefPass = "Pass";
+    private NotificationManager NM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        NM=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         remMe = (CheckBox)findViewById(R.id.remMe);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userText = (EditText) findViewById(R.id.userText);
@@ -63,6 +68,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             json.put("username", userText.getText().toString());
             json.put("password", passText.getText().toString());
             data.execute(json);
+
+
+
             if(remMe.isChecked()) {
                 setPrefName(userText.getText().toString());
                 setPrefPass(passText.getText().toString());
