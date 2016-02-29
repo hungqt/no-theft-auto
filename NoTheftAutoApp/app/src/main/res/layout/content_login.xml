@@ -37,4 +37,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="77dp"
         android:onClick="onLClick" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember me"
+        android:id="@+id/remMe"
+        android:checked="false"
+        android:layout_below="@+id/passText"
+        android:layout_alignStart="@+id/passText" />
 </RelativeLayout>
