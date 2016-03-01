@@ -74,7 +74,8 @@
         android:id="@+id/button"
         android:layout_marginBottom="53dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/btnRegister" />
+        android:layout_alignStart="@+id/btnRegister"
+        android:onClick="onCancel" />
 
     <Button
         android:layout_width="wrap_content"
