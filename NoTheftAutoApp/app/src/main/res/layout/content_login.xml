@@ -14,9 +14,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/userText"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="90dp"
-        android:width="200dp" />
+        android:width="200dp"
+        android:layout_alignStart="@+id/passText"
+        android:layout_alignEnd="@+id/passText"
+        android:hint="@string/example_username"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -26,7 +28,8 @@
         android:id="@+id/passText"
         android:layout_marginTop="32dp"
         android:layout_below="@+id/userText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:hint="@string/example_pass"/>
 
     <Button
         android:layout_width="wrap_content"

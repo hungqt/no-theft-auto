@@ -21,14 +21,18 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/userText" />
 
-    <Button
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/btnRegister"
-        android:onClick="onRegClick"
-        android:layout_above="@+id/button"
-        android:layout_centerHorizontal="true" />
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/emailText"
+        android:outlineProvider="bounds"
+        android:layout_below="@+id/userText"
+        android:layout_alignStart="@+id/passText1"
+        android:layout_marginTop="33dp"
+        android:autoText="false"
+        android:hint="@string/example_mail"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -36,10 +40,10 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/passText1"
-        android:text="pass"
         android:layout_marginTop="47dp"
         android:layout_below="@+id/emailText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:hint="@string/example_pass" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -47,31 +51,21 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/passText2"
-        android:text="pass"
         android:layout_above="@+id/btnRegister"
         android:layout_alignStart="@+id/passText1"
-        android:layout_marginBottom="33dp" />
+        android:layout_marginBottom="33dp"
+        android:hint="@string/example_pass" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/userText"
-        android:text="username"
         android:layout_marginTop="26dp"
         android:layout_below="@+id/text"
-        android:layout_alignStart="@+id/btnRegister" />
+        android:layout_alignEnd="@+id/emailText"
+        android:layout_alignStart="@+id/emailText"
+        android:hint="@string/example_username"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/emailText"
-        android:text="example@example.com"
-        android:outlineProvider="bounds"
-        android:layout_below="@+id/userText"
-        android:layout_alignStart="@+id/passText1"
-        android:layout_marginTop="33dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -81,5 +75,14 @@
         android:layout_marginBottom="53dp"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/btnRegister" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/btnRegister"
+        android:onClick="onRegClick"
+        android:layout_above="@+id/button"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
