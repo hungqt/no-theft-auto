@@ -11,7 +11,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnReg;
+    private Button btnReg; //Hey
     private Button btnLogin;
 
     @Override
