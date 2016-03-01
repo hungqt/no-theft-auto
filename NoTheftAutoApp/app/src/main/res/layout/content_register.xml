@@ -72,11 +72,12 @@
         android:layout_height="wrap_content"
         android:text="Cancel"
         android:id="@+id/button"
-        android:layout_alignStart="@+id/btnRegister"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/btnRegister"
-        android:layout_alignEnd="@+id/btnRegister"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/btnRegister"
+        android:onClick="onCancel"
+        android:layout_below="@+id/btnRegister" />
+
 
     <Button
         android:layout_width="wrap_content"
