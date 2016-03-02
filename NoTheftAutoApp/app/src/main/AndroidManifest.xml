@@ -43,6 +43,14 @@
             android:name=".ObserverActivity"
             android:label="@string/title_activity_observer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <receiver
+            android:name=".AlarmService"
+            android:process=":remote" >
+        </receiver>
+
+        <service
+            android:name=".ListenerService"
+            android:exported="false" />
     </application>
 
 </manifest>
