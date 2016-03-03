@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
+        //scheduleAlarm();
 
     }
 
