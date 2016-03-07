@@ -11,7 +11,7 @@ import android.location.GpsStatus;
 public class AlarmService extends BroadcastReceiver {
 
     public static final int REQUEST_CODE = 12345;
-    public static final String ACTION = "com.codepath.example.servicesdemo.alarm";
+    public static final String ACTION = "hulatechnologies.notheftautoapp.AlarmService";
 
     @Override
     public void onReceive(Context context, Intent intent) {

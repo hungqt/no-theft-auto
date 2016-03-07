@@ -27,7 +27,14 @@ public class ListenerService extends IntentService implements AsyncResponse {
     private static final String PrefPass = "Pass";
 
     @Override
+    public void onCreate() {
+        super.onCreate(); // if you override onCreate(), make sure to call super().
+        // If a Context object is needed, call getApplicationContext() here.
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
+        Log.i("MyTestService", "Service running");
         callDataBase();
     }
     public void callDataBase(){
