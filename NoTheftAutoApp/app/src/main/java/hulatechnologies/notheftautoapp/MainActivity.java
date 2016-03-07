@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // Setup a recurring alarm every half hour
+    // Setup a recurring alarm every 15 seconds
     public void scheduleAlarm() {
         // Construct an intent that will execute the AlarmReceiver
         Intent intent = new Intent(getApplicationContext(), ListenerService.class);
