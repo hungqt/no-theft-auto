@@ -1,15 +1,12 @@
 package hulatechnologies.notheftautoapp;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -82,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     @Override
     public void processFinish(Integer output) {
         if(output == 1){
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, StartActivity.class));
         }
         else if(output == 2){
             alertDialog.show();

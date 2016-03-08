@@ -2,8 +2,6 @@ package hulatechnologies.notheftautoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -63,14 +61,14 @@ public class RegisterActivity extends AppCompatActivity {
         else{
             Log.d("Error:", "Noe gikk galt");
         }
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, StartActivity.class));
     }
     public void onCancel(View v){
         userText.setText("");
         passText1.setText("");
         passText2.setText("");
         emailText.setText("");
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, StartActivity.class));
     }
 
 }
