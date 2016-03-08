@@ -30,11 +30,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     private CheckBox remMe;
     private AlertDialog alertDialog;
     private AlertDialog alertDialog2;
-    private AlertDialog acceptDialog;
-    private static final String PrefName = "User";
-    private static final String PrefPass = "Pass";
-    private static final String remName = "False";
-    private NotificationManager NM;
+    private PreferenceHandler handler = new PreferenceHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +38,14 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        NM=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        
         remMe = (CheckBox)findViewById(R.id.remMe);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userText = (EditText) findViewById(R.id.userText);
         passText = (EditText) findViewById(R.id.passText);
-        if(getPrefRem() == true){
-            userText.setText(getPrefName());
-            passText.setText(getPrefPass());
+        if(handler.getPrefRem(getBaseContext()) == true){
+            userText.setText(handler.getPrefName(getBaseContext()));
+            passText.setText(handler.getPrefPass(getBaseContext()));
         }
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Error");
@@ -72,11 +67,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             data.execute(json);
 
             if(remMe.isChecked()){
-                setPrefRem(true);
+                handler.setPrefRem(true,getBaseContext());
             }
-
-            setPrefName(userText.getText().toString());
-            setPrefPass(passText.getText().toString());
+            handler.setPrefName(userText.getText().toString(),getBaseContext());
+            handler.setPrefPass(passText.getText().toString(),getBaseContext());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -85,6 +79,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     public void processFinish(Integer output) {
         if(output == 1){
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            handler.setLoggedIn(true,getBaseContext());
+            finish();
+
         }
         else if(output == 2){
             alertDialog.show();
@@ -101,30 +98,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             });
             alertDialog2.show();
         }
-    }
-    private void setPrefName(String prefName){
-        SharedPreferences SPname = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext());
-        SharedPreferences.Editor editor = SPname.edit();
-        editor.putString(PrefName, prefName);
-        editor.commit();
-    }
-    private void setPrefPass(String prefPass){
-        SharedPreferences SPpass = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext());
-        SharedPreferences.Editor editor = SPpass.edit();
-        editor.putString(PrefPass, prefPass);
-        editor.commit();
-    }
-    private void setPrefRem(boolean pref){
-        PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).edit().putBoolean(remName, pref);
-    }
-    private String getPrefName(){
-        return PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).getString(PrefName,"");
-    }
-    private String getPrefPass(){
-        return PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).getString(PrefPass, "");
-    }
-    private boolean getPrefRem(){
-        return PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).getBoolean(remName, false);
     }
 }
 

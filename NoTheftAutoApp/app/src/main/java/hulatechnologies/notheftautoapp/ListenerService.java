@@ -1,16 +1,10 @@
 package hulatechnologies.notheftautoapp;
 
-import android.app.AlertDialog;
 import android.app.IntentService;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.PeriodicSync;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,13 +12,12 @@ import org.json.JSONObject;
 /**
  * Created by thoma on 3/1/2016.
  */
-public class ListenerService extends IntentService implements AsyncResponse {
+public class ListenerService extends IntentService {
     public ListenerService() {
         super("ListenerService");
     }
 
-    private static final String PrefName = "User";
-    private static final String PrefPass = "Pass";
+    private PreferenceHandler handler = new PreferenceHandler();
 
     @Override
     public void onCreate() {
@@ -38,34 +31,27 @@ public class ListenerService extends IntentService implements AsyncResponse {
         callDataBase();
     }
     public void callDataBase(){
-        AsyncAlarm data = new AsyncAlarm();
-        data.delegate = this;
+        SyncAlarm data = new SyncAlarm();
         JSONObject json = new JSONObject();
         try {
-            json.put("username", getPrefName());
-            json.put("password", getPrefPass());
-            data.execute(json);
+            json.put("username", handler.getPrefName(getBaseContext()));
+            json.put("password", handler.getPrefPass(getBaseContext()));
+            Log.d("username",handler.getPrefName(getBaseContext()));
+            Log.d("password",handler.getPrefPass(getBaseContext()));
+            int answer = data.doInBackground(json);
+
+            if(answer == 1){
+                Log.d("Alarm","Active");
+            }
+            else if(answer == 0){
+                Log.d("Alarm", "Not active");
+            }
+            else{
+                Log.d("Connection error","Something went wrong");
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public void processFinish(Integer output) {
-        if(output == 1){
-            Log.d("Alarm","Active");
-        }
-        else{
-            Log.d("Alarm", "Not active");
-        }
-    }
-    private String getPrefName(){
-        final SharedPreferences mSharedPreference= PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String value=(mSharedPreference.getString(PrefName, ""));
-        return value;
-    }
-    private String getPrefPass(){
-        final SharedPreferences mSharedPreference= PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String value=(mSharedPreference.getString(PrefPass, ""));
-        return value;
     }
 }

@@ -15,18 +15,17 @@ import java.net.URL;
 /**
  * Created by thoma on 3/7/2016.
  */
-public class AsyncAlarm extends AsyncTask<JSONObject, Void, Integer> {
+public class SyncAlarm {
 
     public AsyncResponse delegate = null;
 
-    @Override
-    protected Integer doInBackground(JSONObject... params) {
+    public Integer doInBackground(JSONObject params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
             url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck");
-            String message = params[0].toString();
+            String message = params.toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
             //Setter at jeg kan sende data til serveren
@@ -66,20 +65,19 @@ public class AsyncAlarm extends AsyncTask<JSONObject, Void, Integer> {
                 urlConnection.disconnect();
             }
         }
-        if(answer.equals("Success")){
+        if(answer.equals("1")){
             return 1;
         }
-        else{
+        else if(answer.equals("0")){
             return 0;
+        }
+        else{
+            return 2;
         }
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
-    }
-    @Override
-    protected void onPostExecute(Integer result) {
-        delegate.processFinish(result);
     }
 }
 

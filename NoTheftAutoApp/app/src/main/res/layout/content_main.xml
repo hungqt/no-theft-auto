@@ -40,4 +40,14 @@
         android:layout_centerHorizontal="true"
         android:onClick="goToLogin"
         android:nestedScrollingEnabled="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log out"
+        android:id="@+id/btnLogout"
+        android:layout_above="@+id/btnReg"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:onClick="logOut" />
 </RelativeLayout>
