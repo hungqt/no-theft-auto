@@ -29,7 +29,8 @@
         android:layout_below="@+id/text"
         android:layout_alignEnd="@+id/emailText"
         android:layout_alignStart="@+id/emailText"
-        android:hint="@string/example_username"/>
+        android:hint="@string/example_username"
+        android:inputType="textPersonName" />
 
     <EditText
         android:layout_width="wrap_content"
