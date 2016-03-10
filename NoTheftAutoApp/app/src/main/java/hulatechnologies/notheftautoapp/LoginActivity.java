@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
+
         remMe = (CheckBox)findViewById(R.id.remMe);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userText = (EditText) findViewById(R.id.userText);
