@@ -9,6 +9,25 @@ db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
                      db="glennchr_nta")  # name of the data base
 
 
+cur = db.cursor()
+cur.execute('''INSERT INTO gps_log (timestamp, longitude, latitude, pi_id) VALUES (%s, %s, %s, %s)''',
+            ('0', '123', '321', 1))
+
+# kode som leser txt-fil
+f = open("coord1.txt", "r")
+
+while True:
+    a = f.readline()
+
+    if a == "":
+        print "lol"
+        f.close()
+        break
+
+    b = a.split("\"")
+    c = b[6].split(":")[1].split(",")[0]
+    print c
+
 # setter opp RaspberryPi
 
 def getAlarm():
@@ -19,6 +38,10 @@ def getAlarm():
     values = cur.fetchone()
     value = values[0]
     return value
+
+def getLatitudeLogditude():
+    cur = db.cursor()
+    cur.execute("INSERT INTO gps_log (timestamp, longitude, latitude, pi_id) VALUES (0000, 667, 668, 1)")
 
 
 def setAlarm(value):
