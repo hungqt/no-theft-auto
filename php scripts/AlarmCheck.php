@@ -18,10 +18,9 @@ else{
 }
 
 if($request != null){
-	
 	$userName = $request['username'];
 	$passWord = $request['password'];
-	$query = "SELECT user_id FROM user WHERE username=? AND password=?";
+	$query = "SELECT alarm FROM raspberry_pi WHERE rpi_id in(SELECT rpi_id FROM user_has_rpi WHERE user_id in(SELECT user_id FROM user WHERE username=? AND password=?))";
 	$stmt = $conn->stmt_init();
 	
 	if(!$stmt->prepare($query)){
@@ -33,7 +32,7 @@ if($request != null){
 		$stmt->bind_result($id);
 		
 		if($stmt->fetch() != null){
-			echo "Success";
+			echo $id;
 		}
 		else{
 			echo "Failure";

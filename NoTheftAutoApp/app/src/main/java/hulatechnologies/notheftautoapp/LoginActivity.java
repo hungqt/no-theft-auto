@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -29,10 +30,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     private CheckBox remMe;
     private AlertDialog alertDialog;
     private AlertDialog alertDialog2;
-    private AlertDialog acceptDialog;
-    private static final String PrefName = "User";
-    private static final String PrefPass = "Pass";
-    private NotificationManager NM;
+    private PreferenceHandler handler = new PreferenceHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +39,13 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        NM=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         remMe = (CheckBox)findViewById(R.id.remMe);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userText = (EditText) findViewById(R.id.userText);
         passText = (EditText) findViewById(R.id.passText);
-        if(!getPrefName().isEmpty()){
-            userText.setText(getPrefName());
-            passText.setText(getPrefPass());
+        if(handler.getPrefRem(getBaseContext()) == true){
+            userText.setText(handler.getPrefName(getBaseContext()));
+            passText.setText(handler.getPrefPass(getBaseContext()));
         }
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Error");
@@ -69,12 +66,11 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             json.put("password", passText.getText().toString());
             data.execute(json);
 
-
-
-            if(remMe.isChecked()) {
-                setPrefName(userText.getText().toString());
-                setPrefPass(passText.getText().toString());
+            if(remMe.isChecked()){
+                handler.setPrefRem(true,getBaseContext());
             }
+            handler.setPrefName(userText.getText().toString(),getBaseContext());
+            handler.setPrefPass(passText.getText().toString(),getBaseContext());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -83,6 +79,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     public void processFinish(Integer output) {
         if(output == 1){
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            handler.setLoggedIn(true,getBaseContext());
+            finish();
+
         }
         else if(output == 2){
             alertDialog.show();
@@ -99,18 +98,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             });
             alertDialog2.show();
         }
-    }
-    private void setPrefName(String prefName){
-        PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).edit().putString(PrefName, prefName).commit();
-    }
-    private void setPrefPass(String prefPass){
-        PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).edit().putString(PrefPass, prefPass).commit();
-    }
-    private String getPrefName(){
-        return PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).getString(PrefName,"");
-    }
-    private String getPrefPass(){
-        return PreferenceManager.getDefaultSharedPreferences(LoginActivity.this.getApplicationContext()).getString(PrefPass,"");
     }
 }
 
