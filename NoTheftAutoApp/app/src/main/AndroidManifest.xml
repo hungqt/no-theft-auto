@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hulatechnologies.notheftautoapp">
+    package="hulatechnologies.notheftautoapp" >
 
     <uses-sdk android:minSdkVersion="17" />
 
@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -39,14 +38,19 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <receiver
             android:name=".AlarmService"
-            android:process=":remote" >
-        </receiver>
+            android:process=":remote"></receiver>
 
         <service
             android:name=".ListenerService"
             android:exported="false" />
+
+        <activity
+            android:name=".Status"
+            android:label="@string/title_activity_status"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
