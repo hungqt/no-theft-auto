@@ -1,5 +1,9 @@
 package hulatechnologies.notheftautoapp;
 
+/**
+ * Created by thoma on 3/14/2016.
+ */
+
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,26 +17,26 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by thoma on 3/7/2016.
+ * Created by thoma on 2/23/2016.
  */
-public class SyncAlarm {
+public class SyncGetCars {
 
     public AsyncResponse delegate = null;
 
-    public String doInBackground(JSONObject params) {
+    protected Integer[] doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck");
-            String message = params.toString();
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/getCars.php");
+            String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
             //Setter at jeg kan sende data til serveren
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //GjÃ¸r noe med byte-streamen sÃ¥ ikke hele lagres i minnet samtidig (?)
+            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -64,7 +68,11 @@ public class SyncAlarm {
                 urlConnection.disconnect();
             }
         }
-        return answer;
+        Integer[] carIDs = new Integer[answer.length()];
+        for(int i = 0; i < answer.length(); i++){
+            carIDs[i] = Integer.valueOf(answer.substring(i,i+1));
+        }
+        return carIDs;
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");

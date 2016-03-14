@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
  */
 public class PreferenceHandler {
 
+    //Klasse for å lagre alle verdiene som må huskes over tid
+
     private static final String PrefName = "User";
     private static final String PrefPass = "Pass";
     private static final String logName = "Log";
@@ -33,8 +35,17 @@ public class PreferenceHandler {
     public void setLoggedIn(boolean pref,Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(logName, pref).commit();
     }
-    public void setCarActive(int carID,Context context){
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(carIDName,carID).commit();
+    public void setCarAlarmActive(boolean pref,Context context, String carName){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(carName, pref).commit();
+    }
+    public void setCarString(String s, Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(carIDName, s).commit();
+    }
+    public String getCarString(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(carIDName,"");
+    }
+    public boolean getCarAlarmActive(Context context, String carName){
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(carName, false);
     }
     public String getPrefName(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PrefName,"");
