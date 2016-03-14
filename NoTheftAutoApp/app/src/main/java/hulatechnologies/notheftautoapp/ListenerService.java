@@ -30,8 +30,8 @@ public class ListenerService extends IntentService {
         callDataBase();
     }
     public void callDataBase(){
-        //SyncGetCars henter alle ID-ene til bilene basert på brukernavn og passord
-        //SyncAlarm sjekker om alarmen er gått på den spesifikke IDen og returnerer dette sammen med navnet på bilen
+        //SyncGetCars henter alle ID-ene til bilene basert pï¿½ brukernavn og passord
+        //SyncAlarm sjekker om alarmen er gï¿½tt pï¿½ den spesifikke IDen og returnerer dette sammen med navnet pï¿½ bilen
         SyncGetCars cars = new SyncGetCars();
         SyncAlarm check = new SyncAlarm();
         JSONObject json = new JSONObject();
@@ -49,16 +49,17 @@ public class ListenerService extends IntentService {
                 int alarm = Integer.valueOf(c.substring(0,1));
 
                 if(alarm == 1){
-                    Log.d("Alarm ACTIVE",c.substring(1,c.length()-1));
+                    Log.d("Alarm ACTIVE",c.substring(1,c.length()));
                     handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
                 }
                 else{
-                    Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()-1));
+                    Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
                     handler.setCarAlarmActive(false,getBaseContext(),carIDs[i]+"");
                 }
                 carIDsString += carIDs[i];
             }
             handler.setCarString(carIDsString,getBaseContext());
+            Log.d("CarIDs",handler.getCarString(getBaseContext()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -24,7 +24,7 @@ public class SyncAlarm {
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck.php");
             String message = params.toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();

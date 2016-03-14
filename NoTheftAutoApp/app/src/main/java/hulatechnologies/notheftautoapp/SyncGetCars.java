@@ -36,7 +36,7 @@ public class SyncGetCars {
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
+            //Gjï¿½r noe med byte-streamen sï¿½ ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -58,6 +58,8 @@ public class SyncGetCars {
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             answer = convertStreamToString(in);
+            Log.d("Answer",answer);
+            Log.d("answers length","" + answer.split("/").length);
             in.close();
 
         } catch (Exception e) {
@@ -68,10 +70,13 @@ public class SyncGetCars {
                 urlConnection.disconnect();
             }
         }
-        Integer[] carIDs = new Integer[answer.length()];
-        for(int i = 0; i < answer.length(); i++){
-            carIDs[i] = Integer.valueOf(answer.substring(i,i+1));
+        String[] answers = answer.split("/");
+        Integer[] carIDs = new Integer[answers.length];
+        for(int i = 0; i < carIDs.length; i++){
+            carIDs[i] = Integer.valueOf(answers[i]);
+            Log.d(":D",answers[i]);
         }
+        Log.d("Length",""+carIDs.length);
         return carIDs;
     }
     public String convertStreamToString(InputStream is) {

@@ -9,8 +9,17 @@ import android.view.View;
 
 public class Status extends AppCompatActivity {
 
+    PreferenceHandler handler = new PreferenceHandler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        String carString = handler.getCarString(getBaseContext());
+        String[] carsInView= new String[carString.length()];
+
+        for(int i = 0; i < carString.length();i++){
+            carsInView[i] = carString.substring(i,i+1);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
