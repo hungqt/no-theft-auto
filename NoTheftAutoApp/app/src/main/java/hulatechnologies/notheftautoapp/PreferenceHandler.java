@@ -13,6 +13,7 @@ public class PreferenceHandler {
     private static final String PrefPass = "Pass";
     private static final String logName = "Log";
     private static final String remName = "False";
+    private static final String carIDName = "carID";
 
     public void setPrefName(String prefName, Context context){
         SharedPreferences SPname = PreferenceManager.getDefaultSharedPreferences(context);
@@ -31,6 +32,9 @@ public class PreferenceHandler {
     }
     public void setLoggedIn(boolean pref,Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(logName, pref).commit();
+    }
+    public void setCarActive(int carID,Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(carIDName,carID).commit();
     }
     public String getPrefName(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PrefName,"");
