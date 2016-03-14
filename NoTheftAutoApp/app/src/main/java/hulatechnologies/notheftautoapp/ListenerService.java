@@ -48,8 +48,10 @@ public class ListenerService extends IntentService {
                 String c = check.doInBackground(j);
                 int alarm = Integer.valueOf(c.substring(0,1));
 
-                if(alarm == 1){
-                    Log.d("Alarm ACTIVE",c.substring(1,c.length()));
+                handler.setCarName(c.substring(1,c.length()),getBaseContext(),carIDs[i]+"Name");
+
+                if (alarm == 1){
+                    Log.d("Alarm ACTIVE", c.substring(1, c.length()));
                     handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
                 }
                 else{

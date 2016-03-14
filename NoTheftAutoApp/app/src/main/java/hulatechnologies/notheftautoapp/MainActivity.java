@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnReg; //Hey
     private Button btnLogin;
     private Button btnLogout;
+    private Button btnStatus;
     private static final String PrefName = "User";
     private static final String PrefPass = "Pass";
     private static final String logName = "Log";
@@ -30,14 +31,17 @@ public class MainActivity extends AppCompatActivity {
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
         btnLogout = (Button)findViewById(R.id.btnLogout);
+        btnStatus = (Button)findViewById(R.id.btnStatus);
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
             scheduleAlarm();
             alarmSet = true;
             btnLogin.setVisibility(View.INVISIBLE);
+            btnStatus.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.VISIBLE);
         }else{
+            btnStatus.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
             if(alarmSet == true){
@@ -55,12 +59,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
+    public void goToStatus(View v){
+        startActivity(new Intent(this,Status.class));
+        finish();
+    }
     public void logOut(View v){
         resetPrefName();
         resetPrefPass();
 
         btnLogout.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
+        btnStatus.setVisibility(View.INVISIBLE);
 
         cancelAlarm();
 

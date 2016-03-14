@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
  */
 public class PreferenceHandler {
 
-    //Klasse for å lagre alle verdiene som må huskes over tid
+    //Klasse for ï¿½ lagre alle verdiene som mï¿½ huskes over tid
 
     private static final String PrefName = "User";
     private static final String PrefPass = "Pass";
@@ -29,6 +29,9 @@ public class PreferenceHandler {
         editor.putString(PrefPass, prefPass);
         editor.commit();
     }
+    public void setCarName(String car,Context context, String saveSpot){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(saveSpot, car).commit();
+    }
     public void setPrefRem(boolean pref,Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(remName, pref).commit();
     }
@@ -40,6 +43,9 @@ public class PreferenceHandler {
     }
     public void setCarString(String s, Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(carIDName, s).commit();
+    }
+    public String getCarName(Context context, String saveSpot){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(saveSpot, "");
     }
     public String getCarString(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(carIDName,"");
