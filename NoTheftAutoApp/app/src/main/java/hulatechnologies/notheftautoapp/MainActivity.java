@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnLogin = (Button)findViewById(R.id.btnLogin);
         btnLogout = (Button)findViewById(R.id.btnLogout);
         btnStatus = (Button)findViewById(R.id.btnStatus);
-        NotificationActivity notify = new NotificationActivity();
-        notify.notification();
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
