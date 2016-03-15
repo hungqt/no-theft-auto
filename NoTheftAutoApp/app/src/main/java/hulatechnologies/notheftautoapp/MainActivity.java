@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 cancelAlarm();
             }
         }
+
+
     }
 
     public void goToReg(View v){

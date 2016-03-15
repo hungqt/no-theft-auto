@@ -13,13 +13,12 @@ import android.content.Context;
  */
 public class NotificationActivity extends AppCompatActivity {
 
-    private NotificationManager myNotificationManager;
 
 
     public void notification(){
 
         int requestID = (int) System.currentTimeMillis();
-        Intent notificationIntent = new Intent(getApplicationContext(), Status.class);
+        Intent notificationIntent = new Intent(NotificationActivity.this, Status.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

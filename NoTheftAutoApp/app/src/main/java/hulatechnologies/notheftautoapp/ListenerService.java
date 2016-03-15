@@ -17,6 +17,8 @@ public class ListenerService extends IntentService {
         super("ListenerService");
     }
     private PreferenceHandler handler = new PreferenceHandler();
+    private NotificationCompat.Builder m notifier = new NotificationActivity();
+
 
     @Override
     public void onCreate() {
@@ -54,6 +56,7 @@ public class ListenerService extends IntentService {
                 if (alarm == 1){
                     Log.d("Alarm ACTIVE", c.substring(1, c.length()));
                     handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
+                    notifier.notification();
                 }
                 else{
                     Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
