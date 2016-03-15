@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class ListenerService extends IntentService {
         SyncAlarm check = new SyncAlarm();
         JSONObject json = new JSONObject();
         String carIDsString = "";
+        boolean startPush = false;
         try {
             json.put("username", handler.getPrefName(getBaseContext()));
             json.put("password", handler.getPrefPass(getBaseContext()));
@@ -52,18 +54,24 @@ public class ListenerService extends IntentService {
                 JSONObject j = new JSONObject();
                 j.put("carID",carIDs[i]+"");
                 String c = check.doInBackground(j);
+
                 int alarm = Integer.valueOf(c.substring(0,1));
 
                 handler.setCarName(c.substring(1,c.length()),getBaseContext(),carIDs[i]+"Name");
 
                 if (alarm == 1){
                     Log.d("Alarm ACTIVE", c.substring(1, c.length()));
-                    handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
-<<<<<<< HEAD
-                    //notifier.notification();
-=======
+                    handler.setCarAlarmActive(true, getBaseContext(), carIDs[i] + "");
+                    startPush = true;
+                }
+                else{
+                    Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
+                    handler.setCarAlarmActive(false,getBaseContext(),carIDs[i]+"");
+                }
+                carIDsString += carIDs[i];
+                }
+                if(startPush){
                     int requestID = (int) System.currentTimeMillis();
-
                     NotificationManager notificationManager = (NotificationManager) getSystemService(Context
                             .NOTIFICATION_SERVICE);
 
@@ -71,28 +79,20 @@ public class ListenerService extends IntentService {
                     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-
-
                     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setPriority(NotificationCompat.PRIORITY_MAX)
                             .setVibrate(new long[]{1, 1, 1})
                             .setCategory(NotificationCompat.CATEGORY_ALARM)
-                            .setContentTitle("OI! YOU CUNT!")
-                            .setContentText("YER CAR IS BEIN' STOLEN!")
+                            .setContentTitle("Attention").setColor(Color.RED)
+                            .setContentText("Your car might have been stolen!")
                             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
                     notificationBuilder.setAutoCancel(true);
                     notificationBuilder.setContentIntent(contentIntent);
                     notificationManager.notify(0, notificationBuilder.build());
->>>>>>> 824ed121bfce1f18fdc0793768d634dc4374eeb2
-                }
-                else{
-                    Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
-                    handler.setCarAlarmActive(false,getBaseContext(),carIDs[i]+"");
-                }
-                carIDsString += carIDs[i];
+
+                    startPush = false;
                 }
             }
             handler.setCarString(carIDsString,getBaseContext());

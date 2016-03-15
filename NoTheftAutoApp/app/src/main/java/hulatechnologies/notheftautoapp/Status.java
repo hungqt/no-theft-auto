@@ -92,7 +92,9 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         }
         else {
             label_status.setText("Not Active");
+            label_status.setTextColor(Color.GREEN);
         }
+        tR.addView(label_status);
         tableLayout.addView(tR, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
     public void callDataBase(){
