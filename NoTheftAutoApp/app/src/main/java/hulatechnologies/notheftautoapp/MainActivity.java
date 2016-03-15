@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         alarm.cancel(pIntent);
     }
     public void scheduleNotification(){
-        
+
     }
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
