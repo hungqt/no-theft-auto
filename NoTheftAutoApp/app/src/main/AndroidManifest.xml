@@ -47,6 +47,10 @@
             android:name=".ListenerService"
             android:exported="false" />
 
+        <activity
+            android:name=".Status"
+            android:label="@string/title_activity_status"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
