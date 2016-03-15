@@ -1,5 +1,7 @@
 package hulatechnologies.notheftautoapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 public class Status extends AppCompatActivity implements AsyncResponse2 {
     PreferenceHandler handler = new PreferenceHandler();
     TableLayout tableLayout;
+    AlertDialog alertDialog2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,19 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+
+        if(!handler.getLoggedIn(getBaseContext())){
+            alertDialog2 = new AlertDialog.Builder(this).create();
+            alertDialog2.setTitle("Not logged in");
+            alertDialog2.setMessage("Please login to check your car status");
+            alertDialog2.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    launchLogin();
+                    Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                }
+            });
+            alertDialog2.show();
+        }
 
         Button btnUpdate = (Button)findViewById(R.id.btnUpdate);
 
@@ -55,11 +72,11 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         tr_head.addView(label_car);// add the column to the table row here
 
         TextView label_status = new TextView(this);
-        label_status.setId(View.generateViewId());
-        label_status.setText("Status");
-        label_status.setTextColor(Color.WHITE);
-        label_status.setPadding(5, 5, 5, 5);
-        tr_head.addView(label_status);
+        label_status.setId(View.generateViewId());// define id that must be unique
+        label_status.setText("Status"); // set the text for the header
+        label_status.setTextColor(Color.WHITE); // set the color
+        label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_status); // add the column to the table row here
 
         tableLayout.addView(tr_head,new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
@@ -71,12 +88,13 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
             addRow(handler.getCarAlarmActive(getBaseContext(),id),id);
         }
     }
-
+    private void launchLogin(){
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
     public void addRow(boolean alarm,String id){
         String carName = handler.getCarName(getBaseContext(),id+"Name");
-
         TableRow tR = new TableRow(this);
-        tR.setBackgroundColor(Color.GRAY);
         tR.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView label_car = new TextView(this);
@@ -92,14 +110,11 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
             label_status.setText("Active");
             label_status.setTextColor(Color.RED);
         }
-        else{
-            label_status.setText("Not active");
+        else {
+            label_status.setText("Not Active");
             label_status.setTextColor(Color.GREEN);
         }
-        label_status.setPadding(5, 5, 5, 5);
         tR.addView(label_status);
-
-
         tableLayout.addView(tR, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
     public void callDataBase(){
@@ -119,6 +134,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
     public void Update(View v){
         callDataBase();
     }
+
     public void cancel(View v){
         startActivity(new Intent(Status.this, MainActivity.class));
         finish();

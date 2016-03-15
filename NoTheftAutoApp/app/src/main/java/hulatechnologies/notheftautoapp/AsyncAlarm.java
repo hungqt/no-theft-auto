@@ -33,7 +33,7 @@ public class AsyncAlarm extends AsyncTask<JSONObject,Void,String> {
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
+            //Gjï¿½r noe med byte-streamen sï¿½ ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -72,7 +72,7 @@ public class AsyncAlarm extends AsyncTask<JSONObject,Void,String> {
         return s.hasNext() ? s.next() : "";
     }
     @Override
-    protected void onPostExecute(String result) {
-        delegate.processFinished(result);
+    protected void onPostExecute(String answer) {
+        delegate.processFinished(answer);
     }
 }

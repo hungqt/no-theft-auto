@@ -16,14 +16,15 @@ import java.net.URL;
 /**
  * Created by thoma on 2/23/2016.
  */
-public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, Void> {
+public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, String> {
 
-    JSONArray data = null;
     URL url = null;
+    public AsyncResponse3 delegate = null;
 
     @Override
-    protected Void doInBackground(JSONObject... params) {
+    protected String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
+        String answer = "";
         try {
             url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/Register.php");
             String message = params[0].toString();
@@ -53,7 +54,8 @@ public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, Void> {
 
             //Receive answer
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            Log.d("Response", convertStreamToString(in));
+            answer = convertStreamToString(in);
+            Log.d("Response", answer);
             in.close();
 
         } catch (Exception e) {
@@ -63,11 +65,16 @@ public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, Void> {
             if(urlConnection != null){
                 urlConnection.disconnect();
             }
+            Log.d("Answer",answer);
+            return answer;
         }
-        return null;
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinished(result);
     }
 }
