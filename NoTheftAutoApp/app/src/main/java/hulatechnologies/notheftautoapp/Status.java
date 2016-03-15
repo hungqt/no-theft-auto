@@ -38,12 +38,19 @@ public class Status extends AppCompatActivity {
         tr_head.setBackgroundColor(Color.GRAY);
         tr_head.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-        TextView label_date = new TextView(this);
-        label_date.setId(View.generateViewId());
-        label_date.setText("Alarms");
-        label_date.setTextColor(Color.WHITE);
-        label_date.setPadding(5, 5, 5, 5);
-        tr_head.addView(label_date);// add the column to the table row here
+        TextView label_car = new TextView(this);
+        label_car.setId(View.generateViewId());
+        label_car.setText("Car");
+        label_car.setTextColor(Color.WHITE);
+        label_car.setPadding(5, 5, 5, 5);
+        tr_head.addView(label_car);// add the column to the table row here
+
+        TextView label_status = new TextView(this);
+        label_status.setId(View.generateViewId());// define id that must be unique
+        label_status.setText("Status"); // set the text for the header
+        label_status.setTextColor(Color.WHITE); // set the color
+        label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_status); // add the column to the table row here
 
         tableLayout.addView(tr_head,new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
@@ -57,21 +64,30 @@ public class Status extends AppCompatActivity {
 
     public void addRow(boolean alarm,String id){
         String carName = handler.getCarName(getBaseContext(),id+"Name");
-
         TableRow tR = new TableRow(this);
-        tR.setBackgroundColor(Color.GRAY);
         tR.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-        TextView rowText = new TextView(this);
+        TextView label_car = new TextView(this);
+        label_car.setId(View.generateViewId());
+        label_car.setText(carName);
+        label_car.setTextColor(Color.BLUE);
+        label_car.setPadding(5, 5, 5, 5);
+        tR.addView(label_car);
+
+        TextView label_status = new TextView(this);
+        label_status.setId(View.generateViewId());
         if(alarm){
-            rowText.setText(carName + ": " + "Alarm is active!");
+            label_status.setText("Active");
+            label_status.setTextColor(Color.RED);
         }
         else{
-            rowText.setText(carName + ": " + "Alarm is not active!");
+            label_status.setText("Not Active");
+            label_status.setTextColor(Color.GREEN);
         }
+        label_status.setPadding(5, 5, 5, 5);
+        tR.addView(label_status);
 
-        tR.addView(rowText);
-        tableLayout.addView(tR,new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        tableLayout.addView(tR, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
 
 }
