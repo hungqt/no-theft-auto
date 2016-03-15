@@ -1,9 +1,7 @@
 import MySQLdb
-import time
 
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
-
 # lager en connection til db
 db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
                      user="glennchr_nta",  # your username
@@ -24,7 +22,11 @@ def getAlarm():
 def setAlarm(value):
     cur = db.cursor()
     stringValue = str(value)
-    cur.execute("UPDATE glennchr_nta.raspberry_pi SET alarm=" + stringValue + " WHERE rpi_id = 1")
+    try:
+        cur.execute("UPDATE glennchr_nta.raspberry_pi SET alarm =(%s)  WHERE rpi_id = 1", (stringValue))
+        db.commit()
+    except:
+        db.rollback()
 
 menu = {'1': "Activate alarm", '2': "Deactive alarm", '3': "Read alarm status", '4': "Quit\n"}
 
