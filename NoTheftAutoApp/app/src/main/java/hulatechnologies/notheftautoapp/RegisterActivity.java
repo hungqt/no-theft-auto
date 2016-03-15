@@ -1,6 +1,7 @@
 package hulatechnologies.notheftautoapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
     private boolean userExist = true;
     private PreferenceHandler handler = new PreferenceHandler();
     private AlertDialog alertDialog2;
-
+    Context c;
 
 
     @Override
@@ -49,11 +50,17 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
         AsyncTaskRegister data = new AsyncTaskRegister();
         data.delegate = this;
         JSONObject userInfo = new JSONObject();
+        c = this;
         try {
             userInfo.put("username",userText.getText().toString());
             String pass1 = passText1.getText().toString();
             String pass2 = passText2.getText().toString();
             String email = emailText.getText().toString();
+            Validation val = new Validation();
+            if(!val.checkEmail(email) || !val.checkUsername(userText.getText().toString())){
+                Toast.makeText(c,"Email or username was invalid", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if(!pass1.equals(pass2)){
                 throw new IllegalStateException();
             }
@@ -82,7 +89,6 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
         emailText.setText("");
         startActivity(new Intent(this, MainActivity.class));
     }
-
     @Override
     public void processFinished(String output) {
         if(output.equals("User exists")){
@@ -127,5 +133,18 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
     }
     public void startMain(){
         startActivity(new Intent(this, MainActivity.class));
+    }
+    public void showAlert(View view) {
+        AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+        myAlert.setMessage("Invalid username or email,username can only contain letters")
+                .setNeutralButton("GG...", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setTitle("")
+                .create();
+        myAlert.show();
     }
 }
