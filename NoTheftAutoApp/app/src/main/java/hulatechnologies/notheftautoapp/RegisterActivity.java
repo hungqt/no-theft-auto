@@ -59,19 +59,21 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
             }
             userInfo.put("email",email);
             userInfo.put("password", pass1);
+
+            if(userInfo != null) {
+                data.execute(userInfo);
+                Log.d("Noe skjedde","Lmfao");
+            }
+            else{
+                Log.d("Error:", "Noe gikk galt");
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
           catch(IllegalStateException e){
               e.printStackTrace();
           }
-        if(userInfo != null) {
-            data.execute(userInfo);
-            Log.d("Noe skjedde","Lmfao");
-        }
-        else{
-            Log.d("Error:", "Noe gikk galt");
-        }
     }
     public void onCancel(View v){
         userText.setText("");
@@ -83,7 +85,6 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
 
     @Override
     public void processFinished(String output) {
-        Log.d("Output",output + "What");
         if(output.equals("User exists")){
             alertDialog2 = new AlertDialog.Builder(this).create();
             alertDialog2.setTitle("Failure");
@@ -96,9 +97,35 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
             });
             alertDialog2.show();
         }
+        else if(output.equals("Success!")){
+            alertDialog2 = new AlertDialog.Builder(this).create();
+            alertDialog2.setTitle("Success!");
+            alertDialog2.setMessage("Account created!");
+            alertDialog2.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startMain();
+                    finish();
+                    Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                }
+            });
+            alertDialog2.show();
+
+        }
         else{
-            Log.d("Success!","It worked");
+            alertDialog2 = new AlertDialog.Builder(this).create();
+            alertDialog2.setTitle("Connection error");
+            alertDialog2.setMessage("There is a error in the connection or the server");
+            alertDialog2.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to execute after dialog closed
+                    Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                }
+            });
+            alertDialog2.show();
             startActivity(new Intent(this, MainActivity.class));
         }
+    }
+    public void startMain(){
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

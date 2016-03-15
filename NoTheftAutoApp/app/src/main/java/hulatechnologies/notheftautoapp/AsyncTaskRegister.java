@@ -18,13 +18,13 @@ import java.net.URL;
  */
 public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, String> {
 
-    String answer;
     URL url = null;
     public AsyncResponse3 delegate = null;
 
     @Override
     protected String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
+        String answer = "";
         try {
             url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/Register.php");
             String message = params[0].toString();
@@ -54,8 +54,8 @@ public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, String> {
 
             //Receive answer
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            Log.d("Response", convertStreamToString(in));
             answer = convertStreamToString(in);
+            Log.d("Response", answer);
             in.close();
 
         } catch (Exception e) {
@@ -65,8 +65,9 @@ public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, String> {
             if(urlConnection != null){
                 urlConnection.disconnect();
             }
+            Log.d("Answer",answer);
+            return answer;
         }
-        return answer;
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
