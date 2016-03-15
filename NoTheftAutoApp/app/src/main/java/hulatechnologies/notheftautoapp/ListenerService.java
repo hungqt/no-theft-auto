@@ -1,9 +1,13 @@
 package hulatechnologies.notheftautoapp;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -17,7 +21,6 @@ public class ListenerService extends IntentService {
         super("ListenerService");
     }
     private PreferenceHandler handler = new PreferenceHandler();
-    private NotificationActivity notifier = new NotificationActivity();
 
 
     @Override
@@ -56,7 +59,30 @@ public class ListenerService extends IntentService {
                 if (alarm == 1){
                     Log.d("Alarm ACTIVE", c.substring(1, c.length()));
                     handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
-                    notifier.notification();
+                    int requestID = (int) System.currentTimeMillis();
+
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context
+                            .NOTIFICATION_SERVICE);
+
+                    Intent notificationIntent = new Intent(ListenerService.this, Status.class);
+                    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setPriority(NotificationCompat.PRIORITY_MAX)
+                            .setVibrate(new long[]{1, 1, 1})
+                            .setCategory(NotificationCompat.CATEGORY_ALARM)
+                            .setContentTitle("OI! YOU CUNT!")
+                            .setContentText("YER CAR IS BEIN' STOLEN!")
+                            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+                    notificationBuilder.setAutoCancel(true);
+                    notificationBuilder.setContentIntent(contentIntent);
+                    notificationManager.notify(0, notificationBuilder.build());
                 }
                 else{
                     Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
