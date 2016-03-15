@@ -1,10 +1,9 @@
 package hulatechnologies.notheftautoapp;
 
 /**
- * Created by thoma on 3/14/2016.
+ * Created by thoma on 3/15/2016.
  */
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -17,18 +16,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
+ * Created by thoma on 3/14/2016.
+ */
+
+import android.os.AsyncTask;
+
+/**
  * Created by thoma on 2/23/2016.
  */
-public class SyncGetCars {
+public class AsyncGetCars extends AsyncTask<JSONObject,Void,String> {
 
-    public AsyncResponse delegate = null;
+    public AsyncResponse2 delegate = null;
 
-    protected Integer[] doInBackground(JSONObject... params) {
+    @Override
+    protected String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/getCars.php");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/getCarsAndIds.php");
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -58,7 +64,7 @@ public class SyncGetCars {
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             answer = convertStreamToString(in);
-            Log.d("Answer",answer);
+            Log.d("Answer", answer);
             Log.d("answers length","" + answer.split("/").length);
             in.close();
 
@@ -70,23 +76,14 @@ public class SyncGetCars {
                 urlConnection.disconnect();
             }
         }
-        if(answer != null && answer.length() > 1) {
-            String[] answers = answer.split("/");
-            Integer[] carIDs = new Integer[answers.length];
-            for (int i = 0; i < carIDs.length; i++) {
-                carIDs[i] = Integer.valueOf(answers[i]);
-                Log.d(":D", answers[i]);
-            }
-            Log.d("Length", "" + carIDs.length);
-            return carIDs;
-        }
-        else{
-            return null;
-        }
+        return answer;
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinish(result);
+    }
 }
-

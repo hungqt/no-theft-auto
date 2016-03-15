@@ -67,5 +67,21 @@ public class PreferenceHandler {
         boolean value=(mSharedPreference.getBoolean(logName, false));
         return value;
     }
+    public void resetPrefName(Context context){
+        SharedPreferences SPpass = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = SPpass.edit();
+        editor.putString(PrefName, "");
+        editor.commit();
+    }
+    public void resetPrefPass(Context context){
+        SharedPreferences SPpass = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = SPpass.edit();
+        editor.putString(PrefPass, "");
+        editor.commit();
+    }
+    public void resetCarString(Context context){
+        setCarString("",context);
+    }
+
 
 }

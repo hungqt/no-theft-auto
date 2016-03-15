@@ -1,9 +1,5 @@
 package hulatechnologies.notheftautoapp;
 
-/**
- * Created by thoma on 3/14/2016.
- */
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,18 +13,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by thoma on 2/23/2016.
+ * Created by thoma on 3/7/2016.
  */
-public class SyncGetCars {
+public class AsyncAlarm extends AsyncTask<JSONObject,Void,String> {
 
-    public AsyncResponse delegate = null;
+    public AsyncResponse3 delegate = null;
 
-    protected Integer[] doInBackground(JSONObject... params) {
+    @Override
+    public String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/getCars.php");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck.php");
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -36,7 +33,7 @@ public class SyncGetCars {
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //Gjï¿½r noe med byte-streamen sï¿½ ikke hele lagres i minnet samtidig (?)
+            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -58,8 +55,6 @@ public class SyncGetCars {
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             answer = convertStreamToString(in);
-            Log.d("Answer",answer);
-            Log.d("answers length","" + answer.split("/").length);
             in.close();
 
         } catch (Exception e) {
@@ -70,23 +65,14 @@ public class SyncGetCars {
                 urlConnection.disconnect();
             }
         }
-        if(answer != null && answer.length() > 1) {
-            String[] answers = answer.split("/");
-            Integer[] carIDs = new Integer[answers.length];
-            for (int i = 0; i < carIDs.length; i++) {
-                carIDs[i] = Integer.valueOf(answers[i]);
-                Log.d(":D", answers[i]);
-            }
-            Log.d("Length", "" + carIDs.length);
-            return carIDs;
-        }
-        else{
-            return null;
-        }
+        return answer;
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinished(result);
+    }
 }
-
