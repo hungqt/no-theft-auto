@@ -16,7 +16,6 @@ public class ListenerService extends IntentService {
     public ListenerService() {
         super("ListenerService");
     }
-
     private PreferenceHandler handler = new PreferenceHandler();
 
     @Override
@@ -31,25 +30,40 @@ public class ListenerService extends IntentService {
         callDataBase();
     }
     public void callDataBase(){
-        SyncAlarm data = new SyncAlarm();
+        //SyncGetCars henter alle ID-ene til bilene basert p� brukernavn og passord
+        //SyncAlarm sjekker om alarmen er g�tt p� den spesifikke IDen og returnerer dette sammen med navnet p� bilen
+        SyncGetCars cars = new SyncGetCars();
+        SyncAlarm check = new SyncAlarm();
         JSONObject json = new JSONObject();
+        String carIDsString = "";
         try {
             json.put("username", handler.getPrefName(getBaseContext()));
             json.put("password", handler.getPrefPass(getBaseContext()));
             Log.d("username",handler.getPrefName(getBaseContext()));
-            Log.d("password",handler.getPrefPass(getBaseContext()));
-            int answer = data.doInBackground(json);
+            Log.d("password", handler.getPrefPass(getBaseContext()));
+            Integer[] carIDs = cars.doInBackground(json);
+            if(carIDs != null){
+            for(int i = 0; i < carIDs.length; i++){
+                JSONObject j = new JSONObject();
+                j.put("carID",carIDs[i]+"");
+                String c = check.doInBackground(j);
+                int alarm = Integer.valueOf(c.substring(0,1));
 
-            if(answer == 1){
-                Log.d("Alarm","Active");
-            }
-            else if(answer == 0){
-                Log.d("Alarm", "Not active");
-            }
-            else{
-                Log.d("Connection error","Something went wrong");
-            }
+                handler.setCarName(c.substring(1,c.length()),getBaseContext(),carIDs[i]+"Name");
 
+                if (alarm == 1){
+                    Log.d("Alarm ACTIVE", c.substring(1, c.length()));
+                    handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
+                }
+                else{
+                    Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
+                    handler.setCarAlarmActive(false,getBaseContext(),carIDs[i]+"");
+                }
+                carIDsString += carIDs[i];
+                }
+            }
+            handler.setCarString(carIDsString,getBaseContext());
+            Log.d("CarIDs",handler.getCarString(getBaseContext()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

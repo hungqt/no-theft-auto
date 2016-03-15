@@ -15,24 +15,25 @@ import java.net.URL;
 /**
  * Created by thoma on 3/7/2016.
  */
-public class SyncAlarm {
+public class AsyncAlarm extends AsyncTask<JSONObject,Void,String> {
 
-    public AsyncResponse delegate = null;
+    public AsyncResponse3 delegate = null;
 
-    public String doInBackground(JSONObject params) {
+    @Override
+    public String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
             url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck.php");
-            String message = params.toString();
+            String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
             //Setter at jeg kan sende data til serveren
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //GjÃ¸r noe med byte-streamen sÃ¥ ikke hele lagres i minnet samtidig (?)
+            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -70,5 +71,8 @@ public class SyncAlarm {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinished(result);
+    }
 }
-

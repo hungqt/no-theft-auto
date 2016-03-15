@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
  */
 public class PreferenceHandler {
 
+    //Klasse for � lagre alle verdiene som m� huskes over tid
+
     private static final String PrefName = "User";
     private static final String PrefPass = "Pass";
     private static final String logName = "Log";
@@ -27,14 +29,29 @@ public class PreferenceHandler {
         editor.putString(PrefPass, prefPass);
         editor.commit();
     }
+    public void setCarName(String car,Context context, String saveSpot){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(saveSpot, car).commit();
+    }
     public void setPrefRem(boolean pref,Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(remName, pref).commit();
     }
     public void setLoggedIn(boolean pref,Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(logName, pref).commit();
     }
-    public void setCarActive(int carID,Context context){
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(carIDName,carID).commit();
+    public void setCarAlarmActive(boolean pref,Context context, String carName){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(carName, pref).commit();
+    }
+    public void setCarString(String s, Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(carIDName, s).commit();
+    }
+    public String getCarName(Context context, String saveSpot){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(saveSpot, "");
+    }
+    public String getCarString(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(carIDName,"");
+    }
+    public boolean getCarAlarmActive(Context context, String carName){
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(carName, false);
     }
     public String getPrefName(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PrefName,"");
@@ -50,5 +67,21 @@ public class PreferenceHandler {
         boolean value=(mSharedPreference.getBoolean(logName, false));
         return value;
     }
+    public void resetPrefName(Context context){
+        SharedPreferences SPpass = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = SPpass.edit();
+        editor.putString(PrefName, "");
+        editor.commit();
+    }
+    public void resetPrefPass(Context context){
+        SharedPreferences SPpass = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = SPpass.edit();
+        editor.putString(PrefPass, "");
+        editor.commit();
+    }
+    public void resetCarString(Context context){
+        setCarString("",context);
+    }
+
 
 }

@@ -1,6 +1,9 @@
 package hulatechnologies.notheftautoapp;
 
-import android.os.AsyncTask;
+/**
+ * Created by thoma on 3/15/2016.
+ */
+
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -13,19 +16,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by Thomas on 3/4/2016.
+ * Created by thoma on 3/14/2016.
  */
-public class AsyncAlarmCheck extends AsyncTask<JSONObject, Void, Integer> {
 
-    public AsyncResponse delegate = null;
+import android.os.AsyncTask;
+
+/**
+ * Created by thoma on 2/23/2016.
+ */
+public class AsyncGetCars extends AsyncTask<JSONObject,Void,String> {
+
+    public AsyncResponse2 delegate = null;
 
     @Override
-    protected Integer doInBackground(JSONObject... params) {
+    protected String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck.php");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/getCarsAndIds.php");
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -33,7 +42,7 @@ public class AsyncAlarmCheck extends AsyncTask<JSONObject, Void, Integer> {
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
+            //Gj�r noe med byte-streamen s� ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -55,7 +64,8 @@ public class AsyncAlarmCheck extends AsyncTask<JSONObject, Void, Integer> {
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             answer = convertStreamToString(in);
-            Log.d("Response", answer);
+            Log.d("Answer", answer);
+            Log.d("answers length","" + answer.split("/").length);
             in.close();
 
         } catch (Exception e) {
@@ -66,19 +76,14 @@ public class AsyncAlarmCheck extends AsyncTask<JSONObject, Void, Integer> {
                 urlConnection.disconnect();
             }
         }
-        if(answer.equals("1")){
-            return 1;
-        }
-        else{
-            return 0;
-        }
+        return answer;
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
     @Override
-    protected void onPostExecute(Integer result) {
+    protected void onPostExecute(String result) {
         delegate.processFinish(result);
     }
 }
