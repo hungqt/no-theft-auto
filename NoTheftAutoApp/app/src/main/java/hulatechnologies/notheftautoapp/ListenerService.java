@@ -56,7 +56,7 @@ public class ListenerService extends IntentService {
                 if (alarm == 1){
                     Log.d("Alarm ACTIVE", c.substring(1, c.length()));
                     handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
-                    notifier.notification();
+                    //notifier.notification();
                 }
                 else{
                     Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
