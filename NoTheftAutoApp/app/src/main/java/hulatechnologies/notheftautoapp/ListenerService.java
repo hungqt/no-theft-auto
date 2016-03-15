@@ -17,7 +17,7 @@ public class ListenerService extends IntentService {
         super("ListenerService");
     }
     private PreferenceHandler handler = new PreferenceHandler();
-    private NotificationCompat.Builder m notifier = new NotificationActivity();
+    private NotificationActivity notifier = new NotificationActivity();
 
 
     @Override
