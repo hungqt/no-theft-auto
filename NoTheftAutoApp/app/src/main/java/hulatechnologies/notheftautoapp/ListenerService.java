@@ -17,6 +17,8 @@ public class ListenerService extends IntentService {
         super("ListenerService");
     }
     private PreferenceHandler handler = new PreferenceHandler();
+    private NotificationActivity notifier = new NotificationActivity();
+
 
     @Override
     public void onCreate() {
@@ -42,6 +44,7 @@ public class ListenerService extends IntentService {
             Log.d("username",handler.getPrefName(getBaseContext()));
             Log.d("password", handler.getPrefPass(getBaseContext()));
             Integer[] carIDs = cars.doInBackground(json);
+            if(carIDs != null){
             for(int i = 0; i < carIDs.length; i++){
                 JSONObject j = new JSONObject();
                 j.put("carID",carIDs[i]+"");
@@ -53,12 +56,14 @@ public class ListenerService extends IntentService {
                 if (alarm == 1){
                     Log.d("Alarm ACTIVE", c.substring(1, c.length()));
                     handler.setCarAlarmActive(true,getBaseContext(),carIDs[i]+"");
+                    //notifier.notification();
                 }
                 else{
                     Log.d("Alarm NOT ACTIVE",c.substring(1,c.length()));
                     handler.setCarAlarmActive(false,getBaseContext(),carIDs[i]+"");
                 }
                 carIDsString += carIDs[i];
+                }
             }
             handler.setCarString(carIDsString,getBaseContext());
             Log.d("CarIDs",handler.getCarString(getBaseContext()));

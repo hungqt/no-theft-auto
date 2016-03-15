@@ -16,13 +16,14 @@ import java.net.URL;
 /**
  * Created by thoma on 2/23/2016.
  */
-public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, Void> {
+public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, String> {
 
-    JSONArray data = null;
+    String answer;
     URL url = null;
+    public AsyncResponse3 delegate = null;
 
     @Override
-    protected Void doInBackground(JSONObject... params) {
+    protected String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         try {
             url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/Register.php");
@@ -54,6 +55,7 @@ public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, Void> {
             //Receive answer
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             Log.d("Response", convertStreamToString(in));
+            answer = convertStreamToString(in);
             in.close();
 
         } catch (Exception e) {
@@ -64,10 +66,14 @@ public class AsyncTaskRegister extends AsyncTask<JSONObject, Void, Void> {
                 urlConnection.disconnect();
             }
         }
-        return null;
+        return answer;
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinished(result);
     }
 }
