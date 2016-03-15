@@ -15,12 +15,11 @@ public class NotificationActivity extends AppCompatActivity {
 
     private NotificationManager myNotificationManager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
+    public void notification(){
 
         int requestID = (int) System.currentTimeMillis();
-        Intent notificationIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), Status.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
