@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
     }
+    public void scheduleNotification(){
+        
+    }
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
         cars.delegate = this;

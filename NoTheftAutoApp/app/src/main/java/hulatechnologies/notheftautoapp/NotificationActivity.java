@@ -39,7 +39,6 @@ public class NotificationActivity extends AppCompatActivity {
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setContentIntent(contentIntent);
         notificationManager.notify(0, notificationBuilder.build());
-
     }
 
 }
