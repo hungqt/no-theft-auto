@@ -72,10 +72,11 @@ public class ListenerService extends IntentService {
                 }
                 if(startPush){
                     int requestID = (int) System.currentTimeMillis();
+                    Intent notificationIntent;
                     NotificationManager notificationManager = (NotificationManager) getSystemService(Context
                             .NOTIFICATION_SERVICE);
+                    notificationIntent = new Intent(ListenerService.this, Status.class);
 
-                    Intent notificationIntent = new Intent(ListenerService.this, Status.class);
                     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

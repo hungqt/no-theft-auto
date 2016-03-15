@@ -1,5 +1,7 @@
 package hulatechnologies.notheftautoapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 public class Status extends AppCompatActivity implements AsyncResponse2 {
     PreferenceHandler handler = new PreferenceHandler();
     TableLayout tableLayout;
+    AlertDialog alertDialog2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,19 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+
+        if(!handler.getLoggedIn(getBaseContext())){
+            alertDialog2 = new AlertDialog.Builder(this).create();
+            alertDialog2.setTitle("Not logged in");
+            alertDialog2.setMessage("Please login to check your car status");
+            alertDialog2.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    launchLogin();
+                    Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                }
+            });
+            alertDialog2.show();
+        }
 
         Button btnUpdate = (Button)findViewById(R.id.btnUpdate);
 
@@ -71,7 +88,10 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
             addRow(handler.getCarAlarmActive(getBaseContext(),id),id);
         }
     }
-
+    private void launchLogin(){
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
     public void addRow(boolean alarm,String id){
         String carName = handler.getCarName(getBaseContext(),id+"Name");
         TableRow tR = new TableRow(this);
