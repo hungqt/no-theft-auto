@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://D:/Algdat/.idea/Algdat.iml" filepath="D:/Algdat/.idea/Algdat.iml" />
+      <module fileurl="file://D:/KTN/.idea/KTN.iml" filepath="D:/KTN/.idea/KTN.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/Skeleton/.idea/Skeleton.iml" filepath="$USER_HOME$/Desktop/Skeleton/.idea/Skeleton.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/TTM4100-master/.idea/TTM4100-master.iml" filepath="$USER_HOME$/Desktop/TTM4100-master/.idea/TTM4100-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/pi-setup.iml" filepath="$PROJECT_DIR$/.idea/pi-setup.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/ttm4100-project-master/.idea/ttm4100-project-master.iml" filepath="$USER_HOME$/Desktop/ttm4100-project-master/.idea/ttm4100-project-master.iml" />
+    </modules>
+  </component>
+</project>
