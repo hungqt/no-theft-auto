@@ -1,5 +1,9 @@
 package hulatechnologies.notheftautoapp;
 
+/**
+ * Created by thoma on 3/14/2016.
+ */
+
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,26 +17,26 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by thoma on 3/7/2016.
+ * Created by thoma on 2/23/2016.
  */
-public class SyncAlarm {
+public class SyncGetCars {
 
     public AsyncResponse delegate = null;
 
-    public String doInBackground(JSONObject params) {
+    protected Integer[] doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/AlarmCheck.php");
-            String message = params.toString();
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/getCars.php");
+            String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
             //Setter at jeg kan sende data til serveren
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
+            //Gj�r noe med byte-streamen s� ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -54,6 +58,8 @@ public class SyncAlarm {
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             answer = convertStreamToString(in);
+            Log.d("Answer",answer);
+            Log.d("answers length","" + answer.split("/").length);
             in.close();
 
         } catch (Exception e) {
@@ -64,7 +70,19 @@ public class SyncAlarm {
                 urlConnection.disconnect();
             }
         }
-        return answer;
+        if(answer != null && answer.length() > 1) {
+            String[] answers = answer.split("/");
+            Integer[] carIDs = new Integer[answers.length];
+            for (int i = 0; i < carIDs.length; i++) {
+                carIDs[i] = Integer.valueOf(answers[i]);
+                Log.d(":D", answers[i]);
+            }
+            Log.d("Length", "" + carIDs.length);
+            return carIDs;
+        }
+        else{
+            return null;
+        }
     }
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");

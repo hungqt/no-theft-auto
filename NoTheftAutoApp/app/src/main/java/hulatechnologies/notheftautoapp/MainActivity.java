@@ -12,11 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
 
     private Button btnReg; //Hey
     private Button btnLogin;
     private Button btnLogout;
+    private Button btnStatus;
     private static final String PrefName = "User";
     private static final String PrefPass = "Pass";
     private static final String logName = "Log";
@@ -30,14 +34,17 @@ public class MainActivity extends AppCompatActivity {
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
         btnLogout = (Button)findViewById(R.id.btnLogout);
+        btnStatus = (Button)findViewById(R.id.btnStatus);
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
             scheduleAlarm();
             alarmSet = true;
             btnLogin.setVisibility(View.INVISIBLE);
+            btnStatus.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.VISIBLE);
         }else{
+            btnStatus.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
             if(alarmSet == true){
@@ -45,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 cancelAlarm();
             }
         }
+
+
     }
 
     public void goToReg(View v){
@@ -55,28 +64,21 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
+    public void goToStatus(View v){
+        callDataBase();
+    }
     public void logOut(View v){
-        resetPrefName();
-        resetPrefPass();
+        handler.resetPrefName(getBaseContext());
+        handler.resetPrefPass(getBaseContext());
+        handler.resetCarString(getBaseContext());
 
         btnLogout.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
+        btnStatus.setVisibility(View.INVISIBLE);
 
         cancelAlarm();
 
-        handler.setLoggedIn(false,getBaseContext());
-    }
-    private void resetPrefName(){
-        SharedPreferences SPpass = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        SharedPreferences.Editor editor = SPpass.edit();
-        editor.putString(PrefName, "");
-        editor.commit();
-    }
-    private void resetPrefPass(){
-        SharedPreferences SPpass = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        SharedPreferences.Editor editor = SPpass.edit();
-        editor.putString(PrefPass, "");
-        editor.commit();
+        handler.setLoggedIn(false, getBaseContext());
     }
 
     // Setup a recurring alarm every 15 seconds
@@ -99,5 +101,47 @@ public class MainActivity extends AppCompatActivity {
         final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE,intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
+    }
+    public void scheduleNotification(){
+
+    }
+    public void callDataBase(){
+        AsyncGetCars cars = new AsyncGetCars();
+        cars.delegate = this;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username",handler.getPrefName(getBaseContext()));
+            json.put("password",handler.getPrefPass(getBaseContext()));
+
+            cars.execute(json);
+
+        } catch (JSONException e) {
+        e.printStackTrace();
+        }
+        }
+
+    @Override
+    public void processFinish(String output) {
+        String[] list = output.split("/");
+        String carString = "";
+        for(int i = 0; i < list.length/3;i++){
+            if(list[i*3 + 1].equals("1")){
+            handler.setCarAlarmActive(true,getBaseContext(),list[i*3]);
+            Log.d("Handler", "Alarm sat active");
+            }
+            else{
+            handler.setCarAlarmActive(false,getBaseContext(),list[i*3]);
+            Log.d("Handler","Alarm sat not active");
+            }
+            Log.d("ID",list[i*3]);
+            Log.d("Alarm",list[i*3+1]);
+            Log.d("Navn",list[i*3+2]);
+        handler.setCarName(list[i*3 + 2],getBaseContext(),list[i*3]+"Name");
+        carString += list[i*3];
+        }
+        Log.d("Car String", carString);
+        handler.setCarString(carString, getBaseContext());
+        startActivity(new Intent(this, Status.class));
+        finish();
     }
 }
