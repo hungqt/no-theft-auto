@@ -8,7 +8,7 @@
         </item>
 
         <item
-            android:id="@+id/my_cars"
+            android:id="@+id/cars_id"
             android:title="My Cars">
         </item>
     </group>
@@ -17,12 +17,12 @@
 
         <menu android:checkableBehavior="single">
             <item
-                android:id="@+id/account_settings"
+                android:id="@+id/account_settings_id"
                 android:title="Account Settings">
             </item>
 
             <item
-                android:id="@+id/notification_settings"
+                android:id="@+id/notification_settings_id"
                 android:title="Notification Settings">
             </item>
 

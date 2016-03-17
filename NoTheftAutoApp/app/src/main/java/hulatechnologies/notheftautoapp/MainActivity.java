@@ -6,9 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,12 +32,68 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     private static final String logName = "Log";
     private boolean alarmSet = false;
     private PreferenceHandler handler = new PreferenceHandler();
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private FragmentTransaction fragmentTransaction;
+    private NavigationView navigationView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
+
+        //Instansierer drawerLayout og actionBarDrawerToggle for å fikse hamburgerbutton
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        //FragmentsHandling
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.main_container, new HomeFragment());
+        fragmentTransaction.commit();
+        getSupportActionBar().setTitle("Home Fragment");
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()){
+
+                    case R.id.home_id:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new HomeFragment());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("Home Fragment");
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.cars_id:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new CarsFragment());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("My Cars Fragment");
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+                }
+
+                return true;
+            }
+        });
     }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState){
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
 
     /*
     @Override
