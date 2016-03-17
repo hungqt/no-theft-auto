@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
 
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
 
         //FragmentsHandling
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
 
                     case R.id.home_id:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -86,12 +87,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 return true;
             }
         });
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState){
-        super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
     }
 
 
@@ -123,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         }
     }
     */
+
+    public void initNavigationDrawer(){
+
+    }
 
     public void goToReg(View v){
         startActivity(new Intent(this, RegisterActivity.class));
