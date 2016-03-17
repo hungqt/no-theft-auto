@@ -28,6 +28,13 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     private PreferenceHandler handler = new PreferenceHandler();
 
     @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_nav_drawer);
+    }
+
+    /*
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -53,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
             }
         }
     }
+    */
 
     public void goToReg(View v){
         startActivity(new Intent(this, RegisterActivity.class));
@@ -96,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     //Cancel the set alarm
     public void cancelAlarm() {
         Intent intent = new Intent(getApplicationContext(), AlarmService.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
     }
