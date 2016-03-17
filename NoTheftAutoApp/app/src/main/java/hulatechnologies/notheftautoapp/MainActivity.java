@@ -39,12 +39,34 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     private NavigationView navigationView;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nav_drawer);
+        setContentView(R.layout.activity_main);
+        btnReg = (Button)findViewById(R.id.btnReg);
+        btnLogin = (Button)findViewById(R.id.btnLogin);
+        btnLogout = (Button)findViewById(R.id.btnLogout);
+        btnStatus = (Button)findViewById(R.id.btnStatus);
+        Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
+        Log.d("User", handler.getPrefName(getBaseContext()) + "");
+        if(handler.getLoggedIn(getBaseContext())) {
+            scheduleAlarm();
+            alarmSet = true;
+            btnLogin.setVisibility(View.INVISIBLE);
+            btnStatus.setVisibility(View.VISIBLE);
+            btnLogout.setVisibility(View.VISIBLE);
+        }else{
+            btnStatus.setVisibility(View.INVISIBLE);
+            btnLogout.setVisibility(View.INVISIBLE);
+            btnLogin.setVisibility(View.VISIBLE);
+            if(alarmSet == true){
+                alarmSet = false;
+                cancelAlarm();
+            }
+        }
+    }
 
+    public void initNavigationDrawer(){
         //Instansierer drawerLayout og actionBarDrawerToggle for å fikse hamburgerbutton
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,40 +109,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 return true;
             }
         });
-    }
-
-
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        btnReg = (Button)findViewById(R.id.btnReg);
-        btnLogin = (Button)findViewById(R.id.btnLogin);
-        btnLogout = (Button)findViewById(R.id.btnLogout);
-        btnStatus = (Button)findViewById(R.id.btnStatus);
-        Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
-        Log.d("User", handler.getPrefName(getBaseContext()) + "");
-        if(handler.getLoggedIn(getBaseContext())) {
-            scheduleAlarm();
-            alarmSet = true;
-            btnLogin.setVisibility(View.INVISIBLE);
-            btnStatus.setVisibility(View.VISIBLE);
-            btnLogout.setVisibility(View.VISIBLE);
-        }else{
-            btnStatus.setVisibility(View.INVISIBLE);
-            btnLogout.setVisibility(View.INVISIBLE);
-            btnLogin.setVisibility(View.VISIBLE);
-            if(alarmSet == true){
-                alarmSet = false;
-                cancelAlarm();
-            }
-        }
-    }
-    */
-
-    public void initNavigationDrawer(){
-
     }
 
     public void goToReg(View v){
