@@ -3,16 +3,20 @@ package hulatechnologies.notheftautoapp;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,7 +26,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity implements AsyncResponse{
+public class LoginActivity extends AppCompatActivity implements AsyncResponse1And2{
 
     private Button btnLogin;
     private EditText userText;
@@ -69,8 +73,22 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             if(remMe.isChecked()){
                 handler.setPrefRem(true,getBaseContext());
             }
-            handler.setPrefName(userText.getText().toString(),getBaseContext());
-            handler.setPrefPass(passText.getText().toString(),getBaseContext());
+            handler.setPrefName(userText.getText().toString(), getBaseContext());
+            handler.setPrefPass(passText.getText().toString(), getBaseContext());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void callDataBase(){
+        AsyncGetCars cars = new AsyncGetCars();
+        cars.delegate = this;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", handler.getPrefName(getBaseContext()));
+            json.put("password", handler.getPrefPass(getBaseContext()));
+
+            cars.execute(json);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -78,9 +96,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     @Override
     public void processFinish(Integer output) {
         if(output == 1){
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
             handler.setLoggedIn(true,getBaseContext());
-            finish();
+            callDataBase();
+
 
         }
         else if(output == 2){
@@ -98,6 +116,59 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             });
             alertDialog2.show();
         }
+    }
+
+
+    @Override
+    public void processFinish(String output) {
+        String[] list = output.split("/");
+        String carString = "";
+        Boolean startPush = false;
+        for(int i = 0; i < list.length/3;i++){
+            if(list[i*3 + 1].equals("1")){
+                handler.setCarAlarmActive(true,getBaseContext(),list[i*3]);
+                startPush = true;
+                Log.d("Handler", "Alarm sat active");
+            }
+            else{
+                handler.setCarAlarmActive(false,getBaseContext(),list[i*3]);
+                Log.d("Handler","Alarm sat not active");
+            }
+            Log.d("ID",list[i*3]);
+            Log.d("Alarm",list[i*3+1]);
+            Log.d("Navn",list[i*3+2]);
+            handler.setCarName(list[i*3 + 2],getBaseContext(),list[i*3]+"Name");
+            carString += list[i*3];
+        }
+        if(startPush){
+            int requestID = (int) System.currentTimeMillis();
+            Intent notificationIntent;
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context
+                    .NOTIFICATION_SERVICE);
+            notificationIntent = new Intent(this, Status.class);
+
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setVibrate(new long[]{1, 1, 1})
+                    .setCategory(NotificationCompat.CATEGORY_ALARM)
+                    .setContentTitle("Attention").setColor(Color.RED)
+                    .setContentText("Your car might have been stolen!")
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+            notificationBuilder.setAutoCancel(true);
+            notificationBuilder.setContentIntent(contentIntent);
+            notificationManager.notify(0, notificationBuilder.build());
+
+            startPush = false;
+        }
+        Log.d("Car String", carString);
+        handler.setCarString(carString, getBaseContext());
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }
 
