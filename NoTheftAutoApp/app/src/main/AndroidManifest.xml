@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hulatechnologies.notheftautoapp" >
+    package="hulatechnologies.notheftautoapp">
 
     <uses-sdk android:minSdkVersion="17" />
 
@@ -41,7 +41,7 @@
 
         <receiver
             android:name=".AlarmService"
-            android:process=":remote"></receiver>
+            android:process=":remote" />
 
         <service
             android:name=".ListenerService"
@@ -50,7 +50,8 @@
         <activity
             android:name=".Status"
             android:label="@string/title_activity_status"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NavDrawer"></activity>
     </application>
 
 </manifest>
