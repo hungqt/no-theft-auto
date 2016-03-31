@@ -39,10 +39,14 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
-public class RegistrationIntentService extends IntentService {
+public class RegistrationIntentService extends IntentService{
 
+    private PreferenceHandler handler = new PreferenceHandler();
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
 
@@ -98,7 +102,18 @@ public class RegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        handler.setToken(token,getBaseContext());
+        AsyncUpdateToken updater = new AsyncUpdateToken();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", handler.getPrefName(getBaseContext()));
+            json.put("token", token);
+
+            updater.execute(json);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

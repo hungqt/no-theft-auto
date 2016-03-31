@@ -52,7 +52,10 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
             btnLogout.setVisibility(View.VISIBLE);
             if(!handler.getGCMstate(getBaseContext())){
                 gcmM.startGCM();
-                handler.setGCMactive(true,getBaseContext());
+                handler.setGCMactive(true, getBaseContext());
+            }
+            else{
+                updateToken(handler.getToken(getBaseContext()));
             }
         }else{
             btnStatus.setVisibility(View.INVISIBLE);
@@ -76,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     public void goToStatus(View v){
         callDataBase();
     }
+
     public void logOut(View v){
+        resetToken();
         handler.resetPrefName(getBaseContext());
         handler.resetPrefPass(getBaseContext());
         handler.resetCarString(getBaseContext());
@@ -85,9 +90,34 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnLogin.setVisibility(View.VISIBLE);
         btnStatus.setVisibility(View.INVISIBLE);
 
-        gcmM.closeGCM();
-
         handler.setLoggedIn(false, getBaseContext());
+    }
+
+    private void resetToken() {
+        AsyncUpdateToken updater = new AsyncUpdateToken();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", handler.getPrefName(getBaseContext()));
+            json.put("token", "");
+
+            updater.execute(json);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void updateToken(String token){
+        AsyncUpdateToken updater = new AsyncUpdateToken();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", handler.getPrefName(getBaseContext()));
+            json.put("token", token);
+
+            updater.execute(json);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     // Setup a recurring alarm every 15 seconds

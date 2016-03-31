@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
     private AlertDialog alertDialog;
     private AlertDialog alertDialog2;
     private PreferenceHandler handler = new PreferenceHandler();
+    private GCMmanager gcm = new GCMmanager(this,this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

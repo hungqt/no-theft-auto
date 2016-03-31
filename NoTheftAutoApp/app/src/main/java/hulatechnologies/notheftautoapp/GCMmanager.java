@@ -15,11 +15,15 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by thoma on 3/30/2016.
  */
 public class GCMmanager extends AppCompatActivity {
 
+    private PreferenceHandler handler = new PreferenceHandler();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
 
