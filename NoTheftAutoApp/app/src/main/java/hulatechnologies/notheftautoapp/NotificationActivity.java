@@ -13,20 +13,21 @@ import android.content.Context;
  */
 public class NotificationActivity extends AppCompatActivity {
 
-    private NotificationManager myNotificationManager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
+    public void notification(){
 
         int requestID = (int) System.currentTimeMillis();
-        Intent notificationIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context
+                .NOTIFICATION_SERVICE);
+
+        Intent notificationIntent = new Intent(NotificationActivity.this, RegisterActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context
-                .NOTIFICATION_SERVICE);
+
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -40,7 +41,6 @@ public class NotificationActivity extends AppCompatActivity {
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setContentIntent(contentIntent);
         notificationManager.notify(0, notificationBuilder.build());
-
     }
 
 }

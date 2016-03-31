@@ -15,7 +15,7 @@ pi_id = 1
 
 f = open("coord1.txt", "r")
 
-
+# Sender til database med SQL
 def sendLatitudeLogditude(time, longitude, latitude, pi_id):
     cur = db.cursor()
     try:
@@ -25,9 +25,12 @@ def sendLatitudeLogditude(time, longitude, latitude, pi_id):
     except:
         db.rollback()
 
+# Henter ut latitude, longtitude og timestamp fra fil.
+# Kjorer til filen er lest igjennom.
+# Har delay pa 1 sek
 while True:
     h = 0
-    long = 0
+    lang = 0
     lat = 0
     while True:
 
@@ -51,7 +54,7 @@ while True:
             h += 1
             latitude = c
         elif d == "longitude" and long == 0:
-            long = 1
+            lang = 1
             h += 1
             longitude = c
 

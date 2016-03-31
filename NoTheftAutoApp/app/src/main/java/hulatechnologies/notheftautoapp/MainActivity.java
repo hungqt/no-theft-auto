@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 cancelAlarm();
             }
         }
-
     }
 
     //Use this method to initiate the navigation drawer in the onCreate() function
@@ -157,6 +156,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
+    }
+    public void scheduleNotification(){
+
     }
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
