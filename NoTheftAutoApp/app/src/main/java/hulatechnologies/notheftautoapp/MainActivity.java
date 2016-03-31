@@ -64,10 +64,12 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 cancelAlarm();
             }
         }
+
     }
 
+    //Use this method to initiate the navigation drawer in the onCreate() function
     public void initNavigationDrawer(){
-        //Instansierer drawerLayout og actionBarDrawerToggle for å fikse hamburgerbutton
+        //Instantiate drawerLayout and actionBarDrawerToggle to make a hamburger button.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -86,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
-
                     case R.id.home_id:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.main_container, new HomeFragment());
