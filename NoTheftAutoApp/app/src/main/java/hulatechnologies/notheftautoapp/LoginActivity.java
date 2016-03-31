@@ -93,13 +93,14 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
             e.printStackTrace();
         }
     }
+    //Handles the login request
     @Override
     public void processFinish(Integer output) {
         if(output == 1){
-            handler.setLoggedIn(true,getBaseContext());
-            callDataBase();
-
-
+            handler.setLoggedIn(true, getBaseContext());
+            //callDataBase();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
         else if(output == 2){
             alertDialog.show();
@@ -118,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
         }
     }
 
-
+    //Updates the cars
     @Override
     public void processFinish(String output) {
         String[] list = output.split("/");
@@ -127,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
         for(int i = 0; i < list.length/3;i++){
             if(list[i*3 + 1].equals("1")){
                 handler.setCarAlarmActive(true,getBaseContext(),list[i*3]);
-                startPush = true;
+                startPush = false;
                 Log.d("Handler", "Alarm sat active");
             }
             else{
