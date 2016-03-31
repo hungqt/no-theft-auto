@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">No Theft Auto App</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_observer">ObserverActivity</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <string name="example_mail"> example@example.com</string>
+    <string name="example_username"> username</string>
+    <string name="example_pass"> password</string>
+    <string name="title_activity_status">Status</string>
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_close">drawer close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
