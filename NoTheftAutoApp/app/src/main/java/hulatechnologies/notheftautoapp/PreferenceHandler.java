@@ -17,6 +17,8 @@ public class PreferenceHandler {
     private static final String remName = "False";
     private static final String carIDName = "carID";
     private static final String notificationID = "notificationID";
+    private static final String GCMactive = "GCMstate";
+    private static final String GCMToken = "GCMToken";
 
     public void setPrefName(String prefName, Context context){
         SharedPreferences SPname = PreferenceManager.getDefaultSharedPreferences(context);
@@ -48,8 +50,17 @@ public class PreferenceHandler {
     public void setNotificationActive(boolean pref, Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(notificationID, pref).commit();
     }
+    public void setGCMactive(boolean pref, Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GCMactive, pref).commit();
+    }
+    public void setToken(String token, Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMToken, token).commit();
+    }
     public String getCarName(Context context, String saveSpot){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(saveSpot, "");
+    }
+    public String getToken(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(GCMToken,"");
     }
     public String getCarString(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(carIDName,"");
@@ -72,6 +83,11 @@ public class PreferenceHandler {
     public boolean getLoggedIn(Context context){
         final SharedPreferences mSharedPreference= PreferenceManager.getDefaultSharedPreferences(context);
         boolean value=(mSharedPreference.getBoolean(logName, false));
+        return value;
+    }
+    public boolean getGCMstate(Context context){
+        final SharedPreferences mSharedPreference= PreferenceManager.getDefaultSharedPreferences(context);
+        boolean value=(mSharedPreference.getBoolean(GCMactive, false));
         return value;
     }
     public void resetPrefName(Context context){

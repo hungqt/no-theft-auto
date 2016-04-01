@@ -2,10 +2,13 @@ package hulatechnologies.notheftautoapp;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +20,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     private static final String logName = "Log";
     private boolean alarmSet = false;
     private PreferenceHandler handler = new PreferenceHandler();
+    private GCMmanager gcmM = new GCMmanager(this,this);
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -50,18 +59,23 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
-            scheduleAlarm();
-            alarmSet = true;
             btnLogin.setVisibility(View.INVISIBLE);
             btnStatus.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.VISIBLE);
+            if(!handler.getGCMstate(getBaseContext())){
+                gcmM.startGCM();
+                handler.setGCMactive(true, getBaseContext());
+            }
+            else{
+                updateToken(handler.getToken(getBaseContext()));
+            }
         }else{
             btnStatus.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
             if(alarmSet == true){
-                alarmSet = false;
-                cancelAlarm();
+                //alarmSet = false;
+                //cancelAlarm();
             }
         }
     }
@@ -122,7 +136,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     public void goToStatus(View v){
         callDataBase();
     }
+
     public void logOut(View v){
+        resetToken();
         handler.resetPrefName(getBaseContext());
         handler.resetPrefPass(getBaseContext());
         handler.resetCarString(getBaseContext());
@@ -131,9 +147,34 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnLogin.setVisibility(View.VISIBLE);
         btnStatus.setVisibility(View.INVISIBLE);
 
-        cancelAlarm();
-
         handler.setLoggedIn(false, getBaseContext());
+    }
+
+    private void resetToken() {
+        AsyncUpdateToken updater = new AsyncUpdateToken();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", handler.getPrefName(getBaseContext()));
+            json.put("token", "");
+
+            updater.execute(json);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void updateToken(String token){
+        AsyncUpdateToken updater = new AsyncUpdateToken();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", handler.getPrefName(getBaseContext()));
+            json.put("token", token);
+
+            updater.execute(json);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     // Setup a recurring alarm every 15 seconds
@@ -148,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         // First parameter is the type: ELAPSED_REALTIME, ELAPSED_REALTIME_WAKEUP, RTC_WAKEUP
         // Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, firstMillis, 60000, pIntent);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, firstMillis, 30000, pIntent);
     }
     //Cancel the set alarm
     public void cancelAlarm() {
