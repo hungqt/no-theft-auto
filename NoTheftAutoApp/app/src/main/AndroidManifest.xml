@@ -43,14 +43,6 @@
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver
-            android:name=".AlarmService"
-            android:process=":remote" />
-
-        <service
-            android:name=".ListenerService"
-            android:exported="false" />
-
         <activity
             android:name=".Status"
             android:label="@string/title_activity_status"
