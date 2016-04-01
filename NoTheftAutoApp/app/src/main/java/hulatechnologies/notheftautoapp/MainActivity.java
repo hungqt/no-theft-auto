@@ -177,30 +177,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         }
     }
 
-    // Setup a recurring alarm every 15 seconds
-    public void scheduleAlarm() {
-        // Construct an intent that will execute the AlarmReceiver
-        Intent intent = new Intent(getApplicationContext(), AlarmService.class);
-        // Create a PendingIntent to be triggered when the alarm goes off
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // Setup periodic alarm every 5 seconds
-        long firstMillis = System.currentTimeMillis(); // alarm is set right away
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        // First parameter is the type: ELAPSED_REALTIME, ELAPSED_REALTIME_WAKEUP, RTC_WAKEUP
-        // Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, firstMillis, 30000, pIntent);
-    }
-    //Cancel the set alarm
-    public void cancelAlarm() {
-        Intent intent = new Intent(getApplicationContext(), AlarmService.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarm.cancel(pIntent);
-    }
-    public void scheduleNotification(){
-
-    }
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
         cars.delegate = this;
