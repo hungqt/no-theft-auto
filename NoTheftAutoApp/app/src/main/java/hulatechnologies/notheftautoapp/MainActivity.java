@@ -9,9 +9,15 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -35,6 +41,12 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     private boolean alarmSet = false;
     private PreferenceHandler handler = new PreferenceHandler();
     private GCMmanager gcmM = new GCMmanager(this,this);
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private FragmentTransaction fragmentTransaction;
+    private NavigationView navigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +78,51 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 //cancelAlarm();
             }
         }
+    }
+
+    //Use this method to initiate the navigation drawer in the onCreate() function
+    public void initNavigationDrawer(){
+        //Instantiate drawerLayout and actionBarDrawerToggle to make a hamburger button.
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        //FragmentsHandling
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.main_container, new HomeFragment());
+        fragmentTransaction.commit();
+        getSupportActionBar().setTitle("Home Fragment");
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.home_id:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new HomeFragment());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("Home Fragment");
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.cars_id:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new CarsFragment());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("My Cars Fragment");
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        break;
+                }
+
+                return true;
+            }
+        });
     }
 
     public void goToReg(View v){
@@ -137,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     //Cancel the set alarm
     public void cancelAlarm() {
         Intent intent = new Intent(getApplicationContext(), AlarmService.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmService.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hulatechnologies.notheftautoapp" >
+    package="hulatechnologies.notheftautoapp">
 
     <!-- [START gcm_permission] -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -45,7 +45,7 @@
 
         <receiver
             android:name=".AlarmService"
-            android:process=":remote"></receiver>
+            android:process=":remote" />
 
         <service
             android:name=".ListenerService"
@@ -85,5 +85,6 @@
             android:name=".RegistrationIntentService"
             android:exported="false">
         </service>
+        <activity android:name=".NavDrawer"></activity>
     </application>
 </manifest>
