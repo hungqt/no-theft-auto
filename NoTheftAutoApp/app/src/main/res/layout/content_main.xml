@@ -60,4 +60,13 @@
         android:layout_alignTop="@+id/btnReg"
         android:layout_alignEnd="@+id/textView"
         android:onClick="goToStatus" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map"
+        android:id="@+id/btnMap"
+        android:layout_below="@+id/btnStatus"
+        android:layout_centerHorizontal="true"
+        android:onClick="goToMap" />
 </RelativeLayout>
