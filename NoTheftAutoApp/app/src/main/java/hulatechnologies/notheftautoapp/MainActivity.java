@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private FragmentTransaction fragmentTransaction;
     private NavigationView navigationView;
+    private Button btnMap;
 
 
     @Override
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
             btnStatus.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
+
             if(alarmSet == true){
                 //alarmSet = false;
                 //cancelAlarm();
@@ -149,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
 
         handler.setLoggedIn(false, getBaseContext());
     }
-
     private void resetToken() {
         AsyncUpdateToken updater = new AsyncUpdateToken();
         JSONObject json = new JSONObject();

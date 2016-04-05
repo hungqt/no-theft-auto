@@ -34,26 +34,12 @@ public class GCMreceiver extends GcmListenerService {
             String message = data.getString("message");
             Log.d(TAG, "From: " + from);
             Log.d(TAG, "Message: " + message);
-
-            if (from.startsWith("/topics/")) {
-                // message received from some topic.
-            } else {
-                // normal downstream message.
+            if(message.startsWith("Coords:")){
+                handler.setCurrCord(message.substring(7,message.length()),getBaseContext());
+                Log.d("Updated cords",message.substring(7,message.length()));
+            }else{
+                sendNotification(message);
             }
-
-            // [START_EXCLUDE]
-            /**
-             * Production applications would usually process the message here.
-             * Eg: - Syncing with server.
-             *     - Store message in local database.
-             *     - Update UI.
-             */
-
-            /**
-             * In some cases it may be useful to show a notification indicating to the user
-             * that a message was received.
-             */
-            sendNotification(message);
         }
     }
     // [END receive_message]
@@ -73,7 +59,7 @@ public class GCMreceiver extends GcmListenerService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.download)
                 .setContentTitle("Alarm notification")
-                .setContentText("Alarm active: "+message)
+                .setContentText("Alarm active: "+ message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

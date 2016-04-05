@@ -60,4 +60,5 @@
         android:layout_alignTop="@+id/btnReg"
         android:layout_alignEnd="@+id/textView"
         android:onClick="goToStatus" />
+
 </RelativeLayout>
