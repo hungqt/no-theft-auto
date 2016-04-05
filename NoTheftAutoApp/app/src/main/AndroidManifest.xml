@@ -16,6 +16,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-library
+        android:name="com.google.android.maps" />
 
     <application
         android:allowBackup="true"
@@ -47,6 +51,7 @@
             android:name=".Status"
             android:label="@string/title_activity_status"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -78,5 +83,18 @@
             android:exported="false">
         </service>
         <activity android:name=".NavDrawer"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDp9WZAvpQBkBEsoo_KyWPjkTOeR3lUEXo" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
