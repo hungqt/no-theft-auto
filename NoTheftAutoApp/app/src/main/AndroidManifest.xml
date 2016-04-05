@@ -82,10 +82,6 @@
             android:exported="false"></service>
 
         <activity android:name=".NavDrawer" />
-        <activity
-            android:name=".MapActivity"
-            android:label="@string/title_activity_map"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

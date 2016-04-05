@@ -19,6 +19,7 @@ public class PreferenceHandler {
     private static final String notificationID = "notificationID";
     private static final String GCMactive = "GCMstate";
     private static final String GCMToken = "GCMToken";
+    private static final String GCMcords = "GCMcords";
 
     public void setPrefName(String prefName, Context context){
         SharedPreferences SPname = PreferenceManager.getDefaultSharedPreferences(context);
@@ -55,6 +56,12 @@ public class PreferenceHandler {
     }
     public void setToken(String token, Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMToken, token).commit();
+    }
+    public void setCurrCord(String cords,Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMcords,cords).commit();
+    }
+    public String getCurrCord(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(GCMcords,"");
     }
     public String getCarName(Context context, String saveSpot){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(saveSpot, "");

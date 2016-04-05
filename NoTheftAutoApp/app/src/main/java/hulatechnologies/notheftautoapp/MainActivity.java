@@ -57,14 +57,12 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnLogin = (Button)findViewById(R.id.btnLogin);
         btnLogout = (Button)findViewById(R.id.btnLogout);
         btnStatus = (Button)findViewById(R.id.btnStatus);
-        btnMap = (Button)findViewById(R.id.btnMap);
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
             btnLogin.setVisibility(View.INVISIBLE);
             btnStatus.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.VISIBLE);
-            btnMap.setVisibility(View.VISIBLE);
             if(!handler.getGCMstate(getBaseContext())){
                 gcmM.startGCM();
                 handler.setGCMactive(true, getBaseContext());
@@ -76,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
             btnStatus.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
-            btnMap.setVisibility(View.INVISIBLE);
 
             if(alarmSet == true){
                 //alarmSet = false;
@@ -151,13 +148,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnLogout.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
         btnStatus.setVisibility(View.INVISIBLE);
-        btnMap.setVisibility(View.INVISIBLE);
 
         handler.setLoggedIn(false, getBaseContext());
-    }
-    public void goToMap(View v){
-        startActivity(new Intent(this,MapActivity.class));
-        finish();
     }
     private void resetToken() {
         AsyncUpdateToken updater = new AsyncUpdateToken();
