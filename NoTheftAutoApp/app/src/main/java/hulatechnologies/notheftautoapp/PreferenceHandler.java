@@ -57,10 +57,10 @@ public class PreferenceHandler {
     public void setToken(String token, Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMToken, token).commit();
     }
-    public void setCurrCord(String cords,Context context){
+    public void setCurrCar(String cords,Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMcords,cords).commit();
     }
-    public String getCurrCord(Context context){
+    public String getCurrCar(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(GCMcords,"");
     }
     public String getCarName(Context context, String saveSpot){

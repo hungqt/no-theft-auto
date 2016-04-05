@@ -93,7 +93,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         finish();
     }
     public void addRow(boolean alarm,String id){
-        String carName = handler.getCarName(getBaseContext(),id+"Name");
+        final String carName = handler.getCarName(getBaseContext(),id+"Name");
         TableRow tR = new TableRow(this);
         tR.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
@@ -115,7 +115,25 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
             label_status.setTextColor(Color.GREEN);
         }
         tR.addView(label_status);
+
+        Button carBtn = new Button(this);
+        carBtn.setId(View.generateViewId());
+        carBtn.setText("Map");
+        carBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                handler.setCurrCar(carName, getBaseContext());
+                goToMap();
+            }
+        });
+
+        tR.addView(carBtn);
+
         tableLayout.addView(tR, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+    }
+    public void goToMap(){
+        startActivity(new Intent(this, MapActivity.class));
     }
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
@@ -127,7 +145,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
 
             cars.execute(json);
 
-        } catch (JSONException e) {
+        }catch (JSONException e) {
             e.printStackTrace();
         }
     }
