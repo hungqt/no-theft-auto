@@ -60,7 +60,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
     //Start funksjoner for å hente kordinatene
+    //startUpdater starter prosessen med å oppdatere longtiude og latitude variabelene
+
+    //Kalles av startUpdater (Dette er funksjonen som henter fra databasen og sender svaret til processFinished-metoden
     public void getCoords(String carname){
         AsyncGetCoords c = new AsyncGetCoords();
         c.delegate = this;
@@ -76,12 +80,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateMap(float longitude, float latitude){
         //Insert code for google maps here
     }
-
+    //launcher status pagen
     public void launchStatus(){
         startActivity(new Intent(this,Status.class));
         finish();
     }
-
+    //Her blir verdiene returnert fra databasen, merk at dette er en asynk operasjon slik at dette gjøres paralelt med andre ting
     @Override
     public void processFinished(String s) {
         cords = s;
@@ -105,6 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         Log.d("Cords", cords);
     }
+    //Starter å hente kordinater hvert sekund (kan endres)
     public void startUpdater(){
         final int delay = 1000; //milliseconds
         runner = new Runnable() {
@@ -116,6 +121,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
         h.postDelayed(runner, delay);
     }
+    //Stopper å hente når du forlater activitien
     @Override
     public void onPause(){
         super.onPause();
