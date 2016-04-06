@@ -20,6 +20,8 @@ public class PreferenceHandler {
     private static final String GCMactive = "GCMstate";
     private static final String GCMToken = "GCMToken";
     private static final String GCMcords = "GCMcords";
+    private static final String mapLatitude = "mapLatitude";
+    private static final String mapLongitude = "mapLongitude";
 
     public void setPrefName(String prefName, Context context){
         SharedPreferences SPname = PreferenceManager.getDefaultSharedPreferences(context);
@@ -57,11 +59,23 @@ public class PreferenceHandler {
     public void setToken(String token, Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMToken, token).commit();
     }
+    public void setLatitude(String savespot,Float latitude, Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putFloat(savespot, latitude).commit();
+    }
+    public void setLongitude(String savespot,Float longitude, Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putFloat(savespot, longitude).commit();
+    }
     public void setCurrCar(String cords,Context context){
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMcords,cords).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMcords, cords).commit();
+    }
+    public float getLatitude(String savespot,Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getFloat(savespot,0);
+    }
+    public float getLongitude(String savespot,Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getFloat(savespot, 0);
     }
     public String getCurrCar(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(GCMcords,"");
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(GCMcords, "");
     }
     public String getCarName(Context context, String saveSpot){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(saveSpot, "");
@@ -70,7 +84,7 @@ public class PreferenceHandler {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(GCMToken,"");
     }
     public String getCarString(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(carIDName,"");
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(carIDName, "");
     }
     public boolean getCarAlarmActive(Context context, String carName){
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(carName, false);
@@ -110,7 +124,15 @@ public class PreferenceHandler {
         editor.commit();
     }
     public void resetCarString(Context context){
-        setCarString("",context);
+        setCarString("", context);
+    }
+
+    public void clear(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context); // here you get your prefrences by either of two methods
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
     }
 
 
