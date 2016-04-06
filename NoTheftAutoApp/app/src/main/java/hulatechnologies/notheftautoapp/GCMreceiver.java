@@ -34,12 +34,8 @@ public class GCMreceiver extends GcmListenerService {
             String message = data.getString("message");
             Log.d(TAG, "From: " + from);
             Log.d(TAG, "Message: " + message);
-            if(message.startsWith("Coords:")){
-                handler.setCurrCord(message.substring(7,message.length()),getBaseContext());
-                Log.d("Updated cords",message.substring(7,message.length()));
-            }else{
-                sendNotification(message);
-            }
+
+            sendNotification(message);
         }
     }
     // [END receive_message]
