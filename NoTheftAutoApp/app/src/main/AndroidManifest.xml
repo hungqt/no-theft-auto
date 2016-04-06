@@ -51,10 +51,7 @@
             android:name=".Status"
             android:label="@string/title_activity_status"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".MapActivity"
-            android:label="@string/title_activity_map"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

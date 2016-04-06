@@ -133,7 +133,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         tableLayout.addView(tR, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
     public void goToMap(){
-        startActivity(new Intent(this, MapActivity.class));
+        startActivity(new Intent(this, MapsActivity.class));
     }
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
