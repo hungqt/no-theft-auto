@@ -64,7 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //Start funksjoner for å hente kordinatene
     //startUpdater starter prosessen med å oppdatere longtiude og latitude variabelene
 
-    //Kalles av startUpdater (Dette er funksjonen som henter fra databasen og sender svaret til processFinished-metoden
+    //Kalles av startUpdater (Dette er funksjonen som henter fra databasen og sn
     public void getCoords(String carname){
         AsyncGetCoords c = new AsyncGetCoords();
         c.delegate = this;
