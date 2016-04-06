@@ -16,8 +16,8 @@ public class MapActivity extends AppCompatActivity implements AsyncResponse3 {
 
     PreferenceHandler handler = new PreferenceHandler();
     String cords = "0,0";
-    int longitude = 0;
-    int latitude = 0;
+    float longitude = 0;
+    float latitude = 0;
     final Handler h = new Handler();
     Runnable runner;
 
@@ -43,7 +43,7 @@ public class MapActivity extends AppCompatActivity implements AsyncResponse3 {
         }
     }
 
-    public void updateMap(int longitude, int latitude){
+    public void updateMap(float longitude, float latitude){
         //Insert code for google maps here
     }
 
@@ -51,8 +51,8 @@ public class MapActivity extends AppCompatActivity implements AsyncResponse3 {
     public void processFinished(String s) {
         cords = s;
         String[] cordinates = s.split(",");
-        longitude = Integer.valueOf(cordinates[0]);
-        latitude = Integer.valueOf(cordinates[1]);
+        longitude = Float.valueOf(cordinates[0]);
+        latitude = Float.valueOf(cordinates[1]);
         Log.d("Cords", cords);
     }
     public void startUpdater(){
