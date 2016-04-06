@@ -57,12 +57,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getMinZoomLevel();
-        // Add a marker in Sydney and move the camera
-        LatLng location = new LatLng(latitude, longitude);
-        marker = new MarkerOptions().position(location).title(handler.getCurrCar(getBaseContext()));
-        mMap.addMarker(marker);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        if(handler.getLatitude(handler.getCurrCar(getBaseContext())+ "latitude",getBaseContext()) != 0.0f) {
+            latitude = handler.getLatitude(handler.getCurrCar(getBaseContext())+ "latitude",getBaseContext());
+            longitude = handler.getLongitude(handler.getCurrCar(getBaseContext())+ "longitude",getBaseContext());
+        }
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude) , 17.0f) );
     }
 
     //Start funksjoner for å hente kordinatene
@@ -84,9 +83,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateMap(float longitude, float latitude){
         LatLng location = new LatLng(latitude, longitude);
         mMap.clear();
+        marker = new MarkerOptions().title(handler.getCurrCar(getBaseContext()));
         marker.position(location);
         mMap.addMarker(marker.title(handler.getCurrCar(getBaseContext())));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
+        handler.setLatitude(handler.getCurrCar(getBaseContext()) + "latitude",latitude,getBaseContext());
+        handler.setLongitude(handler.getCurrCar(getBaseContext())+ "longitude",longitude,getBaseContext());
     }
     //launcher status pagen
     public void launchStatus(){
@@ -123,7 +125,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         runner = new Runnable() {
             public void run() {
                 getCoords(handler.getCurrCar(getBaseContext()));
-                updateMap(longitude, latitude);
+                if(longitude != 0 || latitude != 0){
+                    updateMap(longitude, latitude);
+                }
                 h.postDelayed(this, delay);
             }
         };

@@ -141,9 +141,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
 
     public void logOut(View v){
         resetToken();
-        handler.resetPrefName(getBaseContext());
-        handler.resetPrefPass(getBaseContext());
-        handler.resetCarString(getBaseContext());
+        handler.clear(getBaseContext());
 
         btnLogout.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
