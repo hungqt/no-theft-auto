@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
@@ -29,6 +30,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     float latitude = 0;
     final Handler h = new Handler();
     Runnable runner;
+    MarkerOptions marker;
 
 
     @Override
@@ -36,6 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        startUpdater();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -54,11 +57,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.getMinZoomLevel();
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng location = new LatLng(latitude, longitude);
+        marker = new MarkerOptions().position(location).title(handler.getCurrCar(getBaseContext()));
+        mMap.addMarker(marker);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
     }
 
     //Start funksjoner for å hente kordinatene
@@ -78,7 +82,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void updateMap(float longitude, float latitude){
-        //Insert code for google maps here
+        LatLng location = new LatLng(latitude, longitude);
+        mMap.clear();
+        marker.position(location);
+        mMap.addMarker(marker.title(handler.getCurrCar(getBaseContext())));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
     }
     //launcher status pagen
     public void launchStatus(){
