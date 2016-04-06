@@ -60,9 +60,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
-            btnLogin.setVisibility(View.INVISIBLE);
-            btnStatus.setVisibility(View.VISIBLE);
-            btnLogout.setVisibility(View.VISIBLE);
+            setContentView(R.layout.activity_nav_drawer);
+            initNavigationDrawer();
             if(!handler.getGCMstate(getBaseContext())){
                 gcmM.startGCM();
                 handler.setGCMactive(true, getBaseContext());
@@ -113,12 +112,20 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                         break;
 
                     case R.id.cars_id:
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_container, new CarsFragment());
-                        fragmentTransaction.commit();
+                        callDataBase();
                         getSupportActionBar().setTitle("My Cars Fragment");
                         item.setChecked(true);
                         drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.log_out_id:
+                        logOutFromMain();
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        setContentView(R.layout.activity_main);
+                        btnReg = (Button) findViewById(R.id.btnReg);
+                        btnLogin = (Button) findViewById(R.id.btnLogin);
+                        btnLogout = (Button) findViewById(R.id.btnLogout);
                         break;
                 }
 
@@ -140,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     }
 
     public void logOut(View v){
+        logOutFromMain();
+    }
+
+    public void logOutFromMain(){
         resetToken();
         handler.resetPrefName(getBaseContext());
         handler.resetPrefPass(getBaseContext());
