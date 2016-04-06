@@ -86,7 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         marker.position(location);
         mMap.addMarker(marker.title(handler.getCurrCar(getBaseContext())));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
     }
     //launcher status pagen
     public void launchStatus(){
