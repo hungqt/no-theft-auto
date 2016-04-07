@@ -23,10 +23,17 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Status extends AppCompatActivity implements AsyncResponse2 {
     PreferenceHandler handler = new PreferenceHandler();
     TableLayout tableLayout;
     AlertDialog alertDialog2;
+    private Timer mActivityTransitionTimer;
+    private TimerTask mActivityTransitionTimerTask;
+    public boolean wasInBackground;
+    private final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +41,6 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         setContentView(R.layout.activity_status);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
 
         if(!handler.getLoggedIn(getBaseContext())){
             alertDialog2 = new AlertDialog.Builder(this).create();
@@ -73,7 +72,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
 
         TextView label_status = new TextView(this);
         label_status.setId(View.generateViewId());// define id that must be unique
-        label_status.setText("Status"); // set the text for the header
+        label_status.setText("Alarm status"); // set the text for the header
         label_status.setTextColor(Color.WHITE); // set the color
         label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
         tr_head.addView(label_status); // add the column to the table row here
@@ -134,6 +133,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
     }
     public void goToMap(){
         startActivity(new Intent(this, MapsActivity.class));
+        finish();
     }
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
@@ -157,6 +157,12 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         startActivity(new Intent(Status.this, MainActivity.class));
         finish();
     }
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        callDataBase();
+    }
+
 
     @Override
     public void processFinish(String output) {
