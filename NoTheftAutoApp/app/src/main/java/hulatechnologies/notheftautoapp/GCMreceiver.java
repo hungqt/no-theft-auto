@@ -19,6 +19,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 public class GCMreceiver extends GcmListenerService {
     private static final String TAG = "GCMreceiver";
     private PreferenceHandler handler = new PreferenceHandler();
+    private int requestCode = 0;
 
     /**
      * Called when message is received.
@@ -48,9 +49,9 @@ public class GCMreceiver extends GcmListenerService {
     // Edit notification here
     private void sendNotification(String message) {
         Intent intent = new Intent(this, Status.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
@@ -65,5 +66,7 @@ public class GCMreceiver extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+
+        requestCode++;
     }
 }

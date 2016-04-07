@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -80,13 +81,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    public void onUpdateClick(View v){
+        LatLng location = new LatLng(latitude,longitude);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,17));
+    }
+    public void goBack(View v){
+        startActivity(new Intent(this,Status.class));
+        finish();
+    }
+
     public void updateMap(float longitude, float latitude){
         LatLng location = new LatLng(latitude, longitude);
         mMap.clear();
         marker = new MarkerOptions().title(handler.getCurrCar(getBaseContext()));
         marker.position(location);
         mMap.addMarker(marker.title(handler.getCurrCar(getBaseContext())));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
         handler.setLatitude(handler.getCurrCar(getBaseContext()) + "latitude",latitude,getBaseContext());
         handler.setLongitude(handler.getCurrCar(getBaseContext())+ "longitude",longitude,getBaseContext());
     }
