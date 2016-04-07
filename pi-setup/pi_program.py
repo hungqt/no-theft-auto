@@ -5,7 +5,10 @@ import MySQLdb
 import time
 import urllib2
 import json
-import socket
+#import RPi.GPIO as GPIO
+
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setup(23, GPIOIN, pull_up_down=GPIO.PUD_UP)
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
 
@@ -15,18 +18,19 @@ db1 = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
                       passwd="nta123",  # your password
                       db="glennchr_nta")  # name of the data base
 
-# lager en connection til db for send_ip_main
-db2 = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                      user="glennchr_nta",  # your username
-                      passwd="nta123",  # your password
-                      db="glennchr_nta")  # name of the data base
 rpi_id = 1
+
+#cur = db1.cursor()
+
+# cur.execute("UPDATE glennchr_nta.raspberry_pi SET update=1  WHERE rpi_id=1")
+# db1.commit()
+# print("hooo")
+
 
 def main():
     try:
         thread.start_new_thread(activation_main, ())
         thread.start_new_thread(gps_sender_main, ())
-        thread.start_new_thread(send_ip_main, ())
     except:
         print "Unable to start thread"
 
@@ -57,6 +61,13 @@ def activation_main():
         else:
             print "Unknown Option Selected!"
 
+# def activation_main2():
+#     while True:
+#         input_state = GPIO.input(23)
+#         if input_state == False:
+#             setAlarm(1)
+#             sendNotification(getToken(getUsername()))
+
 
 # Henter ut latitude, longtitude og timestamp fra fil.
 # Kjorer til filen er lest igjennom.
@@ -65,7 +76,6 @@ def activation_main():
 def gps_sender_main():
 
     f = open("coord1.txt", "r")
-    tid = 0
     while True:
         h = 0
         lang = 0
@@ -77,6 +87,7 @@ def gps_sender_main():
             a = f.readline()
 
             if a == "":
+
                 f.close()
                 break
 
@@ -98,29 +109,18 @@ def gps_sender_main():
                 longitude = c
 
         if a == "":
-
             f.close()
             break
 
         #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
-        if tid >= 5:
-            updateCurrCoor(longitude, latitude)
-            #print "Current coordinates updated"
-            tid = 0
+
+        # if getUpdateCurrCoor() == 1:
+        updateCurrCoor(longitude, latitude)
+        #     #print "Current coordinates updated"
+
         time.sleep(1)
-        tid += 1
 
-def send_ip_main():
-
-    ip = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1],
-                   [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close())
-                     for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
-
-    while True:
-        setIp(ip)
-        #print "ip er oppdatert"
-        time.sleep(5)
 
 
 def sendLatitudeLogditude(time, longitude, latitude, pi_id):
@@ -205,12 +205,13 @@ def getUsername():
     return cur.fetchone()[0]
 
 
-def setIp(rpiIp):
-    cur = db2.cursor()
-    try:
-        cur.execute("""UPDATE raspberry_pi SET IP ='{0}' WHERE rpi_id = 1""".format(rpiIp))
-        db2.commit()
-    except:
-        db2.rollback()
+def getUpdateCurrCoor():
+    cur = db1.cursor()
+    cur.execute('''SELECT update
+                   FROM raspberry_pi
+                   WHERE rpi_id = {0} '''.format(rpi_id))
+    # henter ut verdier fra fetchone
+    value = cur.fetchone()
+    return value
 
 main()
