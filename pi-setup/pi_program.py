@@ -21,6 +21,13 @@ db2 = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
                       passwd="nta123",  # your password
                       db="glennchr_nta")  # name of the data base
 
+cur1 = db1.cursor()
+cur2 = db2.cursor()
+if cur1:
+    cur1.close()
+if cur2:
+    cur1.close()
+
 rpi_id = 1
 
 #cur = db1.cursor()
@@ -144,18 +151,16 @@ def gps_sender_main():
 
 
 def sendLatitudeLogditude(time, longitude, latitude, pi_id):
-    cur = db1.cursor()
     try:
-        cur.execute('''INSERT INTO gps_log (timestamp, longitude, latitude, pi_id) VALUES (%s, %s, %s, %s)''',
+        cur1.execute('''INSERT INTO gps_log (timestamp, longitude, latitude, pi_id) VALUES (%s, %s, %s, %s)''',
                     (time, longitude, latitude, pi_id))
         db1.commit()
     except:
         db1.rollback()
 
 def updateCurrCoor(longtitude, latitude):
-    cur = db1.cursor()
     try:
-        cur.execute('''UPDATE raspberry_pi SET Coords = '{0}' WHERE rpi_id = 1'''.format(longtitude + "," + latitude))
+        cur1.execute('''UPDATE raspberry_pi SET Coords = '{0}' WHERE rpi_id = 1'''.format(longtitude + "," + latitude))
         db1.commit()
     except:
         db1.rollback()
@@ -176,10 +181,10 @@ def sendNotification(token):
 
 
 def setAlarm(value):
-    cur = db2.cursor()
+
     stringValue = str(value)
     try:
-        cur.execute("UPDATE glennchr_nta.raspberry_pi SET alarm =(%s)  WHERE rpi_id = (%s)", (stringValue, rpi_id))
+        cur2.execute("UPDATE glennchr_nta.raspberry_pi SET alarm =(%s)  WHERE rpi_id = (%s)", (stringValue, rpi_id))
         db1.commit()
     except:
         db1.rollback()
@@ -188,50 +193,46 @@ def setAlarm(value):
 # get-metoder
 def getAlarm():
     # lager en cursor som kan kjore sql soringer
-    cur = db2.cursor()
-    cur.execute('''SELECT alarm FROM raspberry_pi WHERE rpi_id = '{0}' '''.format(rpi_id))
+
+    cur2.execute('''SELECT alarm FROM raspberry_pi WHERE rpi_id = '{0}' '''.format(rpi_id))
     # henter ut verdier fra fetchone
-    values = cur.fetchone()
+    values = cur2.fetchone()
     value = values[0]
     return value
 
 
 def getToken(username):
     # lager en cursor som kan kjore sql soringer
-    cur = db2.cursor()
     user = str(username)
-    cur.execute('''SELECT token FROM user WHERE username = '{0}' '''.format(username))
+    cur2.execute('''SELECT token FROM user WHERE username = '{0}' '''.format(username))
     # henter ut verdier fra fetchone
-    values = cur.fetchone()
+    values = cur2.fetchone()
     value = values[0]
     return value
 
 
 def getCarName():
     # lager en cursor som kan kjore sql soringer
-    cur = db2.cursor()
-    cur.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+    cur2.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
     # henter ut verdier fra fetchone
-    values = cur.fetchone()
+    values = cur2.fetchone()
     value = values[0]
     return value
 
 
 def getUsername():
-    cur = db2.cursor()
-    cur.execute(''' SELECT U.username
+    cur2.execute(''' SELECT U.username
                     FROM user U, user_has_rpi UR
                     WHERE {0} = UR.rpi_id AND U.user_id = UR.user_id'''.format(rpi_id))
-    return cur.fetchone()[0]
+    return cur2.fetchone()[0]
 
 
 def getUpdateCurrCoor():
-    cur = db1.cursor()
-    cur.execute('''SELECT update
+    cur1.execute('''SELECT update
                    FROM raspberry_pi
                    WHERE rpi_id = {0} '''.format(rpi_id))
     # henter ut verdier fra fetchone
-    value = cur.fetchone()
+    value = cur1.fetchone()
     return value
 
 main()
