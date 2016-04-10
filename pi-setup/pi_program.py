@@ -67,16 +67,18 @@ def activation_main():
 def activation_main2():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
+    a = 0
 
     try:
         while True:
             if (GPIO.input(11) == 1):
-                setAlarm(1)
-                sendNotification(getToken(getUsername()))
-                print "knapp trykk"
+                if (a == 0):
+                    setAlarm(1)
+                    sendNotification(getToken(getUsername()))
+                    a = 1
+                    print "knapp trykk"
             else:
-                continue
+                a = 0
 
     except KeyboardInterrupt:
         GPIO.cleanup()
