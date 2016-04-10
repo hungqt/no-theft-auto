@@ -23,9 +23,9 @@ db2 = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
 
 cur1 = db1.cursor()
 cur2 = db2.cursor()
-if cur1:
+if not cur1:
     cur1.close()
-if cur2:
+if not cur2:
     cur1.close()
 
 rpi_id = 1
@@ -149,14 +149,14 @@ def gps_sender_main():
         time.sleep(1)
 
 
-
 def sendLatitudeLogditude(time, longitude, latitude, pi_id):
     try:
         cur1.execute('''INSERT INTO gps_log (timestamp, longitude, latitude, pi_id) VALUES (%s, %s, %s, %s)''',
-                    (time, longitude, latitude, pi_id))
+                     (time, longitude, latitude, pi_id))
         db1.commit()
     except:
         db1.rollback()
+
 
 def updateCurrCoor(longtitude, latitude):
     try:
