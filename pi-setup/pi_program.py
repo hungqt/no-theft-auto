@@ -96,10 +96,10 @@ def activation_main2():
     except KeyboardInterrupt:
         GPIO.cleanup()
 
+
 # Henter ut latitude, longtitude og timestamp fra fil.
 # Kjorer til filen er lest igjennom.
 # Har delay pa 1 sek
-
 def gps_sender_main():
 
     f = open("coord1.txt", "r")
@@ -139,7 +139,7 @@ def gps_sender_main():
             f.close()
             break
 
-        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
