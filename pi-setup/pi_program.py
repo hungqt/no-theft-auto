@@ -75,8 +75,11 @@ def activation_main2():
             if GPIO.input(11) == 1:
                 print "cool"
                 if a == 0:
+                    print "feit"
                     setAlarm(1)
+                    print "teit"
                     sendNotification(getToken(getUsername()))
+                    print "wat"
                     a = 1
                     print "knapp trykk"
             else:
