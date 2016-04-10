@@ -63,12 +63,9 @@ def activation_main2():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-    GPIO.setup(7, GPIO.OUT)
-    GPIO.output(7, 0)
 
     try:
         while True:
-            GPIO.output(7, GPIO.input(11))
             if (GPIO.input(11) == 1):
                 setAlarm(1)
                 sendNotification(getToken(getUsername()))
