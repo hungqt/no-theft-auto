@@ -5,10 +5,8 @@ import MySQLdb
 import time
 import urllib2
 import json
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(23, GPIOIN, pull_up_down=GPIO.PUD_UP)
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
 
@@ -29,7 +27,7 @@ rpi_id = 1
 
 def main():
     try:
-        thread.start_new_thread(activation_main, ())
+        thread.start_new_thread(activation_main2, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
@@ -61,13 +59,25 @@ def activation_main():
         else:
             print "Unknown Option Selected!"
 
-# def activation_main2():
-#     while True:
-#         input_state = GPIO.input(23)
-#         if input_state == False:
-#             setAlarm(1)
-#             sendNotification(getToken(getUsername()))
+def activation_main2():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
+    GPIO.setup(7, GPIO.OUT)
+    GPIO.output(7, 0)
+
+    try:
+        while True:
+            GPIO.output(7, GPIO.input(11))
+            if (GPIO.input(11) == 1):
+                setAlarm(1)
+                sendNotification(getToken(getUsername()))
+                print "knapp trykk"
+            else:
+                print "knapp slipp"
+
+    except KeyboardInterrupt:
+        GPIO.cleanup()
 
 # Henter ut latitude, longtitude og timestamp fra fil.
 # Kjorer til filen er lest igjennom.
