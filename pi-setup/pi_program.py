@@ -74,7 +74,7 @@ def activation_main2():
                 sendNotification(getToken(getUsername()))
                 print "knapp trykk"
             else:
-                print "knapp slipp"
+                continue
 
     except KeyboardInterrupt:
         GPIO.cleanup()
