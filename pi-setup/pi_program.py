@@ -71,13 +71,16 @@ def activation_main2():
 
     try:
         while True:
-            if (GPIO.input(11) == 1):
-                if (a == 0):
+            time.sleep(1)
+            if GPIO.input(11) == 1:
+                print "cool"
+                if a == 0:
                     setAlarm(1)
                     sendNotification(getToken(getUsername()))
                     a = 1
                     print "knapp trykk"
             else:
+                print "Hey"
                 a = 0
 
     except KeyboardInterrupt:
