@@ -5,7 +5,7 @@ import MySQLdb
 import time
 import urllib2
 import json
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
@@ -33,7 +33,7 @@ rpi_id = 1
 
 def main():
     try:
-        thread.start_new_thread(activation_main, ())
+        thread.start_new_thread(activation_main2, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
@@ -85,6 +85,7 @@ def activation_main2():
                     print "knapp trykk"
             else:
                 print "Hey"
+                setAlarm(0)
                 a = 0
 
     except KeyboardInterrupt:
