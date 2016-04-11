@@ -84,7 +84,7 @@
         <activity android:name=".NavDrawer"></activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDp9WZAvpQBkBEsoo_KyWPjkTOeR3lUEXo" />
+            android:value="AIzaSyAPJ01Ma75RFgUV0H5V0A3kicp2RdLCQgA" />
 
         <activity
             android:name=".MapsActivity"
