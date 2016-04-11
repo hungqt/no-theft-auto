@@ -49,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
         passText1 = (EditText)findViewById(R.id.passText1);
         passText2 = (EditText)findViewById(R.id.passText2);
         emailText = (EditText)findViewById(R.id.emailText);
-
     }
     public void onRegClick(View v){
         AsyncTaskRegister data = new AsyncTaskRegister();
