@@ -175,6 +175,29 @@ def updateCurrCoor(longtitude, latitude):
         db.rollback()
 
 
+def setAlarm(value):
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
+
+    name = getCarName2()
+    coords = getLongLat()
+    try:
+        cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+        cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
+                    (rpi_id, value, name, coords))
+        db.commit()
+    except:
+        print "Alarm rollback"
+        db.rollback()
+
+
 def sendNotification(token):
 
     if not (token == None or token == ""):
@@ -187,30 +210,6 @@ def sendNotification(token):
         data = json.dumps(postdata)
 
         response = urllib2.urlopen(req, data)
-
-
-def setAlarm(value):
-    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                      user="glennchr_nta",  # your username
-                      passwd="nta123",  # your password
-                      db="glennchr_nta")  # name of the data base
-
-    cur = db.cursor()
-
-    if not cur:
-        cur.close()
-
-    stringValue = str(value)
-    name = getCarName2()
-    coords = getLongLat()
-    try:
-        cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
-        cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
-                     (rpi_id, stringValue, name, coords))
-        db.commit()
-    except:
-        print "Alarm rollback"
-        db.rollback()
 
 
 # get-metoder
