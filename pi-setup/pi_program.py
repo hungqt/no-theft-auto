@@ -5,28 +5,22 @@ import MySQLdb
 import time
 import urllib2
 import json
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
 
 # lager en connection til db for gps_sender_main
-db1 = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
                       user="glennchr_nta",  # your username
                       passwd="nta123",  # your password
                       db="glennchr_nta")  # name of the data base
 
-db2 = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                      user="glennchr_nta",  # your username
-                      passwd="nta123",  # your password
-                      db="glennchr_nta")  # name of the data base
+cur = db.cursor()
 
-cur1 = db1.cursor()
-cur2 = db2.cursor()
-if not cur1:
-    cur1.close()
-if not cur2:
-    cur1.close()
+if not cur:
+    cur.close()
+
 
 rpi_id = 1
 
@@ -39,7 +33,7 @@ rpi_id = 1
 
 def main():
     try:
-        thread.start_new_thread(activation_main2, ())
+        thread.start_new_thread(activation_main, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
@@ -151,27 +145,45 @@ def gps_sender_main():
 
 
 def sendLatitudeLogditude(time, longitude, latitude, pi_id):
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
     try:
-        cur1.execute('''INSERT INTO gps_log (timestamp, longitude, latitude, pi_id) VALUES (%s, %s, %s, %s)''',
+        cur.execute('''INSERT INTO gps_log (timestamp, longitude, latitude, pi_id) VALUES (%s, %s, %s, %s)''',
                      (time, longitude, latitude, pi_id))
-        db1.commit()
+        db.commit()
     except:
-        db1.rollback()
+        db.rollback()
 
 
 def updateCurrCoor(longtitude, latitude):
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
     try:
         alarm = getAlarm()
         name = getCarName1()
         gps_string = (longtitude +","+ latitude)
-        cur1.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
-        cur1.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
+        cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+        cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
                      (rpi_id, alarm, name, gps_string))
 
-        db1.commit()
+        db.commit()
     except:
 
-        db1.rollback()
+        db.rollback()
 
 
 def sendNotification(token):
@@ -189,76 +201,142 @@ def sendNotification(token):
 
 
 def setAlarm(value):
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
 
     stringValue = str(value)
     name = getCarName2()
     coords = getLongLat()
     try:
-        cur2.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
-        cur2.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
+        cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+        cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
                      (rpi_id, stringValue, name, coords))
-        db2.commit()
+        db.commit()
     except:
-        db2.rollback()
+        db.rollback()
 
 
 # get-metoder
 def getAlarm():
     # lager en cursor som kan kjore sql soringer
 
-    cur1.execute('''SELECT alarm FROM raspberry_pi WHERE rpi_id = '{0}' '''.format(rpi_id))
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
+
+    cur.execute('''SELECT alarm FROM raspberry_pi WHERE rpi_id = '{0}' '''.format(rpi_id))
     # henter ut verdier fra fetchone
-    values = cur1.fetchone()
+    values = cur.fetchone()
     value = values[0]
     return value
 
 
 def getToken(username):
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
     # lager en cursor som kan kjore sql soringer
     user = str(username)
-    cur2.execute('''SELECT token FROM user WHERE username = '{0}' '''.format(username))
+    cur.execute('''SELECT token FROM user WHERE username = '{0}' '''.format(username))
     # henter ut verdier fra fetchone
-    values = cur2.fetchone()
+    values = cur.fetchone()
     value = values[0]
     return value
 
 
 def getCarName2():
-    # lager en cursor som kan kjore sql soringer
-    cur2.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
+    cur.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
     # henter ut verdier fra fetchone
-    values = cur2.fetchone()
+    values = cur.fetchone()
     value = values[0]
     return value
 
 def getCarName1():
-    # lager en cursor som kan kjore sql soringer
-    cur1.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+    cur = db.cursor()
+    if not cur:
+        cur.close()
+    cur.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
     # henter ut verdier fra fetchone
-    values = cur1.fetchone()
+    values = cur.fetchone()
     value = values[0]
     return value
 
 
 def getUsername():
-    cur2.execute(''' SELECT U.username
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
+    cur.execute(''' SELECT U.username
                     FROM user U, user_has_rpi UR
                     WHERE {0} = UR.rpi_id AND U.user_id = UR.user_id'''.format(rpi_id))
-    return cur2.fetchone()[0]
+    return cur.fetchone()[0]
 
 
 def getUpdateCurrCoor():
-    cur1.execute('''SELECT update
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
+    cur.execute('''SELECT update
                    FROM raspberry_pi
                    WHERE rpi_id = {0} '''.format(rpi_id))
     # henter ut verdier fra fetchone
-    value = cur1.fetchone()
+    value = cur.fetchone()
     return value
 
 
 def getLongLat():
-    cur1.execute('''SELECT Coords FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
-    value = cur1.fetchone()
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+                      user="glennchr_nta",  # your username
+                      passwd="nta123",  # your password
+                      db="glennchr_nta")  # name of the data base
+    cur = db.cursor()
+
+    if not cur:
+        cur.close()
+    cur.execute('''SELECT Coords FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+    value = cur.fetchone()
     return value
 
 main()
