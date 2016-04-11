@@ -10,17 +10,6 @@ import RPi.GPIO as GPIO
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
 
-# lager en connection til db for gps_sender_main
-db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                      user="glennchr_nta",  # your username
-                      passwd="nta123",  # your password
-                      db="glennchr_nta")  # name of the data base
-
-cur = db.cursor()
-
-if not cur:
-    cur.close()
-
 
 rpi_id = 1
 
@@ -65,6 +54,7 @@ def activation_main():
         else:
             print "Unknown Option Selected!"
 
+
 def activation_main2():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -72,7 +62,6 @@ def activation_main2():
 
     try:
         while True:
-            time.sleep(1)
             if GPIO.input(11) == 1:
                 print "cool"
                 if a == 0:
@@ -84,7 +73,6 @@ def activation_main2():
                     a = 1
                     print "knapp trykk"
             else:
-                print "Hey"
                 setAlarm(0)
                 a = 0
 
