@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
         btnLogout = (Button)findViewById(R.id.btnLogout);
-        btnStatus = (Button)findViewById(R.id.btnStatus);
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 updateToken(handler.getToken(getBaseContext()));
             }
         }else{
-            btnStatus.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
 
@@ -156,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
 
         btnLogout.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
-        btnStatus.setVisibility(View.INVISIBLE);
 
         handler.setLoggedIn(false, getBaseContext());
     }

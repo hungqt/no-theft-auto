@@ -5,10 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +30,8 @@ public class Status extends Fragment implements AsyncResponse2 {
     TableLayout tableLayout;
     AlertDialog alertDialog2;
     View v;
+    FragmentTransaction fragmentTransaction;
+    DrawerLayout drawerLayout;
 
     public Status (){
 
@@ -51,9 +53,16 @@ public class Status extends Fragment implements AsyncResponse2 {
             });
             alertDialog2.show();
         }
-
-        Button btnUpdate = (Button)getActivity().findViewById(R.id.btnUpdate);
         v = inflater.inflate(R.layout.fragment_cars, container, false);
+
+        Button btnUpdate = (Button)v.findViewById(R.id.btnUpdate);
+        btnUpdate.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Update();
+            }
+        });
+
 
         tableLayout = (TableLayout)v.findViewById(R.id.tableLayout);
         TableRow tr_head = new TableRow(getActivity());
@@ -85,7 +94,6 @@ public class Status extends Fragment implements AsyncResponse2 {
             String id = carString.substring(i,i+1);
             addRow(handler.getCarAlarmActive(getActivity().getBaseContext(),id),id);
         }
-
 
         // Inflate the layout for this fragment
         return v;
@@ -153,14 +161,11 @@ public class Status extends Fragment implements AsyncResponse2 {
             e.printStackTrace();
         }
     }
-    public void Update(View v){
+
+    public void Update(){
         callDataBase();
     }
 
-    public void cancel(View v){
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        getActivity().finish();
-    }
 
     @Override
     public void processFinish(String output) {
@@ -183,7 +188,8 @@ public class Status extends Fragment implements AsyncResponse2 {
         }
         Log.d("Car String", carString);
         handler.setCarString(carString, getActivity().getBaseContext());
-        startActivity(new Intent(getActivity(), Status.class));
-        getActivity().finish();
+        fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, new Status());
+        fragmentTransaction.commit();
     }
 }
