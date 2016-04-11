@@ -122,13 +122,13 @@ def gps_sender_main():
             f.close()
             break
 
-        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
         #print "updating"
         updateCurrCoor(longitude, latitude)
-        #print "Current coordinates updated"
+        print "Current coordinates updated"
 
         time.sleep(1)
 
