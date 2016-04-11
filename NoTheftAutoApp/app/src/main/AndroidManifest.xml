@@ -47,10 +47,7 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Status"
-            android:label="@string/title_activity_status"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

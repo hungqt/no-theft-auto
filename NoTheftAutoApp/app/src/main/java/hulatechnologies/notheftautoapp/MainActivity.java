@@ -113,9 +113,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
 
                     case R.id.cars_id:
                         callDataBase();
-                        getSupportActionBar().setTitle("My Cars Fragment");
                         item.setChecked(true);
-                        drawerLayout.closeDrawers();
                         break;
 
                     case R.id.log_out_id:
@@ -221,11 +219,14 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
             Log.d("Alarm",list[i*3+1]);
             Log.d("Navn",list[i*3+2]);
         handler.setCarName(list[i*3 + 2],getBaseContext(),list[i*3]+"Name");
-        carString += list[i*3];
+        carString += list[i * 3];
         }
         Log.d("Car String", carString);
         handler.setCarString(carString, getBaseContext());
-        startActivity(new Intent(this, Status.class));
-        finish();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, new Status());
+        fragmentTransaction.commit();
+        getSupportActionBar().setTitle("My Cars Fragment");
+        drawerLayout.closeDrawers();
     }
 }
