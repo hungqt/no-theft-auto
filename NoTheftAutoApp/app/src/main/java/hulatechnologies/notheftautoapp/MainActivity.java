@@ -56,13 +56,11 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
         btnLogout = (Button)findViewById(R.id.btnLogout);
-        btnStatus = (Button)findViewById(R.id.btnStatus);
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         if(handler.getLoggedIn(getBaseContext())) {
-            btnLogin.setVisibility(View.INVISIBLE);
-            btnStatus.setVisibility(View.VISIBLE);
-            btnLogout.setVisibility(View.VISIBLE);
+            setContentView(R.layout.activity_nav_drawer);
+            initNavigationDrawer();
             if(!handler.getGCMstate(getBaseContext())){
                 gcmM.startGCM();
                 handler.setGCMactive(true, getBaseContext());
@@ -71,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 updateToken(handler.getToken(getBaseContext()));
             }
         }else{
-            btnStatus.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
 
@@ -113,12 +110,18 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                         break;
 
                     case R.id.cars_id:
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_container, new CarsFragment());
-                        fragmentTransaction.commit();
-                        getSupportActionBar().setTitle("My Cars Fragment");
+                        callDataBase();
+                        item.setChecked(true);
+                        break;
+
+                    case R.id.log_out_id:
+                        logOutFromMain();
                         item.setChecked(true);
                         drawerLayout.closeDrawers();
+                        setContentView(R.layout.activity_main);
+                        btnReg = (Button) findViewById(R.id.btnReg);
+                        btnLogin = (Button) findViewById(R.id.btnLogin);
+                        btnLogout = (Button) findViewById(R.id.btnLogout);
                         break;
                 }
 
@@ -140,12 +143,15 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     }
 
     public void logOut(View v){
+        logOutFromMain();
+    }
+
+    public void logOutFromMain(){
         resetToken();
         handler.clear(getBaseContext());
 
         btnLogout.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
-        btnStatus.setVisibility(View.INVISIBLE);
 
         handler.setLoggedIn(false, getBaseContext());
     }
@@ -208,11 +214,14 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
             Log.d("Alarm",list[i*3+1]);
             Log.d("Navn",list[i*3+2]);
         handler.setCarName(list[i*3 + 2],getBaseContext(),list[i*3]+"Name");
-        carString += list[i*3];
+        carString += list[i * 3];
         }
         Log.d("Car String", carString);
         handler.setCarString(carString, getBaseContext());
-        startActivity(new Intent(this, Status.class));
-        finish();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, new Status());
+        fragmentTransaction.commit();
+        getSupportActionBar().setTitle("My Cars Fragment");
+        drawerLayout.closeDrawers();
     }
 }

@@ -51,14 +51,4 @@
         android:visibility="invisible"
         android:onClick="logOut" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status"
-        android:id="@+id/btnStatus"
-        android:layout_marginTop="45dp"
-        android:layout_alignTop="@+id/btnReg"
-        android:layout_alignEnd="@+id/textView"
-        android:onClick="goToStatus" />
-
 </RelativeLayout>
