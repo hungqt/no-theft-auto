@@ -62,7 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             latitude = handler.getLatitude(handler.getCurrCar(getBaseContext())+ "latitude",getBaseContext());
             longitude = handler.getLongitude(handler.getCurrCar(getBaseContext())+ "longitude",getBaseContext());
         }
-        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude) , 17.0f) );
+        LatLng location = new LatLng(latitude,longitude);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
     }
 
     //Start funksjoner for å hente kordinatene
