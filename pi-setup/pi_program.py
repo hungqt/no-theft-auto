@@ -5,7 +5,7 @@ import MySQLdb
 import time
 import urllib2
 import json
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
@@ -209,6 +209,7 @@ def setAlarm(value):
                      (rpi_id, stringValue, name, coords))
         db.commit()
     except:
+        print "Alarm rollback"
         db.rollback()
 
 
