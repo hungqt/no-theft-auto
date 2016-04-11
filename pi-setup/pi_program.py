@@ -28,8 +28,6 @@ if not cur1:
 if not cur2:
     cur1.close()
 
-db1.reconnect()
-
 rpi_id = 1
 
 #cur = db1.cursor()
@@ -165,10 +163,9 @@ def updateCurrCoor(longtitude, latitude):
     try:
         cur1.execute('''UPDATE raspberry_pi SET Coords = '{0}' WHERE rpi_id = 1'''.format(longtitude + "," + latitude))
         db1.commit()
-    except (AttributeError, MySQLdb.OperationalError):
-        print("feil")
-        db1.reconnect(attempts=1, delay=0)
-        updateCurrCoor(longtitude, latitude)
+    except:
+        db1.rollback()
+
 
 def sendNotification(token):
 
@@ -190,10 +187,8 @@ def setAlarm(value):
     try:
         cur2.execute("UPDATE glennchr_nta.raspberry_pi SET alarm =(%s)  WHERE rpi_id = (%s)", (stringValue, rpi_id))
         db2.commit()
-    except (AttributeError, MySQLdb.OperationalError):
-        print("feil")
-        db2.reconnect(attempts=1, delay=0)
-        setAlarm(value)
+    except:
+        db2.rollback()
 
 
 # get-metoder
