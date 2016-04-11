@@ -39,7 +39,7 @@ rpi_id = 1
 
 def main():
     try:
-        # thread.start_new_thread(activation_main2, ())
+        thread.start_new_thread(activation_main, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
@@ -139,13 +139,13 @@ def gps_sender_main():
             f.close()
             break
 
-        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
-        print "updating"
+        #print "updating"
         updateCurrCoor(longitude, latitude)
-        print "Current coordinates updated"
+        #print "Current coordinates updated"
 
         time.sleep(1)
 
@@ -161,8 +161,8 @@ def sendLatitudeLogditude(time, longitude, latitude, pi_id):
 
 def updateCurrCoor(longtitude, latitude):
     try:
-        alarm = 1
-        name = "Audi R8"
+        alarm = getAlarm()
+        name = getCarName1()
         gps_string = (longtitude +","+ latitude)
         cur1.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
         cur1.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
@@ -178,7 +178,7 @@ def sendNotification(token):
 
     if not (token == None or token == ""):
         url = 'https://gcm-http.googleapis.com/gcm/send'
-        postdata = {"data": {"message": getCarName()}, "to": token}
+        postdata = {"data": {"message": getCarName1()}, "to": token}
 
         req = urllib2.Request(url)
         req.add_header('Content-Type', 'application/json')
@@ -191,8 +191,12 @@ def sendNotification(token):
 def setAlarm(value):
 
     stringValue = str(value)
+    name = getCarName2()
+    coords = getLongLat()
     try:
-        cur2.execute("UPDATE glennchr_nta.raspberry_pi SET alarm =(%s)  WHERE rpi_id = (%s)", (stringValue, rpi_id))
+        cur2.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+        cur2.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
+                     (rpi_id, stringValue, name, coords))
         db2.commit()
     except:
         db2.rollback()
@@ -202,9 +206,9 @@ def setAlarm(value):
 def getAlarm():
     # lager en cursor som kan kjore sql soringer
 
-    cur2.execute('''SELECT alarm FROM raspberry_pi WHERE rpi_id = '{0}' '''.format(rpi_id))
+    cur1.execute('''SELECT alarm FROM raspberry_pi WHERE rpi_id = '{0}' '''.format(rpi_id))
     # henter ut verdier fra fetchone
-    values = cur2.fetchone()
+    values = cur1.fetchone()
     value = values[0]
     return value
 
@@ -219,11 +223,19 @@ def getToken(username):
     return value
 
 
-def getCarName():
+def getCarName2():
     # lager en cursor som kan kjore sql soringer
     cur2.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
     # henter ut verdier fra fetchone
     values = cur2.fetchone()
+    value = values[0]
+    return value
+
+def getCarName1():
+    # lager en cursor som kan kjore sql soringer
+    cur1.execute('''SELECT car_name FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+    # henter ut verdier fra fetchone
+    values = cur1.fetchone()
     value = values[0]
     return value
 
@@ -240,6 +252,12 @@ def getUpdateCurrCoor():
                    FROM raspberry_pi
                    WHERE rpi_id = {0} '''.format(rpi_id))
     # henter ut verdier fra fetchone
+    value = cur1.fetchone()
+    return value
+
+
+def getLongLat():
+    cur1.execute('''SELECT Coords FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
     value = cur1.fetchone()
     return value
 
