@@ -5,7 +5,7 @@ import MySQLdb
 import time
 import urllib2
 import json
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
@@ -22,7 +22,7 @@ rpi_id = 1
 
 def main():
     try:
-        thread.start_new_thread(activation_main, ())
+        thread.start_new_thread(activation_main2, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
@@ -122,13 +122,13 @@ def gps_sender_main():
             f.close()
             break
 
-        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
         #print "updating"
         updateCurrCoor(longitude, latitude)
-        #print "Current coordinates updated"
+        print "Current coordinates updated"
 
         time.sleep(1)
 
@@ -180,12 +180,9 @@ def setAlarm(value):
                       user="glennchr_nta",  # your username
                       passwd="nta123",  # your password
                       db="glennchr_nta")  # name of the data base
-
     cur = db.cursor()
-
     if not cur:
         cur.close()
-
     name = getCarName2()
     coords = getLongLat()
     try:
