@@ -161,9 +161,9 @@ def sendLatitudeLogditude(time, longitude, latitude, pi_id):
 
 def updateCurrCoor(longtitude, latitude):
     try:
-        cur1.execute('''DELETE FROM rapsberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
         cur1.execute('''INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coord) VALUES (%s, %s, %s, %s, %s)''',
                      (rpi_id, getAlarm(), getCarName(), longtitude +","+ latitude))
+        cur1.execute('''DELETE FROM rapsberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
         db1.commit()
     except:
         db1.rollback()
