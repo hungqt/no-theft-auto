@@ -39,7 +39,7 @@ rpi_id = 1
 
 def main():
     try:
-        thread.start_new_thread(activation_main2, ())
+        # thread.start_new_thread(activation_main2, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
