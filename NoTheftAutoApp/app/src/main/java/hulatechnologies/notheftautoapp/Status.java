@@ -86,11 +86,11 @@ public class Status extends Fragment implements AsyncResponse2 {
         label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
         tr_head.addView(label_status); // add the column to the table row here
 
-        tableLayout.addView(tr_head,new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+        tableLayout.addView(tr_head, new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
 
         String carString = handler.getCarString(getActivity().getBaseContext());
-        Log.d("CarString","Hello" + carString);
+        Log.d("CarString", "Hello" + carString);
         for(int i = 0; i < carString.length();i++){
             String id = carString.substring(i,i+1);
             addRow(handler.getCarAlarmActive(getActivity().getBaseContext(),id),id);
@@ -188,7 +188,7 @@ public class Status extends Fragment implements AsyncResponse2 {
         }
         Log.d("Car String", carString);
         handler.setCarString(carString, getActivity().getBaseContext());
-        fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_container, new Status());
         fragmentTransaction.commit();
     }

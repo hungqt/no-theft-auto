@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         } catch (JSONException e) {
         e.printStackTrace();
         }
-        }
+    }
 
     @Override
     public void processFinish(String output) {

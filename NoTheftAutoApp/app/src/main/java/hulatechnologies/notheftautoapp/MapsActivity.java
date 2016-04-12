@@ -1,14 +1,22 @@
 package hulatechnologies.notheftautoapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +40,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final Handler h = new Handler();
     Runnable runner;
     MarkerOptions marker;
+    private Button btnBack;
+    private ViewPager vp;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private FragmentTransaction fragmentTransaction;
+    private NavigationView navigationView;
+
 
 
     @Override
@@ -43,6 +59,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        vp = new ViewPager(this);
+
+        btnBack = (Button)findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
     }
 
 
@@ -84,10 +112,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onUpdateClick(View v){
         LatLng location = new LatLng(latitude,longitude);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
     }
-    public void goBack(View v){
-        startActivity(new Intent(this,Status.class));
+    public void goBack(){
+        startActivity(new Intent(this,MainActivity.class));
         finish();
     }
 
@@ -97,8 +125,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker = new MarkerOptions().title(handler.getCurrCar(getBaseContext()));
         marker.position(location);
         mMap.addMarker(marker.title(handler.getCurrCar(getBaseContext())));
-        handler.setLatitude(handler.getCurrCar(getBaseContext()) + "latitude",latitude,getBaseContext());
-        handler.setLongitude(handler.getCurrCar(getBaseContext())+ "longitude",longitude,getBaseContext());
+        handler.setLatitude(handler.getCurrCar(getBaseContext()) + "latitude", latitude, getBaseContext());
+        handler.setLongitude(handler.getCurrCar(getBaseContext()) + "longitude", longitude, getBaseContext());
     }
     //launcher status pagen
     public void launchStatus(){
