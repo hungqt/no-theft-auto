@@ -63,8 +63,8 @@ def activation_main2():
     try:
         while True:
             if GPIO.input(11) == 1:
+                print "feit"
                 if a == 0:
-                    print "feit"
                     setAlarm2(1)
                     sendNotification(getToken(getUsername()))
                     a = 1
