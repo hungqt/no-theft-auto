@@ -73,7 +73,7 @@ def activation_main2():
                     setAlarm2(0)
                     a = 0
                     time.sleep(1)
-
+            time.sleep(0.1)
 
     except KeyboardInterrupt:
         GPIO.cleanup()
