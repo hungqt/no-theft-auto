@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -60,7 +61,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         tableLayout = (TableLayout)findViewById(R.id.tableLayout);
         TableRow tr_head = new TableRow(this);
         tr_head.setId(View.generateViewId());
-        tr_head.setBackgroundColor(Color.GRAY);
+        tr_head.setBackgroundColor(Color.TRANSPARENT);
         tr_head.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView label_car = new TextView(this);
@@ -76,6 +77,13 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         label_status.setTextColor(Color.WHITE); // set the color
         label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
         tr_head.addView(label_status); // add the column to the table row here
+
+        TextView label_map = new TextView(this);
+        label_map.setId(View.generateViewId());// define id that must be unique
+        label_map.setText("Map tracking"); // set the text for the header
+        label_map.setTextColor(Color.WHITE); // set the color
+        label_map.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_map); // add the column to the table row here
 
         tableLayout.addView(tr_head,new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
@@ -99,7 +107,7 @@ public class Status extends AppCompatActivity implements AsyncResponse2 {
         TextView label_car = new TextView(this);
         label_car.setId(View.generateViewId());
         label_car.setText(carName);
-        label_car.setTextColor(Color.BLUE);
+        label_car.setTextColor(Color.WHITE);
         label_car.setPadding(5, 5, 5, 5);
         tR.addView(label_car);
 
