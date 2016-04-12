@@ -63,16 +63,17 @@ def activation_main2():
     try:
         while True:
             if GPIO.input(11) == 1:
-                print "cool"
                 if a == 0:
                     print "feit"
                     setAlarm2(1)
                     sendNotification(getToken(getUsername()))
                     a = 1
+                    time.sleep(1)
                 else:
                     setAlarm2(0)
                     a = 0
-            time.sleep(0.9)
+                    time.sleep(1)
+
 
     except KeyboardInterrupt:
         GPIO.cleanup()
