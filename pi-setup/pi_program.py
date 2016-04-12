@@ -42,10 +42,10 @@ def activation_main():
 
         selection = raw_input("Please Select: ")
         if selection == '1':
-            setAlarm(1)
+            setAlarm2(1)
             sendNotification(getToken(getUsername()))
         elif selection == '2':
-            setAlarm(0)
+            setAlarm2(0)
         elif selection == '3':
             text = "\nAlarm status: %d \n" % getAlarm()
             print text
@@ -66,16 +66,13 @@ def activation_main2():
                 print "cool"
                 if a == 0:
                     print "feit"
-                    setAlarm2()
-                    print "teit"
+                    setAlarm2(1)
                     sendNotification(getToken(getUsername()))
-                    print "wat"
                     a = 1
-                    print "knapp trykk"
-            else:
-				print("Alarm is sett")
-				setAlarm2()
-				a = 0
+                else:
+                    setAlarm2(0)
+                    a = 0
+            time.sleep(0.9)
 
     except KeyboardInterrupt:
         GPIO.cleanup()
@@ -176,25 +173,41 @@ def updateCurrCoor(longtitude, latitude):
         db.rollback()
 
 
-def setAlarm(value):
-    db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                         user="glennchr_nta",  # your username
-                         passwd="nta123",  # your password
-                         db="glennchr_nta")  # name of the data base
+# def setAlarm(value):
+#     db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
+#                          user="glennchr_nta",  # your username
+#                          passwd="nta123",  # your password
+#                          db="glennchr_nta")  # name of the data base
+#     cur = db.cursor()
+#
+#     try:
+#         name = getCarName2()
+#         gps_string = getLongLat()
+#         cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
+#         cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
+#                      (rpi_id, value, name, gps_string))
+#         db.commit()
+#     except:
+#         print "Alarm rollback"
+#         db.rollback()
+
+
+def setAlarm2(value):
+    db = MySQLdb.connect(host="mysql.stud.ntnu.no",
+                         user="glennchr_nta",
+                         passwd="nta123",
+                         db="glennchr_nta")
+
     cur = db.cursor()
-    if not cur:
-        cur.close()
 
     try:
-        name = getCarName2()
-        gps_string = getLongLat()
-        cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
-        cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
-                     (rpi_id, value, name, gps_string))
+        cur.execute('''UPDATE raspberry_pi SET alarm = {0} WHERE rpi_id = '{1}' '''.format(value, rpi_id))
         db.commit()
     except:
-        print "Alarm rollback"
+        print("det gikk ikke")
         db.rollback()
+
+    db.close()
 
 
 def sendNotification(token):
@@ -213,23 +226,6 @@ def sendNotification(token):
 
 # get-metoder
 
-def setAlarm2():
-	
-	db = MySQLdb.connect(host="mysql.stud.ntnu.no",
-					user="glennchr_nta",
-					passwd="nta123",
-					db="glennchr_nta")
-
-	cur = db.cursor()
-
-	try:
-		cur.execute('''UPDATE raspberry_pi SET alarm=1 WHERE rpi_id = '{0}' '''.format(rpi_id))
-		db.commit()
-	except:
-		print("det gikk ikke")
-		db.rollback()
-
-	db.close()
 
 def getAlarm():
     # lager en cursor som kan kjore sql soringer
