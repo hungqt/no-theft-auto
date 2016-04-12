@@ -66,15 +66,16 @@ def activation_main2():
                 print "cool"
                 if a == 0:
                     print "feit"
-                    setAlarm(1)
+                    setAlarm2()
                     print "teit"
                     sendNotification(getToken(getUsername()))
                     print "wat"
                     a = 1
                     print "knapp trykk"
             else:
-                setAlarm(0)
-                a = 0
+				print("Alarm is sett")
+				setAlarm2()
+				a = 0
 
     except KeyboardInterrupt:
         GPIO.cleanup()
@@ -122,13 +123,13 @@ def gps_sender_main():
             f.close()
             break
 
-        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
-        #print "updating"
+        print "updating"
         updateCurrCoor(longitude, latitude)
-        #print "Current coordinates updated"
+        print "Current coordinates updated"
 
         time.sleep(1)
 
@@ -211,6 +212,25 @@ def sendNotification(token):
 
 
 # get-metoder
+
+def setAlarm2():
+	
+	db = MySQLdb.connect(host="mysql.stud.ntnu.no",
+					user="glennchr_nta",
+					passwd="nta123",
+					db="glennchr_nta")
+
+	cur = db.cursor()
+
+	try:
+		cur.execute('''UPDATE raspberry_pi SET alarm=1 WHERE rpi_id = '{0}' '''.format(rpi_id))
+		db.commit()
+	except:
+		print("det gikk ikke")
+		db.rollback()
+
+	db.close()
+
 def getAlarm():
     # lager en cursor som kan kjore sql soringer
 
