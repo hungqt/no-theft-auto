@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +70,8 @@ public class Status extends Fragment implements AsyncResponse2 {
         TableRow tr_head = new TableRow(getActivity());
         View table_row_view = v.inflate(getActivity(),R.layout.fragment_cars,tr_head); //inflate from parent view
         tr_head.setId(View.generateViewId());
-        tr_head.setBackgroundColor(Color.GRAY);
-        tr_head.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+        tr_head.setBackgroundColor(Color.TRANSPARENT);
+        tr_head.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TextView label_car = new TextView(getActivity());
         label_car.setId(View.generateViewId());
@@ -86,8 +87,14 @@ public class Status extends Fragment implements AsyncResponse2 {
         label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
         tr_head.addView(label_status); // add the column to the table row here
 
-        tableLayout.addView(tr_head, new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                TableLayout.LayoutParams.WRAP_CONTENT));
+        TextView label_map = new TextView(getActivity());
+        label_map.setId(View.generateViewId());// define id that must be unique
+        label_map.setText("Map tracking"); // set the text for the header
+        label_map.setTextColor(Color.WHITE); // set the color
+        label_map.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_map); // add the column to the table row here
+
+        tableLayout.addView(tr_head, new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
 
         String carString = handler.getCarString(getActivity().getBaseContext());
         Log.d("CarString", "Hello" + carString);
@@ -113,7 +120,7 @@ public class Status extends Fragment implements AsyncResponse2 {
         TextView label_car = new TextView(getActivity());
         label_car.setId(View.generateViewId());
         label_car.setText(carName);
-        label_car.setTextColor(Color.BLUE);
+        label_car.setTextColor(Color.WHITE);
         label_car.setPadding(5, 5, 5, 5);
         tR.addView(label_car);
 
