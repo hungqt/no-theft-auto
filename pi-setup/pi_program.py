@@ -122,22 +122,22 @@ def gps_sender_main():
             f.close()
             break
 
-        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
         #print "updating"
         updateCurrCoor(longitude, latitude)
-        print "Current coordinates updated"
+        #print "Current coordinates updated"
 
         time.sleep(1)
 
 
 def sendLatitudeLogditude(time, longitude, latitude, pi_id):
     db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                      user="glennchr_nta",  # your username
-                      passwd="nta123",  # your password
-                      db="glennchr_nta")  # name of the data base
+                         user="glennchr_nta",  # your username
+                         passwd="nta123",  # your password
+                         db="glennchr_nta")  # name of the data base
 
     cur = db.cursor()
 
@@ -153,21 +153,21 @@ def sendLatitudeLogditude(time, longitude, latitude, pi_id):
 
 def updateCurrCoor(longtitude, latitude):
     db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                      user="glennchr_nta",  # your username
-                      passwd="nta123",  # your password
-                      db="glennchr_nta")  # name of the data base
+                         user="glennchr_nta",  # your username
+                         passwd="nta123",  # your password
+                         db="glennchr_nta")  # name of the data base
 
     cur = db.cursor()
 
     if not cur:
         cur.close()
     try:
-        alarm = getAlarm()
+        value = getAlarm()
         name = getCarName1()
         gps_string = (longtitude +","+ latitude)
         cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
         cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
-                     (rpi_id, alarm, name, gps_string))
+                     (rpi_id, value, name, gps_string))
 
         db.commit()
     except:
@@ -177,18 +177,19 @@ def updateCurrCoor(longtitude, latitude):
 
 def setAlarm(value):
     db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-                      user="glennchr_nta",  # your username
-                      passwd="nta123",  # your password
-                      db="glennchr_nta")  # name of the data base
+                         user="glennchr_nta",  # your username
+                         passwd="nta123",  # your password
+                         db="glennchr_nta")  # name of the data base
     cur = db.cursor()
     if not cur:
         cur.close()
-    name = getCarName2()
-    coords = getLongLat()
+
     try:
+        name = getCarName2()
+        gps_string = getLongLat()
         cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
         cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
-                    (rpi_id, value, name, coords))
+                     (rpi_id, value, name, gps_string))
         db.commit()
     except:
         print "Alarm rollback"
