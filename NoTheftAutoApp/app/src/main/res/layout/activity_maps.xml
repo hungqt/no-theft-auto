@@ -24,6 +24,5 @@
         android:id="@+id/btnBack"
         android:padding="10dp"
         android:layout_marginTop="20dp"
-        android:paddingRight="10dp"
-        android:onClick="goBack" />
+        android:paddingRight="10dp"/>
 </fragment>
