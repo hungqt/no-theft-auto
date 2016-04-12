@@ -30,6 +30,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 public class LoginActivity extends AppCompatActivity implements AsyncResponse1And2{
 
     private Button btnLogin;
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
     private AlertDialog alertDialog2;
     private PreferenceHandler handler = new PreferenceHandler();
     private GCMmanager gcm = new GCMmanager(this,this);
+    private String verificationString;
+    private final int MAX_LENGTH = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
         try {
             json.put("username", userText.getText().toString());
             json.put("password", passText.getText().toString());
+            json.put("verification",verificationString);
             data.execute(json);
 
             if(remMe.isChecked()){
@@ -85,14 +90,27 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
             e.printStackTrace();
         }
     }
+    public String getRandomString() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(MAX_LENGTH);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
+
     public void callDataBase(){
         AsyncGetCars cars = new AsyncGetCars();
         cars.delegate = this;
         JSONObject json = new JSONObject();
+        verificationString = getRandomString();
         try {
             json.put("username", handler.getPrefName(getBaseContext()));
             json.put("password", handler.getPrefPass(getBaseContext()));
-
+            json.put("verification",verificationString);
             cars.execute(json);
 
         } catch (JSONException e) {
@@ -105,6 +123,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
         if(output == 1){
             handler.setLoggedIn(true, getBaseContext());
             //callDataBase();
+            handler.setVerificationString(verificationString,getBaseContext());
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -170,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
                 Log.d("Handler", "Alarm sat active");
             }
             else{
-                handler.setCarAlarmActive(false,getBaseContext(),list[i*3]);
+                handler.setCarAlarmActive(false,getBaseContext(), list[i * 3]);
                 Log.d("Handler","Alarm sat not active");
             }
             Log.d("ID",list[i*3]);
@@ -178,31 +197,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
             Log.d("Navn",list[i*3+2]);
             handler.setCarName(list[i*3 + 2],getBaseContext(),list[i*3]+"Name");
             carString += list[i*3];
-        }
-        if(startPush){
-            int requestID = (int) System.currentTimeMillis();
-            Intent notificationIntent;
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context
-                    .NOTIFICATION_SERVICE);
-            notificationIntent = new Intent(this, Status.class);
-
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setPriority(NotificationCompat.PRIORITY_MAX)
-                    .setVibrate(new long[]{1, 1, 1})
-                    .setCategory(NotificationCompat.CATEGORY_ALARM)
-                    .setContentTitle("Attention").setColor(Color.RED)
-                    .setContentText("Your car might have been stolen!")
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-
-            notificationBuilder.setAutoCancel(true);
-            notificationBuilder.setContentIntent(contentIntent);
-            notificationManager.notify(0, notificationBuilder.build());
-
-            startPush = false;
         }
         Log.d("Car String", carString);
         handler.setCarString(carString, getBaseContext());
