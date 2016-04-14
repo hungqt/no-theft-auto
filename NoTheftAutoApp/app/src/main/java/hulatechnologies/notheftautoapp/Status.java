@@ -56,6 +56,8 @@ public class Status extends Fragment implements AsyncResponse2 {
         }
         v = inflater.inflate(R.layout.fragment_cars, container, false);
 
+        callDataBase();
+
         Button btnUpdate = (Button)v.findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -64,7 +66,24 @@ public class Status extends Fragment implements AsyncResponse2 {
             }
         });
 
+        // Inflate the layout for this fragment
+        return v;
+    }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            //do when hidden
+        } else {
+            callDataBase();
+        }
+    }
+
+    private void addTable(){
+        if(tableLayout != null){
+            tableLayout.removeAllViews();
+        }
         tableLayout = (TableLayout)v.findViewById(R.id.tableLayout);
         TableRow tr_head = new TableRow(getActivity());
         View table_row_view = v.inflate(getActivity(),R.layout.fragment_cars,tr_head); //inflate from parent view
@@ -95,9 +114,6 @@ public class Status extends Fragment implements AsyncResponse2 {
             String id = carString.substring(i,i+1);
             addRow(handler.getCarAlarmActive(getActivity().getBaseContext(),id),id);
         }
-
-        // Inflate the layout for this fragment
-        return v;
     }
 
 
@@ -183,13 +199,12 @@ public class Status extends Fragment implements AsyncResponse2 {
             Log.d("ID",list[i*3]);
             Log.d("Alarm",list[i*3+1]);
             Log.d("Navn",list[i*3+2]);
-            handler.setCarName(list[i*3 + 2],getActivity().getBaseContext(),list[i*3]+"Name");
+            handler.setCarName(list[i * 3 + 2], getActivity().getBaseContext(),list[i*3]+"Name");
             carString += list[i*3];
         }
         Log.d("Car String", carString);
         handler.setCarString(carString, getActivity().getBaseContext());
-        fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_container, new Status());
-        fragmentTransaction.commit();
+        addTable();
+
     }
 }

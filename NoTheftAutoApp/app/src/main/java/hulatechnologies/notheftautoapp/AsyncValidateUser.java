@@ -25,7 +25,7 @@ public class AsyncValidateUser extends AsyncTask<JSONObject, Void, String> {
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/loginCheck.php");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/checkValidation.php");
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
