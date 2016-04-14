@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnLogout = (Button)findViewById(R.id.btnLogout);
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
-        Log.d("Verification",handler.getVerificationString(getBaseContext()));
+        Log.d("Verification",handler.getVerificationString(getBaseContext())+"Hello");
         if(handler.getLoggedIn(getBaseContext())) {
             setContentView(R.layout.activity_nav_drawer);
             initNavigationDrawer();

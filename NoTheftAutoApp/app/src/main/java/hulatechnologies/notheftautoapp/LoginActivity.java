@@ -30,6 +30,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity implements AsyncResponse1And2{
@@ -43,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
     private PreferenceHandler handler = new PreferenceHandler();
     private GCMmanager gcm = new GCMmanager(this,this);
     private String verificationString;
-    private final int MAX_LENGTH = 15;
+    private SecureRandom random = new SecureRandom();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
         AsyncTaskCheckUser data = new AsyncTaskCheckUser();
         data.delegate = this;
         JSONObject json = new JSONObject();
+        verificationString = nextSessionId();
         try {
             json.put("username", userText.getText().toString());
             json.put("password", passText.getText().toString());
@@ -90,32 +93,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
             e.printStackTrace();
         }
     }
-    public String getRandomString() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(MAX_LENGTH);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
-    }
 
-    public void callDataBase(){
-        AsyncGetCars cars = new AsyncGetCars();
-        cars.delegate = this;
-        JSONObject json = new JSONObject();
-        verificationString = getRandomString();
-        try {
-            json.put("username", handler.getPrefName(getBaseContext()));
-            json.put("password", handler.getPrefPass(getBaseContext()));
-            json.put("verification",verificationString);
-            cars.execute(json);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public String nextSessionId() {
+        return new BigInteger(130, random).toString(32);
     }
     //Handles the login request
     @Override
@@ -181,11 +161,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
     public void processFinish(String output) {
         String[] list = output.split("/");
         String carString = "";
-        Boolean startPush = false;
         for(int i = 0; i < list.length/3;i++){
             if(list[i*3 + 1].equals("1")){
                 handler.setCarAlarmActive(true,getBaseContext(),list[i*3]);
-                startPush = false;
                 Log.d("Handler", "Alarm sat active");
             }
             else{
