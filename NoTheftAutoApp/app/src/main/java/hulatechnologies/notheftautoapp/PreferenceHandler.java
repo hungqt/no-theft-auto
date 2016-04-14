@@ -23,6 +23,7 @@ public class PreferenceHandler {
     private static final String mapLatitude = "mapLatitude";
     private static final String mapLongitude = "mapLongitude";
     private static final String verificationString = "verificationString";
+    private static final String Email = "EmailString";
 
     public void setPrefName(String prefName, Context context){
         SharedPreferences SPname = PreferenceManager.getDefaultSharedPreferences(context);
@@ -74,6 +75,12 @@ public class PreferenceHandler {
     }
     public void setCurrCar(String cords,Context context){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GCMcords, cords).commit();
+    }
+    public void setEmail(String email,Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(Email, email).commit();
+    }
+    public String getEmail(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(Email,"");
     }
     public String getVerificationString(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(verificationString,"");

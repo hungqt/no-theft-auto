@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private NavigationView navigationView;
     private Button btnMap;
+    private TextView name;
+    private TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         Log.d("Verification", handler.getVerificationString(getBaseContext()) + "Hello");
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("No Theft Auto");
         if(handler.getLoggedIn(getBaseContext())) {
             setContentView(R.layout.activity_nav_drawer);
             initNavigationDrawer();
@@ -86,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
@@ -109,14 +113,6 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         break;
 
-                    case R.id.cars_id:
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_container, new Status());
-                        fragmentTransaction.commit();
-                        getSupportActionBar().setTitle("My Cars Fragment");
-                        drawerLayout.closeDrawers();
-                        break;
-
                     case R.id.log_out_id:
                         logOutFromMain();
                         item.setChecked(true);
@@ -127,17 +123,22 @@ public class MainActivity extends AppCompatActivity {
                         btnLogout = (Button) findViewById(R.id.btnLogout);
                         break;
                 }
-
                 return true;
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isEnabled()){
+            drawerLayout.closeDrawers();
+        }
     }
 
     public void goToReg(View v){
         startActivity(new Intent(this, RegisterActivity.class));
         finish();
     }
-    public void goToLogin(View v){
+    public void goToLogin(View v) {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
