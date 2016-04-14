@@ -29,7 +29,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
+public class MainActivity extends AppCompatActivity {
 
     private Button btnReg; //Hey
     private Button btnLogin;
@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
     private NavigationView navigationView;
     private Button btnMap;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         btnLogout = (Button)findViewById(R.id.btnLogout);
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
+        Log.d("Verification", handler.getVerificationString(getBaseContext()) + "Hello");
         if(handler.getLoggedIn(getBaseContext())) {
             setContentView(R.layout.activity_nav_drawer);
             initNavigationDrawer();
@@ -92,9 +92,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
 
         //FragmentsHandling
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_container, new HomeFragment());
+        fragmentTransaction.add(R.id.main_container, new Status());
         fragmentTransaction.commit();
-        getSupportActionBar().setTitle("Home Fragment");
+        getSupportActionBar().setTitle("Status");
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -102,16 +102,19 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
                 switch (item.getItemId()) {
                     case R.id.home_id:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_container, new HomeFragment());
+                        fragmentTransaction.replace(R.id.main_container, new Status());
                         fragmentTransaction.commit();
-                        getSupportActionBar().setTitle("Home Fragment");
+                        getSupportActionBar().setTitle("Status");
                         item.setChecked(true);
                         drawerLayout.closeDrawers();
                         break;
 
                     case R.id.cars_id:
-                        callDataBase();
-                        item.setChecked(true);
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new Status());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("My Cars Fragment");
+                        drawerLayout.closeDrawers();
                         break;
 
                     case R.id.log_out_id:
@@ -138,10 +141,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
-    public void goToStatus(View v){
-        callDataBase();
-    }
-
     public void logOut(View v){
         logOutFromMain();
     }
@@ -180,48 +179,5 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse2 {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public void callDataBase(){
-        AsyncGetCars cars = new AsyncGetCars();
-        cars.delegate = this;
-        JSONObject json = new JSONObject();
-        try {
-            json.put("username",handler.getPrefName(getBaseContext()));
-            json.put("password",handler.getPrefPass(getBaseContext()));
-
-            cars.execute(json);
-
-        } catch (JSONException e) {
-        e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void processFinish(String output) {
-        String[] list = output.split("/");
-        String carString = "";
-        for(int i = 0; i < list.length/3;i++){
-            if(list[i*3 + 1].equals("1")){
-            handler.setCarAlarmActive(true,getBaseContext(),list[i*3]);
-            Log.d("Handler", "Alarm sat active");
-            }
-            else{
-            handler.setCarAlarmActive(false,getBaseContext(),list[i*3]);
-            Log.d("Handler","Alarm sat not active");
-            }
-            Log.d("ID",list[i*3]);
-            Log.d("Alarm",list[i*3+1]);
-            Log.d("Navn",list[i*3+2]);
-        handler.setCarName(list[i*3 + 2],getBaseContext(),list[i*3]+"Name");
-        carString += list[i * 3];
-        }
-        Log.d("Car String", carString);
-        handler.setCarString(carString, getBaseContext());
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_container, new Status());
-        fragmentTransaction.commit();
-        getSupportActionBar().setTitle("My Cars Fragment");
-        drawerLayout.closeDrawers();
     }
 }
