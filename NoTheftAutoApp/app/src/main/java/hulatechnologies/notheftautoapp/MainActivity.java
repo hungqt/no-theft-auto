@@ -127,6 +127,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isEnabled()){
+            drawerLayout.closeDrawers();
+        }
+    }
 
     public void goToReg(View v){
         startActivity(new Intent(this, RegisterActivity.class));
