@@ -28,12 +28,13 @@ import org.json.JSONObject;
 
 
 public class Status extends Fragment implements AsyncResponse2 {
-    PreferenceHandler handler = new PreferenceHandler();
-    TableLayout tableLayout;
-    AlertDialog alertDialog2;
-    View v;
-    FragmentTransaction fragmentTransaction;
-    DrawerLayout drawerLayout;
+    private PreferenceHandler handler = new PreferenceHandler();
+    private TableLayout tableLayout;
+    private AlertDialog alertDialog2;
+    private View v;
+    private FragmentTransaction fragmentTransaction;
+    private DrawerLayout drawerLayout;
+    private float headertextsize = 21;
 
     public Status (){
 
@@ -86,17 +87,17 @@ public class Status extends Fragment implements AsyncResponse2 {
             tableLayout.removeAllViews();
         }
         tableLayout = (TableLayout)v.findViewById(R.id.tableLayout);
+        tableLayout.setWeightSum(3);
         TableRow tr_head = new TableRow(getActivity());
-        View table_row_view = v.inflate(getActivity(),R.layout.fragment_cars,tr_head); //inflate from parent view
         tr_head.setId(View.generateViewId());
-        tr_head.setBackgroundColor(Color.TRANSPARENT);
-        tr_head.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-
+        tr_head.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
+        tr_head.setBackgroundResource(R.drawable.head_row_border);
         TextView label_car = new TextView(getActivity());
         label_car.setId(View.generateViewId());
         label_car.setText("Car");
         label_car.setTextColor(Color.WHITE);
         label_car.setPadding(5, 5, 5, 5);
+        label_car.setTextSize(headertextsize);
         tr_head.addView(label_car);// add the column to the table row here
 
         TextView label_status = new TextView(getActivity());
@@ -104,6 +105,7 @@ public class Status extends Fragment implements AsyncResponse2 {
         label_status.setText("Alarm status"); // set the text for the header
         label_status.setTextColor(Color.WHITE); // set the color
         label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
+        label_status.setTextSize(headertextsize);
         tr_head.addView(label_status); // add the column to the table row here
 
         TextView label_map = new TextView(getActivity());
@@ -111,9 +113,9 @@ public class Status extends Fragment implements AsyncResponse2 {
         label_map.setText("Map tracking"); // set the text for the header
         label_map.setTextColor(Color.WHITE); // set the color
         label_map.setPadding(5, 5, 5, 5); // set the padding (if required)
+        label_map.setTextSize(headertextsize);
         tr_head.addView(label_map); // add the column to the table row here
-
-        tableLayout.addView(tr_head, new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        tableLayout.addView(tr_head, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.MATCH_PARENT));
 
         String carString = handler.getCarString(getActivity().getBaseContext());
         Log.d("CarString", "Hello" + carString);
@@ -131,12 +133,13 @@ public class Status extends Fragment implements AsyncResponse2 {
     public void addRow(boolean alarm,String id){
         final String carName = handler.getCarName(getActivity().getBaseContext(),id+"Name");
         TableRow tR = new TableRow(getActivity());
-        tR.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+        tR.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
+        tR.setBackgroundResource(R.drawable.row_border);
 
         TextView label_car = new TextView(getActivity());
         label_car.setId(View.generateViewId());
         label_car.setText(carName);
-        label_car.setTextColor(Color.WHITE);
+        label_car.setTextColor(Color.BLACK);
         label_car.setPadding(5, 5, 5, 5);
         tR.addView(label_car);
 
@@ -166,7 +169,7 @@ public class Status extends Fragment implements AsyncResponse2 {
 
         tR.addView(carBtn);
 
-        tableLayout.addView(tR, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        tableLayout.addView(tR, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT));
     }
     public void goToMap(){
         startActivity(new Intent(getActivity(), MapsActivity.class));
