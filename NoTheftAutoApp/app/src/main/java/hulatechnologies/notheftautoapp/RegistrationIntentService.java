@@ -44,7 +44,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class RegistrationIntentService extends IntentService{
+public class RegistrationIntentService extends IntentService implements AsyncResponse3{
 
     private PreferenceHandler handler = new PreferenceHandler();
     private static final String TAG = "RegIntentService";
@@ -128,6 +128,11 @@ public class RegistrationIntentService extends IntentService{
         for (String topic : TOPICS) {
             pubSub.subscribe(token, "/topics/" + topic, null);
         }
+    }
+
+    @Override
+    public void processFinished(String s) {
+        //Do nothing
     }
 }
 // [END subscribe_topics]

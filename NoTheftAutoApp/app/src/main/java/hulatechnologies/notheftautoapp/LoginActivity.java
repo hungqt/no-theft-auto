@@ -35,12 +35,11 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
 
-public class LoginActivity extends AppCompatActivity implements AsyncResponse1And2{
+public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     private Button btnLogin;
     private EditText userText;
     private EditText passText;
-    private CheckBox remMe;
     private AlertDialog alertDialog;
     private AlertDialog alertDialog2;
     private PreferenceHandler handler = new PreferenceHandler();
@@ -56,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        remMe = (CheckBox)findViewById(R.id.remMe);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userText = (EditText) findViewById(R.id.userText);
         passText = (EditText) findViewById(R.id.passText);
@@ -85,9 +83,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
             json.put("verification",verificationString);
             data.execute(json);
 
-            if(remMe.isChecked()){
-                handler.setPrefRem(true,getBaseContext());
-            }
             handler.setPrefName(userText.getText().toString(), getBaseContext());
             handler.setPrefPass(passText.getText().toString(), getBaseContext());
         } catch (JSONException e) {
@@ -103,7 +98,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
     public void processFinish(Integer output) {
         if(output == 1){
             handler.setLoggedIn(true, getBaseContext());
-            //callDataBase();
             handler.setVerificationString(verificationString,getBaseContext());
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -157,30 +151,5 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse1An
         }
     }
 
-    //Updates the cars
-    @Override
-    public void processFinish(String output) {
-        String[] list = output.split("/");
-        String carString = "";
-        for(int i = 0; i < list.length/3;i++){
-            if(list[i*3 + 1].equals("1")){
-                handler.setCarAlarmActive(true,getBaseContext(),list[i*3]);
-                Log.d("Handler", "Alarm sat active");
-            }
-            else{
-                handler.setCarAlarmActive(false,getBaseContext(), list[i * 3]);
-                Log.d("Handler","Alarm sat not active");
-            }
-            Log.d("ID",list[i*3]);
-            Log.d("Alarm",list[i*3+1]);
-            Log.d("Navn",list[i*3+2]);
-            handler.setCarName(list[i*3 + 2],getBaseContext(),list[i*3]+"Name");
-            carString += list[i*3];
-        }
-        Log.d("Car String", carString);
-        handler.setCarString(carString, getBaseContext());
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-    }
 }
 
