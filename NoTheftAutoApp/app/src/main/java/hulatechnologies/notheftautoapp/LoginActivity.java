@@ -55,13 +55,15 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //Kobler alle knapper og tekstvinduer med xml-layouten
+
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userText = (EditText) findViewById(R.id.userText);
         passText = (EditText) findViewById(R.id.passText);
-        if(handler.getPrefRem(getBaseContext()) == true){
-            userText.setText(handler.getPrefName(getBaseContext()));
-            passText.setText(handler.getPrefPass(getBaseContext()));
-        }
+
+        //Initialize a alertDialog for later use
+
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Error");
         alertDialog.setMessage("Wrong username or password");
@@ -72,9 +74,20 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             }
         });
     }
+
+    //Metoden som blir kalt når du trykker på login knappen i loginscreenen
+
     public void onLClick(View v){
+
+        //Launcher en Asynkron tråd som kjører i paralell med resten av koden
+        //delegate er til for å hente ut svaret fra Async-klassen og sende det til processFinished-metoden lenger ned
+
         AsyncTaskCheckUser data = new AsyncTaskCheckUser();
         data.delegate = this;
+
+        //Oppretter et json-objekt som skal sendes til webserveren med et backend script som skal snakke med databasen
+        //verificationString er en random-generert streng som skulle vært brukt til loginstate-validering om vi hadde rukket det
+        //navn og pass hentes ut fra tekstfeltene i loginscreenen
         JSONObject json = new JSONObject();
         verificationString = nextSessionId();
         try {
@@ -90,21 +103,26 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         }
     }
 
+    //Genererer en ny random streng for state validering (Rakk ikke bli ferdig)
     public String nextSessionId() {
         return new BigInteger(130, random).toString(32);
     }
-    //Handles the login request
+    //Her kommer svaret fra webserveren om hva som skjedde i databasen
     @Override
     public void processFinish(Integer output) {
+        // 1 betyr at login var vellykket og statusen blir oppdatert til "logged in"
+        //Går tilbake til main
         if(output == 1){
             handler.setLoggedIn(true, getBaseContext());
             handler.setVerificationString(verificationString,getBaseContext());
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
+        //Dette betyr at login var mislykket, feil navn eller passord
         else if(output == 2){
             alertDialog.show();
         }
+        //Dette betyr at noe gikk galt, enten på server siden eller her
         else{
             alertDialog2 = new AlertDialog.Builder(this).create();
             alertDialog2.setTitle("Error");
@@ -118,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             alertDialog2.show();
         }
     }
-    //Metoden som gjemmer keyboardet
+    //Metoden som gjemmer keyboardet når du trykker utenfor keyboardet
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
@@ -126,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     //Copy paste kode jeg ikke vet helt hvordan funker, men den gjemmer keyboardet om du trykker en plass utenfor det
     public void setupUI(View view) {
 
-        //Set up touch listener for non-text box views to hide keyboard.
+        //Setter opp en lytter som sjekker om du trykker utenfor tekstfeltet og keyboardet
         if(!(view instanceof EditText)) {
 
             view.setOnTouchListener(new View.OnTouchListener() {
@@ -139,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
             });
         }
 
-        //If a layout container, iterate over children and seed recursion.
+        //If a layout container, iterate over children and seed recursion (Copy-paste kommentar)
         if (view instanceof ViewGroup) {
 
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
