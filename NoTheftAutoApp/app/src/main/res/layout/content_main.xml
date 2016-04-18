@@ -30,14 +30,4 @@
         android:layout_above="@+id/btnReg"
         android:layout_alignStart="@+id/btnReg" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log out"
-        android:id="@+id/btnLogout"
-        android:visibility="invisible"
-        android:onClick="logOut"
-        android:layout_above="@+id/btnLogin"
-        android:layout_alignStart="@+id/btnLogin" />
-
 </RelativeLayout>
