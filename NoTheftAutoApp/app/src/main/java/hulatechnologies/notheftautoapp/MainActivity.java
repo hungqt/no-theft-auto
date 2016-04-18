@@ -133,10 +133,16 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
             }
         });
     }
+
+    //Overrider back-knappen hvis man er i lo
+
     @Override
     public void onBackPressed() {
         if(drawerLayout.isEnabled()){
             drawerLayout.closeDrawers();
+        }
+        else{
+            super.onBackPressed();
         }
     }
 
