@@ -100,7 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Kalles av startUpdater (Dette er funksjonen som henter fra databasen og sn
     public void getCoords(String carname){
-        AsyncGetCoords c = new AsyncGetCoords();
+        AsyncSendJSONreturnString c = new AsyncSendJSONreturnString("http://folk.ntnu.no/thomborr/NoTheftAuto/getCords.php");
         c.delegate = this;
         JSONObject json = new JSONObject();
         try {

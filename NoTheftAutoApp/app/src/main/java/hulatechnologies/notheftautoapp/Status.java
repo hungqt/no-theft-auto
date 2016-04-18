@@ -27,7 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class Status extends Fragment implements AsyncResponse2 {
+public class Status extends Fragment implements AsyncResponse3 {
     private PreferenceHandler handler = new PreferenceHandler();
     private TableLayout tableLayout;
     private AlertDialog alertDialog2;
@@ -175,7 +175,7 @@ public class Status extends Fragment implements AsyncResponse2 {
         startActivity(new Intent(getActivity(), MapsActivity.class));
     }
     public void callDataBase(){
-        AsyncGetCars cars = new AsyncGetCars();
+        AsyncSendJSONreturnString cars = new AsyncSendJSONreturnString("http://folk.ntnu.no/thomborr/NoTheftAuto/getCarsAndIds.php");
         cars.delegate = this;
         JSONObject json = new JSONObject();
         try {
@@ -193,9 +193,10 @@ public class Status extends Fragment implements AsyncResponse2 {
         callDataBase();
     }
 
+
     @Override
-    public void processFinish(String output) {
-        String[] list = output.split("/");
+    public void processFinished(String s) {
+        String[] list = s.split("/");
         String carString = "";
         for(int i = 0; i < list.length/3;i++){
             if(list[i*3 + 1].equals("1")){
@@ -215,6 +216,5 @@ public class Status extends Fragment implements AsyncResponse2 {
         Log.d("Car String", carString);
         handler.setCarString(carString, getActivity().getBaseContext());
         addTable();
-
     }
 }

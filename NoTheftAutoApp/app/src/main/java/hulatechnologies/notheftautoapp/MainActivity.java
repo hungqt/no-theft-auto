@@ -29,7 +29,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
 
     private Button btnReg; //Hey
     private Button btnLogin;
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMap;
     private TextView name;
     private TextView email;
+    private Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +61,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
         Log.d("User", handler.getPrefName(getBaseContext()) + "");
         Log.d("Verification", handler.getVerificationString(getBaseContext()) + "Hello");
-        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("No Theft Auto");
+        mActionBarToolbar.setTitle("No Theft Auto");
         if(handler.getLoggedIn(getBaseContext())) {
             setContentView(R.layout.activity_nav_drawer);
             initNavigationDrawer();
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         item.setChecked(true);
                         drawerLayout.closeDrawers();
                         setContentView(R.layout.activity_main);
+                        mActionBarToolbar.setTitle("No Theft Auto");
                         btnReg = (Button) findViewById(R.id.btnReg);
                         btnLogin = (Button) findViewById(R.id.btnLogin);
                         btnLogout = (Button) findViewById(R.id.btnLogout);
@@ -180,5 +183,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void processFinished(String s) {
+        //Do nothing
     }
 }
