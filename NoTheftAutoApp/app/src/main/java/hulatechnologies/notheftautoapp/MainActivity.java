@@ -53,36 +53,39 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Setter layout-xml, finner toolbaren i xmlen og knappene/tekstfelt
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
         btnLogout = (Button)findViewById(R.id.btnLogout);
-        Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
-        Log.d("User", handler.getPrefName(getBaseContext()) + "");
-        Log.d("Verification", handler.getVerificationString(getBaseContext()) + "Hello");
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("No Theft Auto");
         mActionBarToolbar.setTitle("No Theft Auto");
+
+        //Sjekker om brukeren er logget inn
         if(handler.getLoggedIn(getBaseContext())) {
+            //Hvis bruker er logged in, gå til status siden
             setContentView(R.layout.activity_nav_drawer);
             initNavigationDrawer();
+            //Sjekker om en gcm connection er opprettet, hvis ikke oppretter den en connection
             if(!handler.getGCMstate(getBaseContext())){
                 gcmM.startGCM();
                 handler.setGCMactive(true, getBaseContext());
             }
+            //Ellers bare oppdaterer man sin personlige token i databasen slik at den samsvarer med den rette
             else{
                 updateToken(handler.getToken(getBaseContext()));
             }
         }else{
+            //Hvis ikke hvis setter den login-knappen til true
             btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
 
-            if(alarmSet == true){
-                //alarmSet = false;
-                //cancelAlarm();
-            }
         }
     }
 
@@ -151,7 +154,12 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
 
     public void logOutFromMain(){
         resetToken();
-        handler.clear(getBaseContext());
+
+        handler.resetPrefName(getBaseContext());
+        handler.resetPrefPass(getBaseContext());
+
+        handler.resetCars(getBaseContext(),handler.getCarString(getBaseContext()));
+        handler.resetCarString(getBaseContext());
 
         btnLogout.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
