@@ -29,7 +29,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
+public class MainActivity extends AppCompatActivity {
 
     private Button btnReg; //Hey
     private Button btnLogin;
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
         setContentView(R.layout.activity_main);
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
-        btnLogout = (Button)findViewById(R.id.btnLogout);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("No Theft Auto");
@@ -134,8 +133,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
         });
     }
 
-    //Overrider back-knappen hvis man er i lo
-
+    //Overrider back-knappen hvis man er i navigation-baren sånn at den lukkes og ikke hele programmet
     @Override
     public void onBackPressed() {
         if(drawerLayout.isEnabled()){
@@ -146,18 +144,17 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
         }
     }
 
+    //Gå til registreringsscreenen
     public void goToReg(View v){
         startActivity(new Intent(this, RegisterActivity.class));
         finish();
     }
+    //Gå til loginscreenen
     public void goToLogin(View v) {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
-    public void logOut(View v){
-        logOutFromMain();
-    }
-
+    //Sletter lokal data om man logger ut fra main og setter status til logged out
     public void logOutFromMain(){
         resetToken();
 
@@ -172,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
 
         handler.setLoggedIn(false, getBaseContext());
     }
+    //Resetter telefonenstoken i databasen
     private void resetToken() {
         AsyncUpdateToken updater = new AsyncUpdateToken();
         JSONObject json = new JSONObject();
@@ -185,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
             e.printStackTrace();
         }
     }
+    //Setter telefonens token i databasen
     private void updateToken(String token){
         AsyncUpdateToken updater = new AsyncUpdateToken();
         JSONObject json = new JSONObject();
@@ -197,10 +196,5 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse3 {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void processFinished(String s) {
-        //Do nothing
     }
 }
