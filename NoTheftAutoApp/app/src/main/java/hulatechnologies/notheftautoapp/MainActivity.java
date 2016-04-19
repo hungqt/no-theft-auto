@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }else{
             //Hvis ikke hvis setter den login-knappen til true
-            btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
 
         }
@@ -125,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                         mActionBarToolbar.setTitle("No Theft Auto");
                         btnReg = (Button) findViewById(R.id.btnReg);
                         btnLogin = (Button) findViewById(R.id.btnLogin);
-                        btnLogout = (Button) findViewById(R.id.btnLogout);
                         break;
                 }
                 return true;
@@ -163,8 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
         handler.resetCars(getBaseContext(),handler.getCarString(getBaseContext()));
         handler.resetCarString(getBaseContext());
-
-        btnLogout.setVisibility(View.INVISIBLE);
+        
         btnLogin.setVisibility(View.VISIBLE);
 
         handler.setLoggedIn(false, getBaseContext());
