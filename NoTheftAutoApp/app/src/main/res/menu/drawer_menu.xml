@@ -3,26 +3,28 @@
 
     <group android:checkableBehavior="single"
         android:id="@+id/main_menu_id">
+
         <item
             android:id="@+id/home_id"
             android:title="Home">
         </item>
-    </group>
 
-    <item
-        android:id="@+id/settings_id"
-        android:title="Settings">
-    </item>
+        <item
+            android:id="@+id/settings_id"
+            android:title="Settings">
+        </item>
+
+    </group>
 
     <group android:checkableBehavior="single"
         android:id="@+id/log_out_group_id">
+
             <item
                 android:id="@+id/log_out_id"
                 android:color="#FF0000"
                 android:title="Log out">
-
             </item>
-    </group>
 
+    </group>
 
 </menu>

@@ -5,7 +5,7 @@ import MySQLdb
 import time
 import urllib2
 import json
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 
 # https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
@@ -22,7 +22,7 @@ rpi_id = 1
 
 def main():
     try:
-        thread.start_new_thread(activation_main2, ())
+        thread.start_new_thread(activation_main, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
@@ -121,13 +121,13 @@ def gps_sender_main():
             f.close()
             break
 
-        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
-        print "updating"
+        #print "updating"
         updateCurrCoor(longitude, latitude)
-        print "Current coordinates updated"
+        #print "Current coordinates updated"
 
         time.sleep(1)
 
@@ -173,24 +173,6 @@ def updateCurrCoor(longtitude, latitude):
 
         db.rollback()
 
-
-# def setAlarm(value):
-#     db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-#                          user="glennchr_nta",  # your username
-#                          passwd="nta123",  # your password
-#                          db="glennchr_nta")  # name of the data base
-#     cur = db.cursor()
-#
-#     try:
-#         name = getCarName2()
-#         gps_string = getLongLat()
-#         cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
-#         cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
-#                      (rpi_id, value, name, gps_string))
-#         db.commit()
-#     except:
-#         print "Alarm rollback"
-#         db.rollback()
 
 
 def setAlarm2(value):

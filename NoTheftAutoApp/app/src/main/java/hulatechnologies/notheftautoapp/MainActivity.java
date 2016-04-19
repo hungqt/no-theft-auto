@@ -123,9 +123,18 @@ public class MainActivity extends AppCompatActivity {
                         item.setChecked(true);
                         drawerLayout.closeDrawers();
                         setContentView(R.layout.activity_main);
-                        mActionBarToolbar.setTitle("No Theft Auto");
+                        getSupportActionBar().setTitle("No Theft Auto");
                         btnReg = (Button) findViewById(R.id.btnReg);
                         btnLogin = (Button) findViewById(R.id.btnLogin);
+                        break;
+
+                    case R.id.settings_id:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new SettingsFragment());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("Settings");
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
                         break;
                 }
                 return true;
