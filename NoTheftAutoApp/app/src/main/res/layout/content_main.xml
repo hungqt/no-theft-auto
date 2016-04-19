@@ -11,13 +11,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@drawable/nta_logo"
-        android:id="@+id/imageView"
-        android:layout_marginLeft="25dp" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +27,8 @@
         android:id="@+id/btnLogin"
         android:onClick="goToLogin"
         android:nestedScrollingEnabled="false"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="191dp" />
 
 </RelativeLayout>
