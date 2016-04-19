@@ -23,6 +23,7 @@
             android:layout_below="@+id/textView2"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="57dp"
+            android:layout_marginBottom="57dp"
             android:stretchColumns="0,1,2"></TableLayout>
     </ScrollView>
 </RelativeLayout>
