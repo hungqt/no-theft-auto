@@ -86,7 +86,7 @@ public class PreferenceHandler {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(verificationString,"");
     }
     public float getLatitude(String savespot,Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getFloat(savespot,0);
+        return PreferenceManager.getDefaultSharedPreferences(context).getFloat(savespot, 0);
     }
     public float getLongitude(String savespot,Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getFloat(savespot, 0);
@@ -143,6 +143,13 @@ public class PreferenceHandler {
     public void resetCarString(Context context){
         setCarString("", context);
     }
+
+    public void resetCars(Context context,String carString){
+        for(int i = 0; i < carString.length(); i++){
+            setCarName("",context,carString.substring(i,i+1)+"Name");
+        }
+    }
+
 
     public void clear(Context context)
     {

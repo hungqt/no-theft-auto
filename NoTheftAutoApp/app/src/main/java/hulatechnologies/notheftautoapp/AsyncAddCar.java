@@ -12,10 +12,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by thoma on 4/11/2016.
+ * Created by Simon on 19.04.2016.
  */
 public class AsyncAddCar extends AsyncTask<JSONObject,Void,String> {
-    public AsyncResponse3 delegate = null;
+    public AsyncResponse4 delegate = null;
+
 
     @Override
     public String doInBackground(JSONObject... params) {
@@ -71,6 +72,9 @@ public class AsyncAddCar extends AsyncTask<JSONObject,Void,String> {
     }
     @Override
     protected void onPostExecute(String answer) {
-        delegate.processFinished(answer);
+        if(answer != null){
+            delegate.processFinish2(answer);
+        }
     }
 }
+

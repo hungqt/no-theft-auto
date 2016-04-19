@@ -27,7 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class Status extends Fragment implements AsyncResponse2 {
+public class Status extends Fragment implements AsyncResponse3 {
     private PreferenceHandler handler = new PreferenceHandler();
     private TableLayout tableLayout;
     private AlertDialog alertDialog2;
@@ -35,6 +35,7 @@ public class Status extends Fragment implements AsyncResponse2 {
     private FragmentTransaction fragmentTransaction;
     private DrawerLayout drawerLayout;
     private float headertextsize = 21;
+    private static int headerbackgroundColor = Color.BLACK;
 
     public Status (){
 
@@ -91,19 +92,19 @@ public class Status extends Fragment implements AsyncResponse2 {
         TableRow tr_head = new TableRow(getActivity());
         tr_head.setId(View.generateViewId());
         tr_head.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
-        tr_head.setBackgroundResource(R.drawable.head_row_border);
+        /*tr_head.setBackgroundResource(R.drawable.head_row_border);*/
         TextView label_car = new TextView(getActivity());
         label_car.setId(View.generateViewId());
         label_car.setText("Car");
-        label_car.setTextColor(Color.WHITE);
-        label_car.setPadding(5, 5, 5, 5);
+        label_car.setTextColor(headerbackgroundColor);
+        label_car.setPadding(20, 5, 5, 5);
         label_car.setTextSize(headertextsize);
         tr_head.addView(label_car);// add the column to the table row here
 
         TextView label_status = new TextView(getActivity());
         label_status.setId(View.generateViewId());// define id that must be unique
         label_status.setText("Alarm status"); // set the text for the header
-        label_status.setTextColor(Color.WHITE); // set the color
+        label_status.setTextColor(headerbackgroundColor); // set the color
         label_status.setPadding(5, 5, 5, 5); // set the padding (if required)
         label_status.setTextSize(headertextsize);
         tr_head.addView(label_status); // add the column to the table row here
@@ -111,7 +112,7 @@ public class Status extends Fragment implements AsyncResponse2 {
         TextView label_map = new TextView(getActivity());
         label_map.setId(View.generateViewId());// define id that must be unique
         label_map.setText("Map tracking"); // set the text for the header
-        label_map.setTextColor(Color.WHITE); // set the color
+        label_map.setTextColor(headerbackgroundColor); // set the color
         label_map.setPadding(5, 5, 5, 5); // set the padding (if required)
         label_map.setTextSize(headertextsize);
         tr_head.addView(label_map); // add the column to the table row here
@@ -140,7 +141,7 @@ public class Status extends Fragment implements AsyncResponse2 {
         label_car.setId(View.generateViewId());
         label_car.setText(carName);
         label_car.setTextColor(Color.BLACK);
-        label_car.setPadding(5, 5, 5, 5);
+        label_car.setPadding(20, 5, 5, 5);
         tR.addView(label_car);
 
         TextView label_status = new TextView(getActivity());
@@ -175,7 +176,7 @@ public class Status extends Fragment implements AsyncResponse2 {
         startActivity(new Intent(getActivity(), MapsActivity.class));
     }
     public void callDataBase(){
-        AsyncGetCars cars = new AsyncGetCars();
+        AsyncSendJSONreturnString cars = new AsyncSendJSONreturnString("http://folk.ntnu.no/thomborr/NoTheftAuto/getCarsAndIds.php");
         cars.delegate = this;
         JSONObject json = new JSONObject();
         try {
@@ -193,9 +194,10 @@ public class Status extends Fragment implements AsyncResponse2 {
         callDataBase();
     }
 
+
     @Override
-    public void processFinish(String output) {
-        String[] list = output.split("/");
+    public void processFinished(String s) {
+        String[] list = s.split("/");
         String carString = "";
         for(int i = 0; i < list.length/3;i++){
             if(list[i*3 + 1].equals("1")){
@@ -215,6 +217,5 @@ public class Status extends Fragment implements AsyncResponse2 {
         Log.d("Car String", carString);
         handler.setCarString(carString, getActivity().getBaseContext());
         addTable();
-
     }
 }

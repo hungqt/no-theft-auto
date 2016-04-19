@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
         emailText = (EditText)findViewById(R.id.emailText);
     }
     public void onRegClick(View v){
-        AsyncTaskRegister data = new AsyncTaskRegister();
+        AsyncSendJSONreturnString data = new AsyncSendJSONreturnString("http://folk.ntnu.no/thomborr/NoTheftAuto/Register.php");
         data.delegate = this;
         JSONObject userInfo = new JSONObject();
         c = this;

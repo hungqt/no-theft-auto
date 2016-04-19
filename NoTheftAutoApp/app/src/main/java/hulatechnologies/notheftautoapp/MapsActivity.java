@@ -47,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private FragmentTransaction fragmentTransaction;
     private NavigationView navigationView;
+    private boolean firstRun = true;
 
 
 
@@ -99,7 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Kalles av startUpdater (Dette er funksjonen som henter fra databasen og sn
     public void getCoords(String carname){
-        AsyncGetCoords c = new AsyncGetCoords();
+        AsyncSendJSONreturnString c = new AsyncSendJSONreturnString("http://folk.ntnu.no/thomborr/NoTheftAuto/getCords.php");
         c.delegate = this;
         JSONObject json = new JSONObject();
         try {
@@ -127,6 +128,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(marker.title(handler.getCurrCar(getBaseContext())));
         handler.setLatitude(handler.getCurrCar(getBaseContext()) + "latitude", latitude, getBaseContext());
         handler.setLongitude(handler.getCurrCar(getBaseContext()) + "longitude", longitude, getBaseContext());
+        if(firstRun){
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,17));
+            firstRun = false;
+        }
     }
     //launcher status pagen
     public void launchStatus(){
@@ -141,6 +146,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(!cordinates[0].equals("") && !cordinates[1].equals("")){
             longitude = Float.valueOf(cordinates[0]);
             latitude = Float.valueOf(cordinates[1]);
+
+
+
         }
         else{
             AlertDialog alertDialog2 = new AlertDialog.Builder(this).create();

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,38 +51,41 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMap;
     private TextView name;
     private TextView email;
+    private Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Setter layout-xml, finner toolbaren i xmlen og knappene/tekstfelt
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnReg = (Button)findViewById(R.id.btnReg);
         btnLogin = (Button)findViewById(R.id.btnLogin);
-        btnLogout = (Button)findViewById(R.id.btnLogout);
-        Log.d("Status", handler.getLoggedIn(getBaseContext()) + "");
-        Log.d("User", handler.getPrefName(getBaseContext()) + "");
-        Log.d("Verification", handler.getVerificationString(getBaseContext()) + "Hello");
-        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("No Theft Auto");
+        mActionBarToolbar.setTitle("No Theft Auto");
+
+        //Sjekker om brukeren er logget inn
         if(handler.getLoggedIn(getBaseContext())) {
+            //Hvis bruker er logged in, gå til status siden
             setContentView(R.layout.activity_nav_drawer);
             initNavigationDrawer();
+            //Sjekker om en gcm connection er opprettet, hvis ikke oppretter den en connection
             if(!handler.getGCMstate(getBaseContext())){
                 gcmM.startGCM();
                 handler.setGCMactive(true, getBaseContext());
             }
+            //Ellers bare oppdaterer man sin personlige token i databasen slik at den samsvarer med den rette
             else{
                 updateToken(handler.getToken(getBaseContext()));
             }
         }else{
-            btnLogout.setVisibility(View.INVISIBLE);
+            //Hvis ikke hvis setter den login-knappen til true
             btnLogin.setVisibility(View.VISIBLE);
 
-            if(alarmSet == true){
-                //alarmSet = false;
-                //cancelAlarm();
-            }
         }
     }
 
@@ -118,43 +123,61 @@ public class MainActivity extends AppCompatActivity {
                         item.setChecked(true);
                         drawerLayout.closeDrawers();
                         setContentView(R.layout.activity_main);
+                        getSupportActionBar().setTitle("No Theft Auto");
                         btnReg = (Button) findViewById(R.id.btnReg);
                         btnLogin = (Button) findViewById(R.id.btnLogin);
-                        btnLogout = (Button) findViewById(R.id.btnLogout);
+                        break;
+
+                    case R.id.settings_id:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new SettingsFragment());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("Settings");
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
                         break;
                 }
                 return true;
             }
         });
     }
+
+    //Overrider back-knappen hvis man er i navigation-baren sånn at den lukkes og ikke hele programmet
     @Override
     public void onBackPressed() {
         if(drawerLayout.isEnabled()){
             drawerLayout.closeDrawers();
         }
+        else{
+            super.onBackPressed();
+        }
     }
 
+    //Gå til registreringsscreenen
     public void goToReg(View v){
         startActivity(new Intent(this, RegisterActivity.class));
         finish();
     }
+    //Gå til loginscreenen
     public void goToLogin(View v) {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
-    public void logOut(View v){
-        logOutFromMain();
-    }
-
+    //Sletter lokal data om man logger ut fra main og setter status til logged out
     public void logOutFromMain(){
         resetToken();
-        handler.clear(getBaseContext());
 
-        btnLogout.setVisibility(View.INVISIBLE);
+        handler.resetPrefName(getBaseContext());
+        handler.resetPrefPass(getBaseContext());
+
+        handler.resetCars(getBaseContext(),handler.getCarString(getBaseContext()));
+        handler.resetCarString(getBaseContext());
+        
         btnLogin.setVisibility(View.VISIBLE);
 
         handler.setLoggedIn(false, getBaseContext());
     }
+    //Resetter telefonenstoken i databasen
     private void resetToken() {
         AsyncUpdateToken updater = new AsyncUpdateToken();
         JSONObject json = new JSONObject();
@@ -168,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    //Setter telefonens token i databasen
     private void updateToken(String token){
         AsyncUpdateToken updater = new AsyncUpdateToken();
         JSONObject json = new JSONObject();

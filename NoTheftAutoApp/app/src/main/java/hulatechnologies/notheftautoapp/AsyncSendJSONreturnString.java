@@ -1,10 +1,6 @@
 package hulatechnologies.notheftautoapp;
 
-/**
- * Created by thoma on 3/15/2016.
- */
-
-import android.util.Log;
+import android.os.AsyncTask;
 
 import org.json.JSONObject;
 
@@ -16,25 +12,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by thoma on 3/14/2016.
+ * Created by thoma on 4/18/2016.
  */
+public class AsyncSendJSONreturnString extends AsyncTask<JSONObject,Void,String> {
 
-import android.os.AsyncTask;
+    public AsyncResponse3 delegate = null;
+    private String urlString;
 
-/**
- * Created by thoma on 2/23/2016.
- */
-public class AsyncGetCars extends AsyncTask<JSONObject,Void,String> {
-
-    public AsyncResponse2 delegate = null;
+    public AsyncSendJSONreturnString(String urlString){
+        this.urlString = urlString;
+    }
 
     @Override
-    protected String doInBackground(JSONObject... params) {
+    public String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/getCarsAndIds.php");
+            url = new URL(urlString);
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -64,8 +59,6 @@ public class AsyncGetCars extends AsyncTask<JSONObject,Void,String> {
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             answer = convertStreamToString(in);
-            Log.d("Answer", answer);
-            Log.d("answers length","" + answer.split("/").length);
             in.close();
 
         } catch (Exception e) {
@@ -83,7 +76,9 @@ public class AsyncGetCars extends AsyncTask<JSONObject,Void,String> {
         return s.hasNext() ? s.next() : "";
     }
     @Override
-    protected void onPostExecute(String result) {
-        delegate.processFinish(result);
+    protected void onPostExecute(String answer) {
+        if(answer != null){
+            delegate.processFinished(answer);
+        }
     }
 }

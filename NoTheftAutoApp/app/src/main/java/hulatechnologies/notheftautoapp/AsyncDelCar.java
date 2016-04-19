@@ -1,7 +1,6 @@
 package hulatechnologies.notheftautoapp;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -13,17 +12,20 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by thoma on 4/4/2016.
+ * Created by Simon on 19.04.2016.
  */
-public class AsyncUpdateIP extends AsyncTask<JSONObject,Void,String> {
+public class AsyncDelCar extends AsyncTask<JSONObject,Void,String> {
+
+    public AsyncResponse2 delegate = null;
+
 
     @Override
-    protected String doInBackground(JSONObject... params) {
+    public String doInBackground(JSONObject... params) {
         HttpURLConnection urlConnection= null;
         String answer = null;
         URL url = null;
         try {
-            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/updateIP.php");
+            url = new URL("http://folk.ntnu.no/thomborr/NoTheftAuto/deleteCar.php");
             String message = params[0].toString();
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -31,7 +33,7 @@ public class AsyncUpdateIP extends AsyncTask<JSONObject,Void,String> {
             urlConnection.setDoOutput(true);
             //Setter at jeg kan motta data fra serveren
             urlConnection.setDoInput(true);
-            //Gjør noe med byte-streamen så ikke hele lagres i minnet samtidig (?)
+            //Gj�r noe med byte-streamen s� ikke hele lagres i minnet samtidig (?)
             urlConnection.setChunkedStreamingMode(0);
             //Setter request method til POST
             urlConnection.setReadTimeout(10000 /*milliseconds*/);
@@ -53,7 +55,6 @@ public class AsyncUpdateIP extends AsyncTask<JSONObject,Void,String> {
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             answer = convertStreamToString(in);
-            Log.d("Response", answer);
             in.close();
 
         } catch (Exception e) {
@@ -69,5 +70,11 @@ public class AsyncUpdateIP extends AsyncTask<JSONObject,Void,String> {
     public String convertStreamToString(InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+    @Override
+    protected void onPostExecute(String answer) {
+        if(answer != null){
+            delegate.processFinish(answer);
+        }
     }
 }
