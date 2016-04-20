@@ -31,7 +31,7 @@ public class GCMreceiver extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        if(handler.getLoggedIn(getBaseContext())) {
+        if(handler.getLoggedIn(getBaseContext()) && handler.getNotificationActive(getBaseContext())) {
             String message = data.getString("message");
             Log.d(TAG, "From: " + from);
             Log.d(TAG, "Message: " + message);
