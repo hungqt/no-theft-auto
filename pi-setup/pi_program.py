@@ -141,7 +141,7 @@ def activation_main2():
 # Har delay pa 1 sek
 def gps_sender_main():
 
-    f = open("coord1.txt", "r")
+    f = open("/home/pi/no-theft-auto/pi-setup/coord1.txt", "r")
     while True:
         h = 0
         lang = 0
