@@ -107,7 +107,6 @@ def activation_main2():
 
             if GPIO.input(left_button) == False:
                 setAlarm2(0)
-                sendNotification(getToken(getUsername()))
 
     except KeyboardInterrupt:
         GPIO.cleanup()
