@@ -5,24 +5,36 @@ import MySQLdb
 import time
 import urllib2
 import json
-#import RPi.GPIO as GPIO
-
-
-# https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
+import RPi.GPIO as GPIO
+import sys
 
 
 rpi_id = 1
 
-#cur = db1.cursor()
 
+#GPIO leds og knapper setup
+GreenLed = 11
+RedLed = 7
+left_button = 10
+right_button = 8
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(RedLed, GPIO.OUT)
+GPIO.setup(GreenLed, GPIO.OUT)
+
+
+
+
+#cur = db1.cursor()
 # cur.execute("UPDATE glennchr_nta.raspberry_pi SET update=1  WHERE rpi_id=1")
 # db1.commit()
 # print("hooo")
 
 
 def main():
+
     try:
-        thread.start_new_thread(activation_main, ())
+        thread.start_new_thread(activation_main2, ())
         thread.start_new_thread(gps_sender_main, ())
     except:
         print "Unable to start thread"
@@ -35,6 +47,14 @@ def activation_main():
     menu = {'1': "Activate alarm", '2': "Deactive alarm", '3': "Read alarm status", '4': "Quit\n"}
 
     while True:
+        alarmstatus = getAlarm()
+        if alarmstatus == 1:
+            GPIO.output(RedLed, 1)
+            GPIO.output(GreenLed, 0)
+        else:
+            GPIO.output(GreenLed, 1)
+            GPIO.output(RedLed, 0)
+
         options = menu.keys()
         options.sort()
         for entry in options:
@@ -44,39 +64,76 @@ def activation_main():
         if selection == '1':
             setAlarm2(1)
             sendNotification(getToken(getUsername()))
+
+            alarmstatus = getAlarm()
+            if alarmstatus == 1:
+                GPIO.output(RedLed, 1)
+                GPIO.output(GreenLed, 0)
         elif selection == '2':
             setAlarm2(0)
+
+            alarmstatus = getAlarm()
+            if alarmstatus == 0:
+                GPIO.output(RedLed, 1)
+                GPIO.output(GreenLed, 0)
         elif selection == '3':
             text = "\nAlarm status: %d \n" % getAlarm()
             print text
         elif selection == '4':
-            break
+            sys.exit()
         else:
             print "Unknown Option Selected!"
 
 
 def activation_main2():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    a = 0
+
+    GPIO.setup(right_button, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(left_button, GPIO.IN, GPIO.PUD_UP)
 
     try:
         while True:
-            if GPIO.input(11) == 1:
-                print "feit"
-                if a == 0:
-                    setAlarm2(1)
-                    sendNotification(getToken(getUsername()))
-                    a = 1
-                    time.sleep(1)
-                else:
-                    setAlarm2(0)
-                    a = 0
-                    time.sleep(1)
-            time.sleep(0.1)
+
+            alarmstatus = getAlarm()
+            if alarmstatus == 1:
+                GPIO.output(RedLed, 1)
+                GPIO.output(GreenLed, 0)
+            else:
+                GPIO.output(GreenLed, 1)
+                GPIO.output(RedLed, 0)
+
+            if GPIO.input(right_button) == False:
+                setAlarm2(1)
+                sendNotification(getToken(getUsername()))
+
+            if GPIO.input(left_button) == False:
+                setAlarm2(0)
+                sendNotification(getToken(getUsername()))
 
     except KeyboardInterrupt:
         GPIO.cleanup()
+
+
+##def activation_main2():
+##    GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+##    a = 0
+##
+##    try:
+##        while True:
+##            if GPIO.input(11) == 1:
+##                print "feit"
+##                if a == 0:
+##                    setAlarm2(1)
+##                    sendNotification(getToken(getUsername()))
+##                    a = 1
+##                    time.sleep(1)
+##                else:
+##                    setAlarm2(0)
+##                    a = 0
+##                    time.sleep(1)
+##            time.sleep(0.1)
+##
+##    except KeyboardInterrupt:
+##        GPIO.cleanup()
 
 
 # Henter ut latitude, longtitude og timestamp fra fil.
