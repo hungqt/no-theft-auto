@@ -47,6 +47,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
         return v;
     }
 
+    //Setter opp knappen som legger til bil, denne knappen kaller check-funksjonen
     public void onAddCarClick(){
         butt = (Button)v.findViewById(R.id.btnAddNewCar);
         butt.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +56,8 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
             }
         });
     }
-
+    /*Denne funksjonen sjekker om RPIen allerede er i bruk, om den er det får brukeren spørsmål om han vil override
+    bilen som RPIen er registrert på fra før, eller så kalles add() med engang*/
     public void check() {
         AsyncSendJSONreturnString check = new AsyncSendJSONreturnString("http://folk.ntnu.no/thomborr/NoTheftAuto/checkIfRegistered.php");
         check.delegate = this;
@@ -68,7 +70,8 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
             e.printStackTrace();
         }
     }
-
+    /*Denne funksjonen sletter RPIen som er registrert på IDen brukeren har oppgitt
+    kaller deretter add()*/
     public void delete() {
         AsyncDelCar check = new AsyncDelCar();
         check.delegate = this;
@@ -83,7 +86,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
             e.printStackTrace();
         }
     }
-
+    //Denne funksjonen legger til bilen til databasen og oppdaterer navn og bruker-ID
     public void add() {
         AsyncAddCar check = new AsyncAddCar();
         check.delegate = this;
@@ -99,7 +102,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
             e.printStackTrace();
         }
     }
-
+    //Output fra delete-kallet
     @Override
     public void processFinish(String output) {
         if (output.equals("Success")) {
@@ -111,7 +114,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
             Toast.makeText(getActivity().getBaseContext(), "Something went wrong with delete", Toast.LENGTH_SHORT).show();
         }
     }
-
+    //Output fra check-kallet
     @Override
     public void processFinished(String s) {
         if (s.equals("EXIST")) {
@@ -137,7 +140,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
 
         }
     }
-
+    //Output fra add-kallet
     @Override
     public void processFinish2(String output) {
         if (output.equals("Success")) {
@@ -159,6 +162,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
             Toast.makeText(getActivity().getBaseContext(), "Something went wrong with add", Toast.LENGTH_SHORT).show();
         }
     }
+    //Launcher en ny dialog med ok og cancel knapper
     public void launchDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("This RPI is already in use are you sure you want to override?")
@@ -178,6 +182,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+    //Resetter textviewsene
     private void resetTextViews(){
         rpiID.setText("");
         carName.setText("");
