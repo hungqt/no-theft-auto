@@ -3,19 +3,18 @@
 
     <group android:checkableBehavior="single"
         android:id="@+id/main_menu_id">
-
         <item
             android:id="@+id/home_id"
             android:title="Home">
         </item>
-
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/settingsbar_id">
         <item
             android:id="@+id/settings_id"
             android:title="Settings">
         </item>
-
     </group>
-
     <group android:checkableBehavior="single"
         android:id="@+id/log_out_group_id">
 

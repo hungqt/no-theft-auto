@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,19 +38,19 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        v = inflater.inflate(R.layout.fragment_settings, container, false);
+        v = inflater.inflate(R.layout.fragment_add_car, container, false);
         // Inflate the layout for this fragment
 
         rpiID = (TextView)v.findViewById(R.id.txtRpiId);
         carName = (TextView)v.findViewById(R.id.txtCarName);
-        butt = (Button)v.findViewById(R.id.btnAddingCar);
         onAddCarClick();
-        return inflater.inflate(R.layout.fragment_add_car, container, false);
+        return v;
     }
 
     public void onAddCarClick(){
-        butt.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        butt = (Button)v.findViewById(R.id.btnAddNewCar);
+        butt.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 check();
             }
         });
@@ -60,8 +61,7 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
         check.delegate = this;
         JSONObject json = new JSONObject();
         try {
-            json.put("username", handler.getPrefName(getActivity().getBaseContext()));
-            json.put("password", handler.getPrefPass(getActivity().getBaseContext()));
+            json.put("rpi_id",rpiID.getText().toString());
             check.execute(json);
 
         } catch (JSONException e) {
@@ -85,13 +85,13 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
     }
 
     public void add() {
-        AsyncDelCar check = new AsyncDelCar();
+        AsyncAddCar check = new AsyncAddCar();
         check.delegate = this;
         JSONObject json = new JSONObject();
         try {
             json.put("username", handler.getPrefName(getActivity().getBaseContext()));
             json.put("password", handler.getPrefPass(getActivity().getBaseContext()));
-            json.put("rpi_id", rpiID.getText().toString());
+            json.put("carID", rpiID.getText().toString());
             json.put("carName", carName.getText().toString());
             check.execute(json);
 
@@ -103,9 +103,11 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
     @Override
     public void processFinish(String output) {
         if (output.equals("Success")) {
+            Log.d("Status",output);
             add();
         }
         else {
+            Log.d("Status",output);
             Toast.makeText(getActivity().getBaseContext(), "Something went wrong with delete", Toast.LENGTH_SHORT).show();
         }
     }
@@ -113,29 +115,16 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
     @Override
     public void processFinished(String s) {
         if (s.equals("EXIST")) {
-            new AlertDialog.Builder(getActivity().getBaseContext())
-                    .setTitle("Delete entry")
-                    .setMessage("Are you sure you want to delete this entry?")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            delete();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+            launchDialog();
         }
 
         else if (s.equals("NOT EXIST")) {
+            Log.d("Didn't find it","Strange");
             add();
         }
 
         else {
-            AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity().getBaseContext()).create();
+            AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity()).create();
             alertDialog2.setTitle("Error");
             alertDialog2.setMessage("Connection error");
             alertDialog2.setButton("OK", new DialogInterface.OnClickListener() {
@@ -144,6 +133,8 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
                 }
             });
             alertDialog2.show();
+
+
         }
     }
 
@@ -151,9 +142,44 @@ public class AddCarFragment extends Fragment implements AsyncResponse2,AsyncResp
     public void processFinish2(String output) {
         if (output.equals("Success")) {
             Toast.makeText(getActivity().getBaseContext(), "Car was added", Toast.LENGTH_SHORT).show();
+            resetTextViews();
+        }
+        else if(output.equals("ERROR")){
+            AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity()).create();
+            alertDialog2.setTitle("Not in system");
+            alertDialog2.setMessage("This RPI is not registered in our system");
+            alertDialog2.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alertDialog2.show();
         }
         else {
             Toast.makeText(getActivity().getBaseContext(), "Something went wrong with add", Toast.LENGTH_SHORT).show();
         }
+    }
+    public void launchDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("This RPI is already in use are you sure you want to override?")
+                .setTitle("Warning");
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(getActivity().getBaseContext(), "Aborted", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                delete();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void resetTextViews(){
+        rpiID.setText("");
+        carName.setText("");
     }
 }

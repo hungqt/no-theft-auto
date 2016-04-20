@@ -115,8 +115,8 @@ public class PreferenceHandler {
     public boolean getPrefRem(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(remName, false);
     }
-    public boolean getNotificationManager(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(notificationID, false);
+    public boolean getNotificationActive(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(notificationID, true);
     }
     public boolean getLoggedIn(Context context){
         final SharedPreferences mSharedPreference= PreferenceManager.getDefaultSharedPreferences(context);
