@@ -56,6 +56,18 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
         JSONObject userInfo = new JSONObject();
         c = this;
         try {
+            if(userText.getText().length() > 11 || userText.getText().length() < 4 || passText2.getText().length() > 11 || passText2.getText().length() < 4){
+                alertDialog2 = new AlertDialog.Builder(this).create();
+                alertDialog2.setTitle("Wrong length on username or password");
+                alertDialog2.setMessage("Username and password must be minimum 3 and maximum 10 characters long");
+                alertDialog2.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog closed
+                        Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alertDialog2.show();
+            }
             userInfo.put("username",userText.getText().toString());
             String pass1 = passText1.getText().toString();
             String pass2 = passText2.getText().toString();

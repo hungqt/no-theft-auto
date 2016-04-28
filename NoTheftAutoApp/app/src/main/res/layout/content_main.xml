@@ -11,13 +11,23 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/nta_logo"
+        android:id="@+id/nta_logo"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        />
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
         android:id="@+id/btnReg"
         android:onClick="goToReg"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/nta_logo"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -27,7 +37,7 @@
         android:id="@+id/btnLogin"
         android:onClick="goToLogin"
         android:nestedScrollingEnabled="false"
-        android:layout_above="@+id/btnReg"
-        android:layout_alignStart="@+id/btnReg" />
+        android:layout_below="@+id/btnReg"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

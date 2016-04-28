@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -82,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }else{
             //Hvis ikke hvis setter den login-knappen til true
-            btnLogout.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
 
         }
@@ -122,9 +123,18 @@ public class MainActivity extends AppCompatActivity {
                         item.setChecked(true);
                         drawerLayout.closeDrawers();
                         setContentView(R.layout.activity_main);
-                        mActionBarToolbar.setTitle("No Theft Auto");
+                        getSupportActionBar().setTitle("No Theft Auto");
                         btnReg = (Button) findViewById(R.id.btnReg);
                         btnLogin = (Button) findViewById(R.id.btnLogin);
+                        break;
+
+                    case R.id.settings_id:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new SettingsFragment());
+                        fragmentTransaction.commit();
+                        getSupportActionBar().setTitle("Settings");
+                        item.setChecked(true);
+                        drawerLayout.closeDrawers();
                         break;
                 }
                 return true;
@@ -162,8 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         handler.resetCars(getBaseContext(),handler.getCarString(getBaseContext()));
         handler.resetCarString(getBaseContext());
-
-        btnLogout.setVisibility(View.INVISIBLE);
+        
         btnLogin.setVisibility(View.VISIBLE);
 
         handler.setLoggedIn(false, getBaseContext());

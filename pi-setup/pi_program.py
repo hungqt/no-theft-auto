@@ -6,21 +6,33 @@ import time
 import urllib2
 import json
 import RPi.GPIO as GPIO
-
-
-# https://github.com/PyMySQL/PyMySQL/ <-- Dokumentasjon for db connection
+import sys
 
 
 rpi_id = 1
 
-#cur = db1.cursor()
 
+#GPIO leds og knapper setup
+GreenLed = 11
+RedLed = 7
+left_button = 10
+right_button = 8
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(RedLed, GPIO.OUT)
+GPIO.setup(GreenLed, GPIO.OUT)
+
+
+
+
+#cur = db1.cursor()
 # cur.execute("UPDATE glennchr_nta.raspberry_pi SET update=1  WHERE rpi_id=1")
 # db1.commit()
 # print("hooo")
 
 
 def main():
+
     try:
         thread.start_new_thread(activation_main2, ())
         thread.start_new_thread(gps_sender_main, ())
@@ -35,6 +47,14 @@ def activation_main():
     menu = {'1': "Activate alarm", '2': "Deactive alarm", '3': "Read alarm status", '4': "Quit\n"}
 
     while True:
+        alarmstatus = getAlarm()
+        if alarmstatus == 1:
+            GPIO.output(RedLed, 1)
+            GPIO.output(GreenLed, 0)
+        else:
+            GPIO.output(GreenLed, 1)
+            GPIO.output(RedLed, 0)
+
         options = menu.keys()
         options.sort()
         for entry in options:
@@ -44,39 +64,75 @@ def activation_main():
         if selection == '1':
             setAlarm2(1)
             sendNotification(getToken(getUsername()))
+
+            alarmstatus = getAlarm()
+            if alarmstatus == 1:
+                GPIO.output(RedLed, 1)
+                GPIO.output(GreenLed, 0)
         elif selection == '2':
             setAlarm2(0)
+
+            alarmstatus = getAlarm()
+            if alarmstatus == 0:
+                GPIO.output(RedLed, 1)
+                GPIO.output(GreenLed, 0)
         elif selection == '3':
             text = "\nAlarm status: %d \n" % getAlarm()
             print text
         elif selection == '4':
-            break
+            sys.exit()
         else:
             print "Unknown Option Selected!"
 
 
 def activation_main2():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    a = 0
+
+    GPIO.setup(right_button, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(left_button, GPIO.IN, GPIO.PUD_UP)
 
     try:
         while True:
-            if GPIO.input(11) == 1:
-                print "feit"
-                if a == 0:
-                    setAlarm2(1)
-                    sendNotification(getToken(getUsername()))
-                    a = 1
-                    time.sleep(1)
-                else:
-                    setAlarm2(0)
-                    a = 0
-                    time.sleep(1)
-            time.sleep(0.1)
+
+            alarmstatus = getAlarm()
+            if alarmstatus == 1:
+                GPIO.output(RedLed, 1)
+                GPIO.output(GreenLed, 0)
+            else:
+                GPIO.output(GreenLed, 1)
+                GPIO.output(RedLed, 0)
+
+            if GPIO.input(right_button) == False:
+                setAlarm2(1)
+                sendNotification(getToken(getUsername()))
+
+            if GPIO.input(left_button) == False:
+                setAlarm2(0)
 
     except KeyboardInterrupt:
         GPIO.cleanup()
+
+
+##def activation_main2():
+##    GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+##    a = 0
+##
+##    try:
+##        while True:
+##            if GPIO.input(11) == 1:
+##                print "feit"
+##                if a == 0:
+##                    setAlarm2(1)
+##                    sendNotification(getToken(getUsername()))
+##                    a = 1
+##                    time.sleep(1)
+##                else:
+##                    setAlarm2(0)
+##                    a = 0
+##                    time.sleep(1)
+##            time.sleep(0.1)
+##
+##    except KeyboardInterrupt:
+##        GPIO.cleanup()
 
 
 # Henter ut latitude, longtitude og timestamp fra fil.
@@ -84,7 +140,7 @@ def activation_main2():
 # Har delay pa 1 sek
 def gps_sender_main():
 
-    f = open("coord1.txt", "r")
+    f = open("/home/pi/no-theft-auto/pi-setup/coord1.txt", "r")
     while True:
         h = 0
         lang = 0
@@ -121,13 +177,13 @@ def gps_sender_main():
             f.close()
             break
 
-        print rpi_id, " ", timestamp, " ", latitude, " ", longitude
+        #print rpi_id, " ", timestamp, " ", latitude, " ", longitude
         sendLatitudeLogditude(timestamp, longitude, latitude, rpi_id)
 
         # if getUpdateCurrCoor() == 1:
-        print "updating"
+        #print "updating"
         updateCurrCoor(longitude, latitude)
-        print "Current coordinates updated"
+        #print "Current coordinates updated"
 
         time.sleep(1)
 
@@ -173,24 +229,6 @@ def updateCurrCoor(longtitude, latitude):
 
         db.rollback()
 
-
-# def setAlarm(value):
-#     db = MySQLdb.connect(host="mysql.stud.ntnu.no",  # your host, usually localhost
-#                          user="glennchr_nta",  # your username
-#                          passwd="nta123",  # your password
-#                          db="glennchr_nta")  # name of the data base
-#     cur = db.cursor()
-#
-#     try:
-#         name = getCarName2()
-#         gps_string = getLongLat()
-#         cur.execute('''DELETE FROM raspberry_pi WHERE rpi_id = {0}'''.format(rpi_id))
-#         cur.execute("INSERT INTO raspberry_pi (rpi_id, alarm, car_name, Coords) VALUES (%s, %s, %s, %s)",
-#                      (rpi_id, value, name, gps_string))
-#         db.commit()
-#     except:
-#         print "Alarm rollback"
-#         db.rollback()
 
 
 def setAlarm2(value):

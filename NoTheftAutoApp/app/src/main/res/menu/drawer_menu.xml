@@ -8,21 +8,22 @@
             android:title="Home">
         </item>
     </group>
-
-    <item
-        android:id="@+id/settings_id"
-        android:title="Settings">
-    </item>
-
+    <group android:checkableBehavior="single"
+        android:id="@+id/settingsbar_id">
+        <item
+            android:id="@+id/settings_id"
+            android:title="Settings">
+        </item>
+    </group>
     <group android:checkableBehavior="single"
         android:id="@+id/log_out_group_id">
+
             <item
                 android:id="@+id/log_out_id"
                 android:color="#FF0000"
                 android:title="Log out">
-
             </item>
-    </group>
 
+    </group>
 
 </menu>

@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hulatechnologies.notheftautoapp.Status">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD NEW CAR"
+        android:id="@+id/btnAddCar"
+        android:minWidth="125dp"
+        android:clickable="false"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DELETE CAR"
+        android:id="@+id/btnDelCar"
+        android:layout_marginBottom="202dp"
+        android:minWidth="125dp"
+        android:clickable="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/btnAddCar" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notifications  "
+        android:id="@+id/switch1"
+        android:layout_marginTop="72dp"
+        android:checked="false"
+        android:layout_alignTop="@+id/btnDelCar"
+        android:layout_alignStart="@+id/btnDelCar" />
+
+</RelativeLayout>
