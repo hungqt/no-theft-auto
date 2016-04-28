@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                         mActionBarToolbar.setTitle("No Theft Auto");
                         btnReg = (Button) findViewById(R.id.btnReg);
                         btnLogin = (Button) findViewById(R.id.btnLogin);
-                        btnLogout = (Button) findViewById(R.id.btnLogout);
                         break;
                 }
                 return true;
